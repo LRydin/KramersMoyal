@@ -25,7 +25,7 @@ def epanechnikov_1d(n_points):
     return kernel * normalisation
 
 
-def Epanechnikov_2d(n_points):
+def Epanechnikov_2d(n_points, symmetric=True):
     """
     Generates the symmetric Epanechnikov kernel in 2 dimension
 
@@ -37,18 +37,29 @@ def Epanechnikov_2d(n_points):
         for bounded compact support kernels, or equivalent of 
         the size of the phase space.
 
+    symmetric  : boolean
+        The Epanechnikov kernel in two dimensional has a 
+        symmetric and a non-symmetric version
+
     Returns
     -------
-    kernel  : array
+    kernel  : array (float)
         The specified kernel.
     """
 
     x1 = np.linspace(-1, 1, n_points, endpoint=True)
     x1_2D, y1_2D = np.meshgrid(x1, x1, sparse=True)
 
-    kernel = 1 - (x1_2D ** 2 + y1_2D ** 2)
-    kernel[kernel < 0.] = 0.
 
-    normalisation = 2 / np.pi
+    if symmetric == True:
+	# Epanechnikov kernel:
+	#   (8/3*pi)*3/4(1 - (x² + y²), x=-1 to x=1 CHECK!
+    	kernel = 1 - (np.power(x1_2D,2) + np.power(y1_2D,2)) / (np.power(bandwidth,2))
+    	kernel[kernel < 0.] = 0.	#Remove <0 values
+
+    	normalisation = 2 / (bandwidth * np.pi)
+
+    elif symmetric == False:
+        
 
     return kernel * normalisation
