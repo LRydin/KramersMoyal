@@ -3,7 +3,7 @@ title: 'Kramers--Moyal coefficients: all orders, any dimension and with kernel-b
 tags:
   - Python
   - Julia
-  - stochastic processes
+  - Stochastic processes
   - Fokker--Planck
 authors:
   - name: Leonardo Rydin Gorjão
@@ -20,7 +20,7 @@ affiliations:
  - name: Helmholtz Institute for Radiation and Nuclear Physics, University of Bonn, Nussallee~14--16, 53115~Bonn, Germany
    index: 3
 date: 18 February 2019
-bibliography: paper.bib
+bibliography: bib.bib
 ---
 
 # Summary
@@ -59,7 +59,7 @@ at a certain reference measure point $(x\_1,x\_2)$. The Kramers--Moyal coefficen
 
 Theoretically $\Delta t$ should take the limiting case of $\Delta t \to 0$, but the restriction of any measuring or storing device -- or the nature of the observables themselves -- permits only time-sampled or discrete recordings.
 The relevance and importance of adequate time-sampling was extensively studied and discussed in [CITE LENA, LEHNERTZ, TABAR].
-In the limiting case where $\Delta t$ is equivalent to the sampling rate of the data, the Kramers--Moyal coefficients take the form 
+In the limiting case where $\Delta t$ is equivalent to the sampling rate of the data, the Kramers--Moyal coefficients take the form
 $$
 \mathcal{M}^{\ell, m}(x\_{1}, x\_{2}) = \frac{1}{\Delta t}  \langle \Delta y\_1^{\ell} \Delta y\_2^{m} |\_{y\_1(t)=x\_1, y\_2(t)=x\_2} \rangle, \mathrm{with}~ \Delta y\_i =  y\_i(t+ \Delta t) - y\_i(t).    
 $$
@@ -78,9 +78,11 @@ All points are averaged, in a weighted fashion, into the distribution space -- a
 
 The choice of the kernel, i.e., the weighting function used for averaging, is a matter of taste.
 Equivalently the usage of a fixed-size box shape would closely resemble binning, as in the histogram case.
-The Epanechnikov kernel [CITE], finite in size, is given by
+The Epanechnikov kernel [@Epanechnikov], finite in size, is given by
 $$
 K(u,v)=\left(\frac{9}{16}\right)\left(1-u^2\right)\left(1-v^2\right), \mathrm{with}~|u|,|v|\leq 1,
 $$
 is used.
 It provides a simple weighted fitting, without the long tails (thus necessarily a wider measure space) of a Gaussian shaped kernel or something similar.
+
+# References
