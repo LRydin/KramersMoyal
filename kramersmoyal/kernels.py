@@ -72,15 +72,14 @@ def Epanechnikov_2d(n_points, bandwidth = 0, data=False, bounds=False,
                         of the bounds at each dimension, or not specified, thus
                         extracted from the provided argument data""")
 
-    # 1d linear space for underlying space
-    x1  = np.linspace(-1 * bandwidth, 1 * bandwidth, Mn)
+    # For a bandwidth of 1, the kernel size is one tenth of the phase space
+    kernel_size = int(n_points * bandwidth / 10)
+
+    # 1d linear space for underlying space in the first dimension
+    x1  = np.linspace(-1 * bandwidth, 1 * bandwidth, kernel_size, endpoint=True)
     # 2d linear space for Kernel generator
     x1_2D, y1_2D = np.meshgrid(x1, x1, sparse=True)                      # 2d linear space for Kernel generator
-    BinsSpace = np.zeros([n + Mn, Dim])                                  # Records x1 and x2 spaces
 
-
-    x1 = np.linspace(-1*bandwidth, 1, n_points, endpoint=True)
-    x1_2D, y1_2D = np.meshgrid(x1, x1, sparse=True)
 
 
     if symmetric == True:
