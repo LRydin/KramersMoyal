@@ -25,7 +25,7 @@ def epanechnikov_1d(n_points):
     return kernel * normalisation
 
 
-def Epanechnikov_2d(n_points, symmetric=True):
+def Epanechnikov_2d(n_points, bandwidth = 0, data=False, bounds=False, symmetric=True):
     """
     Generates the symmetric Epanechnikov kernel in 2 dimension
 
@@ -36,6 +36,20 @@ def Epanechnikov_2d(n_points, symmetric=True):
         either smaller than the total size of the phase space,
         for bounded compact support kernels, or equivalent of 
         the size of the phase space.
+
+    bandwidth  : float
+        Number ( >= 0) indicating the bandwidth of the kernel.
+        If unspecified, the optimal bandwidth according to 
+	Silverman will be used.
+	Can require the argument  : data
+
+    data  : array (2D)
+	Data where to apply the kernel. Needed to calculate the
+	extrema, if not given by argument bounds, or to
+	calculate the optimal bandwidth	
+	
+    n_points_data  : integer
+        Required to calculate the optimal bandwidth
 
     symmetric  : boolean
         The Epanechnikov kernel in two dimensional has a 
