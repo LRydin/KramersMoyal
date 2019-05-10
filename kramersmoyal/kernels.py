@@ -46,20 +46,37 @@ def Epanechnikov_2d(n_points, bandwidth = 0, data=False, bounds=False, symmetric
     data  : array (2D)
 	Data where to apply the kernel. Needed to calculate the
 	extrema, if not given by argument bounds, or to
-	calculate the optimal bandwidth	
-	
-    n_points_data  : integer
-        Required to calculate the optimal bandwidth
+	calculate the optimal bandwidth	.
+
+    bounds  : array
+	Either an array of two entries, mininum and maximum, or
+        an 2D array of minimum and maximum in each dimension.
+	If unspecified and argument data is passed as argument,
+        extrema will be taken from there	
 
     symmetric  : boolean
         The Epanechnikov kernel in two dimensional has a 
-        symmetric and a non-symmetric version
+        symmetric and a non-symmetric version.
 
     Returns
     -------
     kernel  : array (float)
         The specified kernel.
     """
+
+    if bounds == False:
+	if data != False:
+	    bounds = np.array([[data[:,0].min(),data[:,0].max()],
+			       [data[:,1].min(),data[:,1].max()]])
+    elif bounds.size == 2:
+	bounds = np.array([[bounds[0],bounds[1]],
+		           [bounds[0],bounds[1]]])
+    elif bounds.size != 4:
+	raise ValueError("""Bounds must be either an array of 2
+			    entries, a 2D array of the bounds at
+			    each dimension, or not specified, 
+			    thus extracted from the provided 
+			    argument data""")
 
     x1 = np.linspace(-1, 1, n_points, endpoint=True)
     x1_2D, y1_2D = np.meshgrid(x1, x1, sparse=True)
