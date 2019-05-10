@@ -112,7 +112,7 @@ def Epanechnikov_2d(n_points, bandwidth = 0, data=False, bounds=np.array([]),
 	elif symmetric == False:
 		# Epanechnikov kernel:
 		#   (8/3*pi)*3/4(1 - (x + y)², x=-1 to x=1 CHECK!
-		kernel = 1 - (np.power(x1_2D + y1_2D,2)) / (np.power(bandwidth,2))
+		kernel = (1 - (np.power(x1_2D,2)))*(1 - (np.power(y1_2D,2))) / (np.power(bandwidth,2))
 		#Remove <0 values
 		kernel[kernel < 0.] = 0.0
 		normalisation = 2 / (bandwidth * np.pi)
