@@ -77,20 +77,21 @@ def Epanechnikov_2d(n_points, bandwidth = 0, data=False, bounds=np.array([]),
 
 	#_assertDim(2,data)
 
-	if type(bounds) == np.ndarray:
-		if data != False:
-			bounds = np.array([[data[:,0].min(),data[:,0].max()],
-					   [data[:,1].min(),data[:,1].max()]])
-		elif bounds.size == 2:
-			bounds = np.array([[bounds[0],bounds[1]],
-					   [bounds[0],bounds[1]]])
-		elif bounds.size != 4:
-			raise ValueError("""Bounds must be either an array of 2 entries, a
-								2D array of the bounds at each dimension, or not
-								specified, thus extracted from the provided argument
-								data""")
+	# if type(bounds) == np.ndarray:
+	# 	if data != False:
+	# 		bounds = np.array([[data[:,0].min(),data[:,0].max()],
+	# 				   [data[:,1].min(),data[:,1].max()]])
+	# 	elif bounds.size == 2:
+	# 		bounds = np.array([[bounds[0],bounds[1]],
+	# 				   [bounds[0],bounds[1]]])
+	# 	elif bounds.size != 4:
+	# 		raise ValueError("""Bounds must be either an array of 2 entries, a
+	# 							2D array of the bounds at each dimension, or not
+	# 							specified, thus extracted from the provided argument
+	# 							data""")
 
 	# For a bandwidth of 1, the kernel size is one tenth of the phase space
+	bandwidth = 1.
 	kernel_size = int(n_points * bandwidth / 10)
 
 	# 1d linear space for underlying space in the first dimension
@@ -103,9 +104,9 @@ def Epanechnikov_2d(n_points, bandwidth = 0, data=False, bounds=np.array([]),
 	if symmetric == True:
 		# Epanechnikov kernel:
 		#   (8/3*pi)*3/4(1 - (x² + y²), x=-1 to x=1 CHECK!
-		#kernel = 1 - (np.power(x1_2D,2) + np.power(y1_2D,2)) / (np.power(bandwidth,2))
+		kernel = 1 - (np.power(x1_2D,2) + np.power(y1_2D,2)) / (np.power(bandwidth,2))
 		#Remove <0 values
-		#kernel[kernel < 0.] = 0.0
+		kernel[kernel < 0.] = 0.0
 		normalisation = 2 / (bandwidth * np.pi)
 
 	elif symmetric == False:
