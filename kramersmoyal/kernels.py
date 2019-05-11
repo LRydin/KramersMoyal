@@ -11,12 +11,45 @@ def _assertDim(dim,*array):
 		raise Error('%d-dimensional array given. Array must be'
 							'%d-dimensional' % array.ndim % dim)
 
+def _assertDimRange(*array):
+	if array.ndim > 2:
+		raise Error('%d-dimensional array given. Array must be either a 1- or '
+							'2-dimensional array' % array.ndim % dim)
 def _assertType(typedesired,*array):
 	if type(array) != typedesired:
 		raise Error('"%d-dimensional given. Required is %d-dimensional'
 					% type(array) % typedesired)
 
-def epanechnikov_1d(n_points):
+def OptimalBandwidth(data):
+	"""
+	Calculates the optimal bandwidth from the data according to Silverman's
+	optimal bandwidth.
+
+	Parameters
+	----------
+	data  : array
+		Either 1D or 2D array
+
+	Returns
+	-------
+	bandwidth  : float
+		Returns optimal value of the bandwidth
+	"""
+	_assertType(np.ndarray, data)
+	_assertDimRange(data)
+
+	if if array.ndim == 2:
+		std_1 = np.std(data[:,0])
+		std_2 = np.std(data[:,1])
+		std = std_2 if std_1 < std_2 else std_1
+		n_size = data[:,0].size
+	elif if array.ndim == 1:
+		std = np.std(data)
+		n_size = data.size
+
+	return np.power(( (4 * std) / (5 n_size) ),1/5)
+
+def epanechnikov_1d(n_points, bandwidth=0):
 	"""
 	Generates the Epanechnikov kernel in 1 dimension
 
@@ -27,16 +60,23 @@ def epanechnikov_1d(n_points):
 		than the total size of the phase space, for bounded compact support
 		kernels, or equivalent of the size of the phase space.
 
+	bandwidth  : float
+		Number ( >= 0) indicating the bandwidth of the kernel. If unspecified,
+		the optimal bandwidth according to Silverman will be used.
+		Can require the argument  : data
 	Returns
 	-------
 	kernel  : array
 		The specified kernel.
 	"""
-	kernel = 1 - np.linspace(-1, 1, n_points, endpoint=True) ** 2
+	space = np.linspace(-1, 1, n_points, endpoint=True)
+	kernel = 1 - space ** 2
 
 	normalisation = 3 / 4
+	kernel = kernel * normalisation
+	kernel = kernel / (np.sum(kernel) * (space[1] - space[0]))
 
-	return kernel * normalisation
+	return kernel
 
 
 def Epanechnikov_2d(n_points, bandwidth = 0, data=False, bounds=np.array([]),
