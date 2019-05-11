@@ -6,21 +6,21 @@ class Error(Exception):
 	"""
 	pass
 
-def _assertDim(dim,*array):
+def _assertDim(dim,array):
 	if array.ndim != dim:
 		raise Error('%d-dimensional array given. Array must be'
 							'%d-dimensional' % array.ndim % dim)
 
-def _assertDimRange(*array):
+def _assertDimRange(array):
 	if array.ndim > 2:
 		raise Error('%d-dimensional array given. Array must be either a 1- or '
 							'2-dimensional array' % array.ndim % dim)
-def _assertType(typedesired,*array):
+def _assertType(typedesired,array):
 	if type(array) != typedesired:
-		raise Error('"%d-dimensional given. Required is %d-dimensional'
-					% type(array) % typedesired)
+		raise Error('A ' + str(typedesired) +' is required. A ' +
+						str(type(array))  + ' was given.')
 
-def OptimalBandwidth(data):
+def OptimalBandwidth(array):
 	"""
 	Calculates the optimal bandwidth from the data according to Silverman's
 	optimal bandwidth.
@@ -35,19 +35,19 @@ def OptimalBandwidth(data):
 	bandwidth  : float
 		Returns optimal value of the bandwidth
 	"""
-	_assertType(np.ndarray, data)
-	_assertDimRange(data)
+	_assertType(np.ndarray, array)
+	_assertDimRange(array)
 
-	if if array.ndim == 2:
-		std_1 = np.std(data[:,0])
-		std_2 = np.std(data[:,1])
+	if array.ndim == 2:
+		std_1 = np.std(array[:,0])
+		std_2 = np.std(array[:,1])
 		std = std_2 if std_1 < std_2 else std_1
-		n_size = data[:,0].size
-	elif if array.ndim == 1:
-		std = np.std(data)
-		n_size = data.size
+		n_size = array[:,0].size
+	elif array.ndim == 1:
+		std = np.std(array)
+		n_size = array.size
 
-	return np.power(( (4 * std) / (5 n_size) ),1/5)
+	return np.power(( (4 * std) / (5 * n_size) ),1/5)
 
 def epanechnikov_1d(n_points, bandwidth=0):
 	"""
@@ -69,10 +69,14 @@ def epanechnikov_1d(n_points, bandwidth=0):
 	kernel  : array
 		The specified kernel.
 	"""
+	# linear space
 	space = np.linspace(-1, 1, n_points, endpoint=True)
+	# kernel
 	kernel = 1 - space ** 2
 
+	# tTheoretical normalisation
 	normalisation = 3 / 4
+	# Numerical re-normalisation to ensure integral is 1
 	kernel = kernel * normalisation
 	kernel = kernel / (np.sum(kernel) * (space[1] - space[0]))
 
