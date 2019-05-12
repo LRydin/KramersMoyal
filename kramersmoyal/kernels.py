@@ -145,7 +145,7 @@ def Uniform_1d(n_points, bandwidth='optimal'):
 
 def Quartic_1d(n_points, bandwidth='optimal'):
 	"""
-	Generates a uniform kernel in 1 dimension
+	Generates a quartic, or biweight, kernel in 1 dimension
 
 	Parameters
 	----------
@@ -178,7 +178,7 @@ def Quartic_1d(n_points, bandwidth='optimal'):
 
 def Triweight_1d(n_points, bandwidth='optimal'):
 	"""
-	Generates a uniform kernel in 1 dimension
+	Generates a triweight kernel in 1 dimension
 
 	Parameters
 	----------
@@ -203,6 +203,39 @@ def Triweight_1d(n_points, bandwidth='optimal'):
 
 	# Theoretical normalisation
 	normalisation = 35 / (32 * bandwidth)
+	# Numerical re-normalisation to ensure integral is 1
+	kernel = kernel * normalisation
+	kernel = kernel / (np.sum(kernel) * (space[1] - space[0]))
+
+	return kernel
+
+def Gaussian_1d(n_points, bandwidth='optimal'):
+	"""
+	Generates a Gaussian, or normal, kernel in 1 dimension
+
+	Parameters
+	----------
+	n_points  : integer
+		Number ( >= 1) total array size of the kernel. Must be either smaller
+		than the total size of the phase space, for bounded compact support
+		kernels, or equivalent of the size of the phase space.
+
+	bandwidth  : float
+		Number ( >= 0) indicating the bandwidth of the kernel. If unspecified,
+		the optimal bandwidth according to Silverman will be used.
+		Requires the argument  : data
+	Returns
+	-------
+	kernel  : array
+		The specified kernel.
+	"""
+	#Produce underlying space
+	space = Space(n_points,bandwidth)
+	# Triweight kernel
+	kernel = np.exp(- np.power((space / bandwidth), 2) / 2)
+
+	# Theoretical normalisation
+	normalisation = 1 / (np.sqrt(np.pi* bandwidth) )
 	# Numerical re-normalisation to ensure integral is 1
 	kernel = kernel * normalisation
 	kernel = kernel / (np.sum(kernel) * (space[1] - space[0]))
@@ -269,11 +302,3 @@ def Epanechnikov_2d(n_points, bandwidth = 'optimal', data=False, bounds=np.array
 		normalisation = 2 / (bandwidth * np.pi)
 
 	return kernel * normalisation
-
-
-"""
-other kernels to add
-
-= 0 for |z| > 1
-- Gaussian (normal) kernel: K(z) =1/sqrt(2*pi) exp(-z**2/2)
-"""
