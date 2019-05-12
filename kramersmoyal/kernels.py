@@ -49,7 +49,9 @@ def OptimalBandwidth(array):
 
 	return np.power(( (4 * std) / (5 * n_size) ),1/5)
 
-def epanechnikov_1d(n_points, bandwidth=0):
+# 1 Dimensional Kernels
+
+def Epanechnikov_1d(n_points, bandwidth='optimal'):
 	"""
 	Generates the Epanechnikov kernel in 1 dimension
 
@@ -63,25 +65,27 @@ def epanechnikov_1d(n_points, bandwidth=0):
 	bandwidth  : float
 		Number ( >= 0) indicating the bandwidth of the kernel. If unspecified,
 		the optimal bandwidth according to Silverman will be used.
-		Can require the argument  : data
+		Requires the argument  : data
 	Returns
 	-------
 	kernel  : array
 		The specified kernel.
 	"""
+	# For a bandwidth of 1, the kernel size is one tenth of the phase space
+	kernel_size = int(n_points * bandwidth / 10)
 	# linear space
-	space = np.linspace(-1, 1, n_points, endpoint=True)
-	# kernel
-	kernel = 1 - space ** 2
+	space = np.linspace(-1 * bandwidth, 1 * bandwidth, kernel_size,
+	 					endpoint=True)
+	# Epanechnikov kernel
+	kernel = 1 - (space / bandwidth) ** 2
 
 	# tTheoretical normalisation
-	normalisation = 3 / 4
+	normalisation = 3 / (4 * bandwidth)
 	# Numerical re-normalisation to ensure integral is 1
 	kernel = kernel * normalisation
 	kernel = kernel / (np.sum(kernel) * (space[1] - space[0]))
 
 	return kernel
-
 
 def Epanechnikov_2d(n_points, bandwidth = 0, data=False, bounds=np.array([]),
 					symmetric=True):
