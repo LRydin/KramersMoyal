@@ -75,31 +75,38 @@ def Space(n_points,bandwidth):
 	space = space + (space[1] - space[0])
 	return space
 
-def Grid(space, bounds):
+def Grid(space, bounds=0):
 	"""
 	Generates underlying space
 
 	Parameters
 	----------
-	n_points  : integer
-		Number ( >= 1) total array size of the kernel. Must be either smaller
-		than the total size of the phase space, for bounded compact support
-		kernels, or equivalent of the size of the phase space.
+	Space  : array
+		Requires a 1-dimensional underlying space. Run Space().
 
-	bandwidth  : float
-		Number ( >= 0) indicating the bandwidth of the kernel.
+	bounds  : array
+		Not implemented yet!
+		Either an array of two entries, mininum and maximum, or an 2D array of
+		minimum and maximum in each dimension. If unspecified and argument data
+		is passed as argument, extrema will be taken from there.
 	Returns
 	-------
 	space  : array
 		The underlying space
 	"""
 	# For a bandwidth of 1, the kernel size is one tenth of the phase space
-	kernel_size = int(n_points * bandwidth / 10)
-	# linear space
-	space = np.linspace(-1 * bandwidth, 1 * bandwidth, kernel_size,
-	 					endpoint=False)
-	space = space + (space[1] - space[0])
-	return space
+
+	# 2d linear space for Kernel generator
+
+	# if data != False:
+	# 	bounds = np.array([[data[:,0].min(),data[:,0].max()],
+	# 			   [data[:,1].min(),data[:,1].max()]])
+	# elif bounds.size == 2:
+	# 	bounds = np.array([[bounds[0],bounds[1]],
+	# 			   [bounds[0],bounds[1]]])
+
+	x_2D, y_2D = np.meshgrid(space, space, sparse=True)
+	return x_2D, y_2D
 
 # 1 Dimensional Kernels
 
@@ -286,13 +293,13 @@ def Epanechnikov_2d(n_points, bandwidth = 'optimal', data=False, bounds=np.array
 		Can require the argument  : data
 
 	data  : array (2D)
-	   Data where to apply the kernel. Needed to calculate the extrema, if not
-	   given by argument bounds, or to	calculate the optimal bandwidth.
+		Data where to apply the kernel. Needed to calculate the extrema, if not
+		given by argument bounds, or to	calculate the optimal bandwidth.
 
 	bounds  : array
-	   Either an array of two entries, mininum and maximum, or an 2D array of
-	   minimum and maximum in each dimension. If unspecified and argument data
-	   is passed as argument, extrema will be taken from there.
+		Either an array of two entries, mininum and maximum, or an 2D array of
+   		minimum and maximum in each dimension. If unspecified and argument data
+	   	is passed as argument, extrema will be taken from there.
 
 	symmetric  : boolean
 		The Epanechnikov kernel in two dimensional has a symmetric and a
@@ -307,8 +314,7 @@ def Epanechnikov_2d(n_points, bandwidth = 'optimal', data=False, bounds=np.array
 	#Produce underlying space
 	space = Space(n_points,bandwidth)
 	# 2d linear space for Kernel generator
-	x1_2D, y1_2D = np.meshgrid(space, space, sparse=True)                      # 2d linear space for Kernel generator
-
+	x_2D, y_2D = Grid(space)
 
 
 	if symmetric == True:
@@ -368,9 +374,7 @@ def Quartic_2d(n_points, bandwidth = 'optimal', data=False, bounds=np.array([]),
 	#Produce underlying space
 	space = Space(n_points,bandwidth)
 	# 2d linear space for Kernel generator
-	x1_2D, y1_2D = np.meshgrid(space, space, sparse=True)                      # 2d linear space for Kernel generator
-
-
+	x_2D, y_2D = Grid(space)
 
 	if symmetric == True:
 		# Quartic, or biweight, kernel in 2d:
