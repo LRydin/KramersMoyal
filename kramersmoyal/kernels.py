@@ -135,7 +135,7 @@ def Uniform_1d(n_points, bandwidth='optimal'):
 	# Uniform kernel
 	kernel = (space*0. + 1.) / (2. * bandwidth)
 
-	# tTheoretical normalisation
+	# Theoretical normalisation
 	normalisation = 1.
 	# Numerical re-normalisation to ensure integral is 1
 	kernel = kernel * normalisation
@@ -170,6 +170,39 @@ def Quartic_1d(n_points, bandwidth='optimal'):
 
 	# tTheoretical normalisation
 	normalisation = 15 / (16 * bandwidth)
+	# Numerical re-normalisation to ensure integral is 1
+	kernel = kernel * normalisation
+	kernel = kernel / (np.sum(kernel) * (space[1] - space[0]))
+
+	return kernel
+
+def Triweight_1d(n_points, bandwidth='optimal'):
+	"""
+	Generates a uniform kernel in 1 dimension
+
+	Parameters
+	----------
+	n_points  : integer
+		Number ( >= 1) total array size of the kernel. Must be either smaller
+		than the total size of the phase space, for bounded compact support
+		kernels, or equivalent of the size of the phase space.
+
+	bandwidth  : float
+		Number ( >= 0) indicating the bandwidth of the kernel. If unspecified,
+		the optimal bandwidth according to Silverman will be used.
+		Requires the argument  : data
+	Returns
+	-------
+	kernel  : array
+		The specified kernel.
+	"""
+	#Produce underlying space
+	space = Space(n_points,bandwidth)
+	# Triweight kernel
+	kernel = np.power((1 - np.power((space / bandwidth) , 2) ) , 3)
+
+	# Theoretical normalisation
+	normalisation = 35 / (32 * bandwidth)
 	# Numerical re-normalisation to ensure integral is 1
 	kernel = kernel * normalisation
 	kernel = kernel / (np.sum(kernel) * (space[1] - space[0]))
@@ -240,11 +273,7 @@ def Epanechnikov_2d(n_points, bandwidth = 'optimal', data=False, bounds=np.array
 
 """
 other kernels to add
-- Quartic (biweight) kernel: K(z) = 15/16 (1-z**2)**2
-2 for |z| ≤ 1
-= 0 for |z| > 1
-- Triweight kernel: K(z) = 35/32 (1-z**2)**3
-3 for |z| ≤ 1
+
 = 0 for |z| > 1
 - Gaussian (normal) kernel: K(z) =1/sqrt(2*pi) exp(-z**2/2)
 """
