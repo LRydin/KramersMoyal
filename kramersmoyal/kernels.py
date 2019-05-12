@@ -330,9 +330,12 @@ def Epanechnikov_2d(n_points, bandwidth = 'optimal', data=False, bounds=np.array
 							/ (np.power(bandwidth,2))
 	#Remove <0 values
 	kernel[kernel < 0.] = 0.0
+
+	#normalisation
 	normalisation = 2 / (bandwidth * np.pi)
+	kernel = kernel * normalisation
 	kernel = kernel / (np.sum(kernel) * np.power((space[1] - space[0]),2))
-	return kernel * normalisation
+	return kernel
 
 def Uniform_2d(n_points, bandwidth = 'optimal', data=False, bounds=np.array([]),
 					symmetric=True):
@@ -361,12 +364,12 @@ def Uniform_2d(n_points, bandwidth = 'optimal', data=False, bounds=np.array([]),
 	   is passed as argument, extrema will be taken from there.
 
 	symmetric  : boolean
-		The Epanechnikov kernel in two dimensional has a symmetric and a
-		non-symmetric version.
+		Non-existent. Left here for conformity with other kernels. The uniform
+		kernel is symmetric
 
 	Returns
 	-------
-	kernel  : array (float)
+	kernel  : array
 		The specified kernel.
 	"""
 
@@ -378,10 +381,14 @@ def Uniform_2d(n_points, bandwidth = 'optimal', data=False, bounds=np.array([]),
 
 	# Uniform kernel in 2d:
 	#   (8/3*pi)*3/4(1 - (x² + y²), x=-1 to x=1 CHECK!
-	kernel = 1 - (np.power(x1_2D,2) + np.power(y1_2D,2)) / (np.power(bandwidth,2))
+	kernel = (x_2D*0.  + 1.) / (2. * bandwidth)
+
 	#Remove <0 values
 	kernel[kernel < 0.] = 0.0
-	normalisation = 2 / (bandwidth * np.pi)
 
+	#Normalisation
+	normalisation = 1.
+	kernel = kernel * normalisation
+	kernel = kernel / (np.sum(kernel) * np.power((space[1] - space[0]),2))
 
-	return kernel * normalisation
+	return kernel
