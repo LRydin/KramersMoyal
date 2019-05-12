@@ -320,22 +320,21 @@ def Epanechnikov_2d(n_points, bandwidth = 'optimal', data=False, bounds=np.array
 	if symmetric == True:
 		# Epanechnikov kernel:
 		#   (8/3*pi)*3/4(1 - (x² + y²), x=-1 to x=1 CHECK!
-		kernel = 1 - (np.power(x1_2D,2) + np.power(y1_2D,2)) / (np.power(bandwidth,2))
-		#Remove <0 values
-		kernel[kernel < 0.] = 0.0
-		normalisation = 2 / (bandwidth * np.pi)
+		kernel = 1 - (np.power(x1_2D,2) + np.power(y1_2D,2))
+							/ (np.power(bandwidth,2))
 
 	elif symmetric == False:
 		# Epanechnikov kernel:
 		#   (8/3*pi)*3/4(1 - (x + y)², x=-1 to x=1 CHECK!
-		kernel = (1 - (np.power(x1_2D,2)))*(1 - (np.power(y1_2D,2))) / (np.power(bandwidth,2))
-		#Remove <0 values
-		kernel[kernel < 0.] = 0.0
-		normalisation = 2 / (bandwidth * np.pi)
-
+		kernel = (1 - (np.power(x1_2D,2)))*(1 - (np.power(y1_2D,2)))
+							/ (np.power(bandwidth,2))
+	#Remove <0 values
+	kernel[kernel < 0.] = 0.0
+	normalisation = 2 / (bandwidth * np.pi)
+	kernel = kernel / (np.sum(kernel) * np.power((space[1] - space[0]),2))
 	return kernel * normalisation
 
-def Quartic_2d(n_points, bandwidth = 'optimal', data=False, bounds=np.array([]),
+def Uniform_2d(n_points, bandwidth = 'optimal', data=False, bounds=np.array([]),
 					symmetric=True):
 	"""
 	Generates the symmetric Epanechnikov kernel in 2 dimension
@@ -376,20 +375,13 @@ def Quartic_2d(n_points, bandwidth = 'optimal', data=False, bounds=np.array([]),
 	# 2d linear space for Kernel generator
 	x_2D, y_2D = Grid(space)
 
-	if symmetric == True:
-		# Quartic, or biweight, kernel in 2d:
-		#   (8/3*pi)*3/4(1 - (x² + y²), x=-1 to x=1 CHECK!
-		kernel = 1 - (np.power(x1_2D,2) + np.power(y1_2D,2)) / (np.power(bandwidth,2))
-		#Remove <0 values
-		kernel[kernel < 0.] = 0.0
-		normalisation = 2 / (bandwidth * np.pi)
 
-	elif symmetric == False:
-		# Epanechnikov kernel:
-		#   (8/3*pi)*3/4(1 - (x + y)², x=-1 to x=1 CHECK!
-		kernel = (1 - (np.power(x1_2D,2)))*(1 - (np.power(y1_2D,2))) / (np.power(bandwidth,2))
-		#Remove <0 values
-		kernel[kernel < 0.] = 0.0
-		normalisation = 2 / (bandwidth * np.pi)
+	# Uniform kernel in 2d:
+	#   (8/3*pi)*3/4(1 - (x² + y²), x=-1 to x=1 CHECK!
+	kernel = 1 - (np.power(x1_2D,2) + np.power(y1_2D,2)) / (np.power(bandwidth,2))
+	#Remove <0 values
+	kernel[kernel < 0.] = 0.0
+	normalisation = 2 / (bandwidth * np.pi)
+
 
 	return kernel * normalisation
