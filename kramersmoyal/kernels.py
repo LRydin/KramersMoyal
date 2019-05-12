@@ -144,7 +144,7 @@ def Uniform_1d(n_points, bandwidth='optimal'):
 	return kernel
 
 
-def Epanechnikov_2d(n_points, bandwidth = 0, data=False, bounds=np.array([]),
+def Epanechnikov_2d(n_points, bandwidth = 'optimal', data=False, bounds=np.array([]),
 					symmetric=True):
 	"""
 	Generates the symmetric Epanechnikov kernel in 2 dimension
