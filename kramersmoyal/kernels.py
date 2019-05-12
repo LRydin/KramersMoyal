@@ -100,7 +100,7 @@ def Epanechnikov_1d(n_points, bandwidth='optimal'):
 	#Produce underlying space
 	space = Space(n_points,bandwidth)
 	# Epanechnikov kernel
-	kernel = 1 - (space / bandwidth) ** 2
+	kernel = 1 - np.power((space / bandwidth) , 2)
 
 	# tTheoretical normalisation
 	normalisation = 3 / (4 * bandwidth)
@@ -132,7 +132,7 @@ def Uniform_1d(n_points, bandwidth='optimal'):
 	"""
 	#Produce underlying space
 	space = Space(n_points,bandwidth)
-	# Epanechnikov kernel
+	# Uniform kernel
 	kernel = (space*0. + 1.) / (2. * bandwidth)
 
 	# tTheoretical normalisation
@@ -143,6 +143,38 @@ def Uniform_1d(n_points, bandwidth='optimal'):
 
 	return kernel
 
+def Quartic_1d(n_points, bandwidth='optimal'):
+	"""
+	Generates a uniform kernel in 1 dimension
+
+	Parameters
+	----------
+	n_points  : integer
+		Number ( >= 1) total array size of the kernel. Must be either smaller
+		than the total size of the phase space, for bounded compact support
+		kernels, or equivalent of the size of the phase space.
+
+	bandwidth  : float
+		Number ( >= 0) indicating the bandwidth of the kernel. If unspecified,
+		the optimal bandwidth according to Silverman will be used.
+		Requires the argument  : data
+	Returns
+	-------
+	kernel  : array
+		The specified kernel.
+	"""
+	#Produce underlying space
+	space = Space(n_points,bandwidth)
+	# Quartic kernel
+	kernel = np.power((1 - np.power((space / bandwidth) , 2) ) , 2)
+
+	# tTheoretical normalisation
+	normalisation = 15 / (16 * bandwidth)
+	# Numerical re-normalisation to ensure integral is 1
+	kernel = kernel * normalisation
+	kernel = kernel / (np.sum(kernel) * (space[1] - space[0]))
+
+	return kernel
 
 def Epanechnikov_2d(n_points, bandwidth = 'optimal', data=False, bounds=np.array([]),
 					symmetric=True):
@@ -183,7 +215,7 @@ def Epanechnikov_2d(n_points, bandwidth = 'optimal', data=False, bounds=np.array
 	#Produce underlying space
 	space = Space(n_points,bandwidth)
 	# 2d linear space for Kernel generator
-	x1_2D, y1_2D = np.meshgrid(x1, x1, sparse=True)                      # 2d linear space for Kernel generator
+	x1_2D, y1_2D = np.meshgrid(space, space, sparse=True)                      # 2d linear space for Kernel generator
 
 
 
@@ -208,8 +240,6 @@ def Epanechnikov_2d(n_points, bandwidth = 'optimal', data=False, bounds=np.array
 
 """
 other kernels to add
-- Epanechnikov kernel: K(z) = 0.75(1-z**2) for |z| ≤ 1
-= 0 for |z| > 1
 - Quartic (biweight) kernel: K(z) = 15/16 (1-z**2)**2
 2 for |z| ≤ 1
 = 0 for |z| > 1
