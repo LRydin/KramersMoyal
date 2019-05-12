@@ -49,6 +49,32 @@ def OptimalBandwidth(array):
 
 	return np.power(( (4 * std) / (5 * n_size) ),1/5)
 
+def Space(n_points,bandwidth):
+	"""
+	Generates underlying space
+
+	Parameters
+	----------
+	n_points  : integer
+		Number ( >= 1) total array size of the kernel. Must be either smaller
+		than the total size of the phase space, for bounded compact support
+		kernels, or equivalent of the size of the phase space.
+
+	bandwidth  : float
+		Number ( >= 0) indicating the bandwidth of the kernel.
+	Returns
+	-------
+	space  : array
+		The underlying space
+	"""
+	# For a bandwidth of 1, the kernel size is one tenth of the phase space
+	kernel_size = int(n_points * bandwidth / 10)
+	# linear space
+	space = np.linspace(-1 * bandwidth, 1 * bandwidth, kernel_size,
+	 					endpoint=False)
+	space = space + (space[1] - space[0])
+	return space
+
 # 1 Dimensional Kernels
 
 def Epanechnikov_1d(n_points, bandwidth='optimal'):
@@ -71,11 +97,8 @@ def Epanechnikov_1d(n_points, bandwidth='optimal'):
 	kernel  : array
 		The specified kernel.
 	"""
-	# For a bandwidth of 1, the kernel size is one tenth of the phase space
-	kernel_size = int(n_points * bandwidth / 10)
-	# linear space
-	space = np.linspace(-1 * bandwidth, 1 * bandwidth, kernel_size,
-	 					endpoint=True)
+	#Produce underlying space
+	space = Space(n_points,bandwidth)
 	# Epanechnikov kernel
 	kernel = 1 - (space / bandwidth) ** 2
 
@@ -86,6 +109,40 @@ def Epanechnikov_1d(n_points, bandwidth='optimal'):
 	kernel = kernel / (np.sum(kernel) * (space[1] - space[0]))
 
 	return kernel
+
+def Uniform_1d(n_points, bandwidth='optimal'):
+	"""
+	Generates a uniform kernel in 1 dimension
+
+	Parameters
+	----------
+	n_points  : integer
+		Number ( >= 1) total array size of the kernel. Must be either smaller
+		than the total size of the phase space, for bounded compact support
+		kernels, or equivalent of the size of the phase space.
+
+	bandwidth  : float
+		Number ( >= 0) indicating the bandwidth of the kernel. If unspecified,
+		the optimal bandwidth according to Silverman will be used.
+		Requires the argument  : data
+	Returns
+	-------
+	kernel  : array
+		The specified kernel.
+	"""
+	#Produce underlying space
+	space = Space(n_points,bandwidth)
+	# Epanechnikov kernel
+	kernel = (space*0. + 1.) / (2. * bandwidth)
+
+	# tTheoretical normalisation
+	normalisation = 1.
+	# Numerical re-normalisation to ensure integral is 1
+	kernel = kernel * normalisation
+	kernel = kernel / (np.sum(kernel) * (space[1] - space[0]))
+
+	return kernel
+
 
 def Epanechnikov_2d(n_points, bandwidth = 0, data=False, bounds=np.array([]),
 					symmetric=True):
@@ -123,27 +180,8 @@ def Epanechnikov_2d(n_points, bandwidth = 0, data=False, bounds=np.array([]),
 		The specified kernel.
 	"""
 
-	#_assertDim(2,data)
-
-	# if type(bounds) == np.ndarray:
-	# 	if data != False:
-	# 		bounds = np.array([[data[:,0].min(),data[:,0].max()],
-	# 				   [data[:,1].min(),data[:,1].max()]])
-	# 	elif bounds.size == 2:
-	# 		bounds = np.array([[bounds[0],bounds[1]],
-	# 				   [bounds[0],bounds[1]]])
-	# 	elif bounds.size != 4:
-	# 		raise ValueError("""Bounds must be either an array of 2 entries, a
-	# 							2D array of the bounds at each dimension, or not
-	# 							specified, thus extracted from the provided argument
-	# 							data""")
-
-	# For a bandwidth of 1, the kernel size is one tenth of the phase space
-	bandwidth = 1.
-	kernel_size = int(n_points * bandwidth / 10)
-
-	# 1d linear space for underlying space in the first dimension
-	x1  = np.linspace(-1 * bandwidth, 1 * bandwidth, kernel_size, endpoint=True)
+	#Produce underlying space
+	space = Space(n_points,bandwidth)
 	# 2d linear space for Kernel generator
 	x1_2D, y1_2D = np.meshgrid(x1, x1, sparse=True)                      # 2d linear space for Kernel generator
 
@@ -170,8 +208,6 @@ def Epanechnikov_2d(n_points, bandwidth = 0, data=False, bounds=np.array([]),
 
 """
 other kernels to add
-- Uniform kernel: K(z) = 0.5 for |z| ≤ 1
-= 0 for |z| > 1
 - Epanechnikov kernel: K(z) = 0.75(1-z**2) for |z| ≤ 1
 = 0 for |z| > 1
 - Quartic (biweight) kernel: K(z) = 15/16 (1-z**2)**2
