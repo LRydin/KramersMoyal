@@ -245,7 +245,8 @@ def Triweight_1d(n_points, bandwidth='optimal'):
 
 def Gaussian_1d(n_points, bandwidth='optimal'):
 	"""
-	Generates a Gaussian, or normal, kernel in 1 dimension
+	Generates a Gaussian, or normal, kernel in 1 dimension. Notice Gaussian functions have
+	infinite support, so a cutoff needs to be enforced.
 
 	Parameters
 	----------
@@ -459,6 +460,7 @@ def Quartic_2d(n_points, bandwidth = 'optimal', data=False,
 	kernel = kernel / (np.sum(kernel) * np.power((space[1] - space[0]),2))
 	return kernel
 
+
 def Triweight_2d(n_points, bandwidth = 'optimal', data=False,
  					bounds=np.array([]), symmetric=True):
 	"""
@@ -518,6 +520,61 @@ def Triweight_2d(n_points, bandwidth = 'optimal', data=False,
 
 	#normalisation
 	normalisation = 2 / (bandwidth * np.pi)
+	kernel = kernel * normalisation
+	kernel = kernel / (np.sum(kernel) * np.power((space[1] - space[0]),2))
+	return kernel
+
+
+def Gaussian_2d(n_points, bandwidth = 'optimal', data=False,
+ 					bounds=np.array([]), symmetric=True):
+	"""
+	Generates the Gaussian, or normal,  kernel in 2 dimension. Notice Gaussian
+	functions have infinite support, so a cutoff needs to be enforced.
+	Parameters
+	----------
+	n_points  : integer
+		Number ( >= 1) total array size of the whole phase space. The kernel
+		will be of a reduced size in this 2D space of size n_points x n_point.
+		Suggested values is of order n_points = 1000.
+
+	bandwidth  : float
+		Number ( >= 0) indicating the bandwidth of the kernel. If unspecified,
+		the optimal bandwidth according to Silverman will be used.
+		Can require the argument  : data
+
+	data  : array (2D)
+		Data where to apply the kernel. Needed to calculate the extrema, if not
+		given by argument bounds, or to	calculate the optimal bandwidth.
+
+	bounds  : array
+		Either an array of two entries, mininum and maximum, or an 2D array of
+   		minimum and maximum in each dimension. If unspecified and argument data
+	   	is passed as argument, extrema will be taken from there.
+
+	symmetric  : boolean
+		The Triweight kernel in two dimensional has a symmetric and a
+		non-symmetric version.
+
+	Returns
+	-------
+	kernel  : array (float)
+		The specified kernel.
+	"""
+
+	#Produce underlying space
+	space = Space(n_points,bandwidth)
+	# 2d linear space for Kernel generator
+	x_2D, y_2D = Grid(space)
+
+	#THIS IS FALSE HERE!
+	kernel = (np.exp(- np.power((x_2D / bandwidth), 2) / 2)*
+				np.exp(- np.power((y_2D / bandwidth), 2) / 2))
+
+	#Remove <0 values
+	kernel[kernel < 0.] = 0.0
+
+	#normalisation
+	normalisation = 1 / (np.sqrt(np.pi* bandwidth) )
 	kernel = kernel * normalisation
 	kernel = kernel / (np.sum(kernel) * np.power((space[1] - space[0]),2))
 	return kernel
