@@ -7,6 +7,7 @@ class Error(Exception):
 	pass
 
 def _assertDim(dim,array):
+	assert
 	if array.ndim != dim:
 		raise Error('%d-dimensional array given. Array must be'
 							'%d-dimensional' % array.ndim % dim)
@@ -111,169 +112,148 @@ def Grid(space, bounds=0):
 
 # 1 Dimensional Kernels
 
-def Epanechnikov_1d(n_points, bandwidth='optimal'):
+def epanechnikov_1d(x: np.ndarray) -> np.ndarray:
 	"""
-	Generates the Epanechnikov kernel in 1 dimension
+	Generates a Epanechnikov kernel in 1 dimension
 
 	Parameters
 	----------
-	n_points  : integer
-		Number ( >= 1) total array size of the kernel. Must be either smaller
-		than the total size of the phase space, for bounded compact support
-		kernels, or equivalent of the size of the phase space.
-
-	bandwidth  : float
-		Number ( >= 0) indicating the bandwidth of the kernel. If unspecified,
-		the optimal bandwidth according to Silverman will be used.
-		Requires the argument  : data
+	x  : ndarray
+		Linear space of given array dimension on which a Epanechnikov kernel is
+		defined. The support of the function is given in [-1, 1].
 	Returns
 	-------
 	kernel  : array
 		The specified kernel.
 	"""
-	#Produce underlying space
-	space = Space(n_points,bandwidth)
-	# Epanechnikov kernel
-	kernel = 1 - np.power((space / bandwidth) , 2)
 
-	# tTheoretical normalisation
-	normalisation = 3 / (4 * bandwidth)
-	# Numerical re-normalisation to ensure integral is 1
+	# Epanechnikov kernel
+	kernel = 1 - np.power(x , 2)
+
+	# Support of kernel is [-1, 1]
+	kernel[np.abs(x)>1] = 0
+
+	# Theoretical normalisation
+	normalisation = 3. / 4.
+
+	# Normalisation
 	kernel = kernel * normalisation
-	kernel = kernel / (np.sum(kernel) * (space[1] - space[0]))
 
 	return kernel
 
-def Uniform_1d(n_points, bandwidth='optimal'):
+def uniform_1d(x: np.ndarray) -> np.ndarray:
 	"""
 	Generates a uniform kernel in 1 dimension
 
 	Parameters
 	----------
-	n_points  : integer
-		Number ( >= 1) total array size of the kernel. Must be either smaller
-		than the total size of the phase space, for bounded compact support
-		kernels, or equivalent of the size of the phase space.
-
-	bandwidth  : float
-		Number ( >= 0) indicating the bandwidth of the kernel. If unspecified,
-		the optimal bandwidth according to Silverman will be used.
-		Requires the argument  : data
+	x  : ndarray
+		Linear space of given array dimension on which a uniform kernel is
+		defined. The support of the function is given in [-1, 1].
 	Returns
 	-------
 	kernel  : array
 		The specified kernel.
 	"""
-	#Produce underlying space
-	space = Space(n_points,bandwidth)
+
 	# Uniform kernel
-	kernel = (space*0. + 1.) / (2. * bandwidth)
+	kernel = (x*0. + 1.) / 2.
+
+	# Support of kernel is [-1, 1]
+	kernel[np.abs(x)>1] = 0
 
 	# Theoretical normalisation
-	normalisation = 1.
-	# Numerical re-normalisation to ensure integral is 1
+	normalisation = 1
+
+	# Normalisation
 	kernel = kernel * normalisation
-	kernel = kernel / (np.sum(kernel) * (space[1] - space[0]))
 
 	return kernel
 
-def Quartic_1d(n_points, bandwidth='optimal'):
+def quartic_1d(x: np.ndarray) -> np.ndarray:
 	"""
 	Generates a quartic, or biweight, kernel in 1 dimension
 
 	Parameters
 	----------
-	n_points  : integer
-		Number ( >= 1) total array size of the kernel. Must be either smaller
-		than the total size of the phase space, for bounded compact support
-		kernels, or equivalent of the size of the phase space.
-
-	bandwidth  : float
-		Number ( >= 0) indicating the bandwidth of the kernel. If unspecified,
-		the optimal bandwidth according to Silverman will be used.
-		Requires the argument  : data
+	x  : ndarray
+		Linear space of given array dimension on which a quartic kernel is
+		defined. The support of the function is given in [-1, 1].
 	Returns
 	-------
 	kernel  : array
 		The specified kernel.
 	"""
-	#Produce underlying space
-	space = Space(n_points,bandwidth)
-	# Quartic kernel
-	kernel = np.power((1 - np.power((space / bandwidth) , 2) ) , 2)
 
-	# tTheoretical normalisation
-	normalisation = 15 / (16 * bandwidth)
-	# Numerical re-normalisation to ensure integral is 1
+	# Quartic kernel
+	kernel = np.power( (1 - np.power(x , 2) ) , 2)
+
+	# Support of kernel is [-1, 1]
+	kernel[np.abs(x)>1] = 0
+
+	# Theoretical normalisation
+	normalisation = 15. / 16.
+
+	# Normalisation
 	kernel = kernel * normalisation
-	kernel = kernel / (np.sum(kernel) * (space[1] - space[0]))
 
 	return kernel
 
-def Triweight_1d(n_points, bandwidth='optimal'):
+def triweight_1d(x: np.ndarray) -> np.ndarray:
 	"""
 	Generates a triweight kernel in 1 dimension
 
 	Parameters
 	----------
-	n_points  : integer
-		Number ( >= 1) total array size of the kernel. Must be either smaller
-		than the total size of the phase space, for bounded compact support
-		kernels, or equivalent of the size of the phase space.
-
-	bandwidth  : float
-		Number ( >= 0) indicating the bandwidth of the kernel. If unspecified,
-		the optimal bandwidth according to Silverman will be used.
-		Requires the argument  : data
+	x  : ndarray
+		Linear space of given array dimension on which a triweight kernel is
+		defined. The support of the function is given in [-1, 1].
 	Returns
 	-------
 	kernel  : array
 		The specified kernel.
 	"""
-	#Produce underlying space
-	space = Space(n_points,bandwidth)
+
 	# Triweight kernel
-	kernel = np.power((1 - np.power((space / bandwidth) , 2) ) , 3)
+	kernel = np.power( (1 - np.power( x , 2) ) , 3)
+
+	# Support of kernel is [-1, 1]
+	kernel[np.abs(x)>1] = 0
 
 	# Theoretical normalisation
-	normalisation = 35 / (32 * bandwidth)
-	# Numerical re-normalisation to ensure integral is 1
+	normalisation = 35. / 32.
+
+	# Normalisation
 	kernel = kernel * normalisation
-	kernel = kernel / (np.sum(kernel) * (space[1] - space[0]))
 
 	return kernel
 
-def Gaussian_1d(n_points, bandwidth='optimal'):
+def gaussian_1d(x: np.ndarray) -> np.ndarray:
 	"""
-	Generates a Gaussian, or normal, kernel in 1 dimension. Notice Gaussian functions have
-	infinite support, so a cutoff needs to be enforced.
+	Generates a Gaussian kernel in 1 dimension
 
 	Parameters
 	----------
-	n_points  : integer
-		Number ( >= 1) total array size of the kernel. Must be either smaller
-		than the total size of the phase space, for bounded compact support
-		kernels, or equivalent of the size of the phase space.
-
-	bandwidth  : float
-		Number ( >= 0) indicating the bandwidth of the kernel. If unspecified,
-		the optimal bandwidth according to Silverman will be used.
-		Requires the argument  : data
+	x  : ndarray
+		Linear space of given array dimension on which a Gaussian kernel is
+		defined. The support of the function is given in [-1, 1].
 	Returns
 	-------
 	kernel  : array
 		The specified kernel.
 	"""
-	#Produce underlying space
-	space = Space(n_points,bandwidth)
-	# Triweight kernel
-	kernel = np.exp(- np.power((space / bandwidth), 2) / 2)
+
+	# Gaussian kernel
+	kernel = np.exp( - np.power( x , 2) / 2)
+
+	# Support of kernel is infinite
+	# kernel[np.abs(x)>1] = 0
 
 	# Theoretical normalisation
-	normalisation = 1 / (np.sqrt(np.pi* bandwidth) )
-	# Numerical re-normalisation to ensure integral is 1
+	normalisation = 1. / ( np.sqrt( np.pi ) )
+
+	# Normalisation
 	kernel = kernel * normalisation
-	kernel = kernel / (np.sum(kernel) * (space[1] - space[0]))
 
 	return kernel
 
