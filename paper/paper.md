@@ -8,38 +8,38 @@ tags:
   - Fokker--Planck
   - Python
 authors:
-  - name: 'Leonardo Rydin Gorjão'
-    orcid: 0000-0001-5513-0580
-    affiliation: "1, 2, 3, 4"
-  - name: Francisco Meirinhos
-    orcid: 0000-0000-0000-0000
-    affiliation: 3
+ - name: Leonardo Rydin Gorjão
+   orcid: 0000-0001-5513-0580
+   affiliation: "1, 2, 3, 4"
+ - name: Francisco Meirinhos
+   orcid: 0000-0000-0000-0000
+   affiliation: 3
 affiliations:
- - name: Institute for Theoretical Physics, University of Cologne, 50937~K\"oln, Germany
+ - name: Institute for Theoretical Physics, University of Cologne, 50937~Köln, Germany
    index: 1
- - name: Forschungszentrum J\"ulich, Institute for Energy and Climate Research - Systems Analysis and Technology Evaluation (IEK-STE), 52428~J\"ulich, Germany
+ - name: Forschungszentrum Jülich, Institute for Energy and Climate Research - Systems Analysis and Technology Evaluation (IEK-STE), 52428~J\"ulich, Germany
    index: 2
- - name: Helmholtz Institute for Radiation and Nuclear Physics, University of Bonn, Nussallee~14--16, 53115~Bonn, Germany
+ - name: Helmholtz Institute for Radiation and Nuclear Physics, University of Bonn, Nußallee~14--16, 53115~Bonn, Germany
    index: 3
  - name: Department of Epileptology, University of Bonn, Sigmund-Freud-Straße 25, 53105 Bonn, Germany
    index: 4
-date: \today{}
+date: \today
 bibliography: bib.bib
 ---
 
 # Summary
 
-A general problem for measuring and evaluating any stochastic process is the retrieval from data or time-series of the Kramers--Moyal coefficients $\mathcal{M}$, the coefficents of the Kramers--Moyal expasion of the master equation describing a particular stochastic process.
+A general problem for measuring and evaluating any stochastic process is the retrieval from data or time-series of the Kramers--Moyal coefficients $\mathcal{M}$, the coefficients of the Kramers--Moyal expansion of the master equation describing a particular stochastic process.
 
 Given a set of continuous and stationary data, i.e., ergodic or quasi-stationary stochastic data, the extensive literature of stochastic processes awards a set of measures, as the Kramers--Moyal coefficients [@Risken] or the conditional moments, that link stochastic processes to a probabilistic description of the process or of the family of processes, i.e., to a set of partial differential equations, e.g. the master equation or the Fokker--Planck equations.
+Of particular relevance is the growing evidence that lower-order stochastic processes do not seem to accurately described phenomena seen in data [@Tabar], thus a necessity to study higher-order processes, an therefore uncover the higher-order Kramers--Moyal coefficients efficiently.
 
 To unravel the Kramers--Moyal coefficients the most straightforward approach is to perform a histogram-based regression to evaluate the conditional moments of the system at hand.
 Such approach is conventional and requires the most commonly used packages in Python (i.e., `numpy`,  `scipy`, or `pandas`), and is directly embodied in MATLAB, Julia or R, usually under the name of `hist` or `histogram`.
 
-The package presented here comprises a manifold of options: A general open-source toolbox for the calculation of Kramers--Moyal coefficients in one and two dimension, up to any order, and with a variety of different kernels, with the added freedom to implement a specific kernel, if desired.
+The package presented here comprises a manifold of options: A general open-source toolbox for the calculation of Kramers--Moyal coefficients in one and two dimension, for any desired order, and with a variety of different kernels, with the added freedom to implement a specific kernel, if desired.
 
 # Mathematics
-
 
 The probability that an $n$-dimensional state variable $\boldsymbol{x}'(t)\in\mathbb{R}^n$ is observed at position $\boldsymbol{x}$ is given by the conditional probability of the previous (or future) states of the system [@Risken].
 This probabilistic description takes the form
@@ -49,7 +49,7 @@ This probabilistic description takes the form
 with $W(\boldsymbol{x}'|\boldsymbol{x})$ the transition probability rate.
 
 The exact evaluation of the Kramers--Moyal coefficients for discrete or discretised datasets $\boldsymbol{y}(t)$---any human measure of a process is discrete, as well as any computer generated data---is bounded by the timewise limit imposed.
-Taking as an example a two-dimentional case, obtained numerically with the present library, with $\boldsymbol{x}(t)=(x_1(t),x_2(t))\in\mathbb{R}^{2}$, the Kramers--Moyal coefficients $\mathcal{M}^{[\ell, m]}\in\mathbb{R}^{2}$ take the form
+Taking as an example a two-dimentional case, that one can obtained numerically with this library, with $\boldsymbol{x}(t)=(x_1(t),x_2(t))\in\mathbb{R}^{2}$, the Kramers--Moyal coefficients $\mathcal{M}^{[\ell, m]}\in\mathbb{R}^{2}$ take the form
 \begin{equation}
 \begin{aligned}
 &\mathcal{M}^{[\ell, m]}(x_1,x_2)=\lim_{\Delta t\to 0}\!\frac{1}{\Delta t}\int \mathrm{d} y_1 \mathrm{d} y_2 (y_1(t\!+\!\Delta t)\!-\!y_1(t))^\ell(y_2(t\!+\!\Delta t)\!-y_2(t))^m \cdot \\
