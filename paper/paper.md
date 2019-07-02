@@ -1,5 +1,5 @@
 ---
-title: 'Retrieving the Kramers--Moyal coefficients for any order in one and two-dimensinal systems'
+title: 'Python KM: Kramers--Moyal coefficients at any order for one and two-dimensional stochastic processes'
 tags:
   - Kramers--Moyal coefficents
   - master equation
@@ -13,17 +13,18 @@ authors:
    affiliation: "1, 2, 3, 4"
  - name: Francisco Meirinhos
    orcid: 0000-0000-0000-0000
-   affiliation: 3
+   affiliation: 4
 affiliations:
  - name: Institute for Theoretical Physics, University of Cologne, 50937~Köln, Germany
    index: 1
  - name: Forschungszentrum Jülich, Institute for Energy and Climate Research - Systems Analysis and Technology Evaluation (IEK-STE), 52428~J\"ulich, Germany
    index: 2
- - name: Helmholtz Institute for Radiation and Nuclear Physics, University of Bonn, Nußallee~14--16, 53115~Bonn, Germany
-   index: 3
  - name: Department of Epileptology, University of Bonn, Sigmund-Freud-Straße 25, 53105 Bonn, Germany
+   index: 3
+ - name: Helmholtz Institute for Radiation and Nuclear Physics, University of Bonn, Nußallee~14--16, 53115~Bonn, Germany
    index: 4
-date: \today
+
+date: Leonardo Rydin Gorjão, Francisco Meirinhos
 bibliography: bib.bib
 ---
 
@@ -77,10 +78,13 @@ Alike the histogram approach for the measure of the Kramers--Moyal coefficients,
 The standing difference, in comparison to the histogram approach, is the riddance of a (discrete) binning system.
 All points are averaged, in a weighted fashion, into the distribution space---aiding specially in cases where the data sets is scarce---and awarding a continuous measurable space (easier for fitting, for example).
 
-![Two exemplary two-dimensional Kramers--Moyal coefficients calculated with a package using a $n\times n = 440\times 440$ array. Plotted as well are the theoretical surfaces according to [@Anvari]. An asymmetric two-dimentional Epanechnikov kernel with a bandwidth of $2$ was employed [@Epanechnikov].](figure.png)
+![Two exemplary two-dimensional Kramers--Moyal coefficients for a stochastic process were calculated with a package using a $n\times n = 440\times 440$ array. Plotted as well are the theoretical surfaces according to [@Anvari]. An asymmetric two-dimensional Epanechnikov kernel was employed [@Epanechnikov].](figure.png)
+
+# Library
+The presented library is comprised of two separate blocks, `kernels` and `km`, and is a standalone package for a non-parametric retrieval of Kramers--Moyal coefficients, solely dependent on `numpy`. The sub-module `kernels` comprises the kernels for the kernel-based estimation, similarly available in `sklearn`, and `km` performs the desired Kramers--Moyal calculations to any desired power. [@scikitlearn].
 
 # Acknowledgements
-L. R. G. thanks Klaus Lehnertz and M. Reza Rahimi Tabar for all the help in understanding and developing this package, and Dirk Witthaut for the support during the process.
-L. R. G. gratefully acknowledge support from the Federal Ministry of Education and Research (BMBF grant no. 03SF0472, 03EK3055) and the Helmholtz Association (via the joint initiative _Energy System 2050 - A Contribution of the Research Field Energy_ and the grant no. VH-NG-1025)
+L. R. G. thanks Klaus Lehnertz and M. Reza Rahimi Tabar for all the help in understanding stochastic processes and developing this package, Dirk Witthaut for the support during the process of writing and reviewing, Gerrit Ansmann for the help in understanding python's intricacies, and Marieke Helmich for the text reviews.
+L. R. G. gratefully acknowledge support Helmholtz Association, via the joint initiative _Energy System 2050 - A Contribution of the Research Field Energy_, and the grant No. VH-NG-1025.
 
 # References
