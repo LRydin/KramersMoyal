@@ -21,8 +21,8 @@
 \frenchspacing
 
 \begin{abstract}
-    This preprints presents an open-source Python library to calculate Kramers--Moyal coefficients, for any desired order, for one- an two-dimensional stochastic processes.
-    The library relies on a kernel-based regression to obtain accurate results for data with a low number of data points, while allowing as well a straightforward way to calculate the Kramers--Moyal coefficients of a stochastic process at any desired order.
+    This preprint presents an open-source Python library to calculate Kramers--Moyal coefficients, for any desired order, for one- an two-dimensional stochastic processes.
+    The library relies on a kernel-based regression to obtain accurate results for data with a low number of data points, while allowing a straightforward way to calculate the Kramers--Moyal coefficients of a stochastic process at any desired order.
     The library is a standalone python package dependent only on \texttt{numpy} and \texttt{scipy}, and is ready for research application. 
 \end{abstract}
 
@@ -49,13 +49,13 @@
 A general problem for evaluating stochastic processes is the retrieval of the Kramers--Moyal coefficients $\mathcal{M}$ from data or time-series.
 The Kramers--Moyal coefficients are derived from an expansion of the master equation that describes a particular stochastic process.
 
-Given a set of continuous and stationary data, i.e., ergodic or quasi-stationary stochastic data, the extensive literature of stochastic processes awards a set of measures, as the Kramers--Moyal coefficients or the conditional moments, that link stochastic processes to a probabilistic description of the process or of the family of processes \cite{Risken}. Most commonly known is the set the partial differential equations, the Fokker--Planck equations, derived from the master equation as a lower-order truncation of the stochastic process.
-Of particular relevance is the growing evidence that lower-order stochastic processes do not seem to accurately describe phenomena seen in data, which necessitates to study of higher-order processes, and therefore to efficiently uncover the higher-order Kramers--Moyal coefficients from data \cite{Tabar}.
-Moreover the presence of discontinuous jumps in data lead has gained attention through a jump-diffusion modelling, which has found applications in wind- and solar-power systems \cite{Anvari} and finance \cite{Sahalia}.
+Given a set of continuous and stationary data, i.e., ergodic or quasi-stationary stochastic data, the extensive literature of stochastic processes awards a set of measures, such as the Kramers--Moyal coefficients or the conditional moments, whcih link stochastic processes to a probabilistic description of the process or of the family of processes \cite{Risken}. Most commonly known is the set the partial differential equations, the Fokker--Planck equations, derived from the master equation as a lower-order truncation of the stochastic process.
+Of particular relevance is the growing evidence that lower-order stochastic processes do not seem to accurately describe phenomena seen in data, which necessitates the study of higher-order processes, and therefore a way to efficiently uncover the higher-order Kramers--Moyal coefficients from data \cite{Tabar}.
+Moreover, the presence of discontinuous jumps in data has gained attention through jump-diffusion modelling, which has found applications in wind- and solar-power systems \cite{Anvari} and finance \cite{Sahalia}.
 
 The most straightforward approach is to perform a histogram-based regression to evaluate the conditional moments of the system at hand.
-Such approach is conventional and requires the most commonly used packages in Python (i.e., \texttt{numpy},  \texttt{scipy}, or \texttt{pandas}), and is directly embodied in MATLAB, Julia, or R, usually under the name of \texttt{hist} or \texttt{histogram}.
-This library is based on a kernel-based regression, which allows for most robust results given both a wider range of possible kernel shapes to perform the calculation, as well as retrieving the results in a non-binned coordinate space, unlike histogram regressions \cite{Silverman}.
+Such an approach is conventional and requires the most commonly used packages in Python (i.e., \texttt{numpy},  \texttt{scipy}, or \texttt{pandas}), and is directly embodied in MATLAB, Julia, or R, usually under the name of \texttt{hist} or \texttt{histogram}.
+This library is based on a kernel-based regression, which allows for more robust results given both a wider range of possible kernel shapes to perform the calculation, as well as retrieving the results in a non-binned coordinate space, unlike histogram regressions \cite{Silverman}.
 
 The package presented here comprises a manifold of options: A general open-source toolbox for the calculation of Kramers--Moyal coefficients in one and two dimensions, for any desired order, with a variety of different kernels, as well as the possibility of extending the code for three or more dimensions.
 
@@ -91,31 +91,33 @@ The order of the Kramers--Moyal coefficients is given here by the superscript $\
 For such measure of the Kramers--Moyal coefficients, i.e., a probabilistic measure, a probabilistic space exists, assigned to the process, stemming from the master equation describing the family of such processes.
 The conventional procedure is to utilise a histogram regression of the observed process and retrieve, via approximation or fitting, the Kramers--Moyal coefficient.
 The choice of a histogram measure for the Kramers--Moyal coefficient results in an acceptable measure of the probability density functions of the process but requires a new mathematical space (a distribution space).
-The usage of a kernel approach, followed here, permits an identical overview without the necessity of a new (discretised) distribution space, given that the equivalent space of the observable can be taken.
+The usage of a kernel approach, implemented in this library, permits an identical overview without the necessity of a new (discretised) distribution space, given that the equivalent space of the observable can be taken.
 
-Alike the histogram approach for the measure of the Kramers--Moyal coefficients, each single measure of the observable $\boldsymbol{y}(t)$ is averaged, with a designed weight, into the distribution space.
+Like the histogram approach for the measure of the Kramers--Moyal coefficients, each single measure of the observable $\boldsymbol{y}(t)$ is averaged, with a designed weight, into the distribution space.
 The standing difference, in comparison to the histogram approach, is the riddance of a (discrete) binning system.
-All points are averaged, in a weighted fashion, into the distribution space---aiding specially in cases where the data sets is scarce---and awarding a continuous measurable space (easier for fitting, for example) \cite{Lamouroux}.
+All points are averaged, in a weighted fashion, into the distribution space---aiding specially in cases where the number of point in a dataset is small---and awarding a continuous measurable space (easier for fitting, for example) \cite{Lamouroux}.
 
 \begin{figure}[h]
     \centering
     \includegraphics[width=0.9\linewidth]{figure.png}
-    \caption{Two exemplary two-dimensional Kramers--Moyal coefficients for a stochastic process were calculated with a package using a $n\times n = 440\times 440$ array. Plotted as well are the theoretical surfaces according to \cite{Anvari}. An asymmetric two-dimensional Epanechnikov kernel was employed \cite{Epanechnikov,Lamouroux}. The data was generated using the \texttt{JiTCSSD} \cite{Ansmann}.}
+    \caption{Two exemplary two-dimensional Kramers--Moyal coefficients for a stochastic process were calculated with a package using a $n\times n = 440\times 440$ array. Plotted as well are the theoretical surfaces according to \cite{Anvari}. An asymmetric two-dimensional Epanechnikov kernel was employed \cite{Epanechnikov,Lamouroux}. The data was generated using \texttt{JiTCSSD} \cite{Ansmann}.}
 \end{figure}
 
 \section{Library}
 The presented library is comprised of two separate blocks, \texttt{kernels} and \texttt{km}, and is a standalone package for a non-parametric retrieval of Kramers--Moyal coefficients, solely dependent on \texttt{numpy} and \texttt{scipy}. The sub-module \texttt{kernels} comprises the kernels for the kernel-based estimation, similarly available in \texttt{sklearn}, and \texttt{km} performs the desired Kramers--Moyal calculations to any desired power \cite{scikitlearn}.
 
-\section{Declaration of intention}
-This package is available openly on GitHub at: \texttt{\href{https://github.com/LRydin/KramersMoyal}{github.com/LRydin/KramersMoyal}} and is still in an experimental stage. Comments, remarks, improvements, and reviews are appreciated.
+\section{Declaration of interest}
+This package is openly available on GitHub at: \texttt{\href{https://github.com/LRydin/KramersMoyal}{github.com/LRydin/KramersMoyal}} and is still in an experimental stage. Comments, remarks, improvements, and reviews are appreciated.
 This article will be submitted to \textit{The Journal of Open Source Software} at: \texttt{\href{https://joss.theoj.org}{joss.theoj.org}} [ISSN: 2475-9066, OCLC number: 971252162].
 The Python library will be maintained always in open-source structure.
 The authors declare no conflict of interest.
 
 \section{Acknowledgements}
 L. R. G. thanks Klaus Lehnertz and M. Reza Rahimi Tabar for all the help in understanding stochastic processes and developing this package, Dirk Witthaut for the support during the process of writing and reviewing, Gerrit Ansmann for the help in understanding python's intricacies, and Marieke Helmich for the text reviews.
-L. R. G. gratefully acknowledge support Helmholtz Association, via the joint initiative \emph{Energy System 2050 - A Contribution of the Research Field Energy}, and the grant No. VH-NG-1025 and F. M. gratefully acknowledge the fund in part by the Deutsche Forschungsgemeinschaft (DFG, German Research Foundation), project number 277625399 - CRC 185.
+L. R. G. gratefully acknowledges support by the Helmholtz Association, via the joint initiative \emph{Energy System 2050 - A Contribution of the Research Field Energy}, and the grant No. VH-NG-1025 and F. M. gratefully acknowledges the fund, in part, by the Deutsche Forschungsgemeinschaft (DFG, German Research Foundation), project number 277625399 - CRC 185.
 
 \bibliography{bib}
 
 \end{document}
+
+
