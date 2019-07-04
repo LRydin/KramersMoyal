@@ -35,7 +35,28 @@ def kmc_kernel_estimator(timeseries: np.ndarray, kernel: callable, bw: float,
     """
     Estimates Kramers-Moyal coefficients from a timeseries using an kernel
     estimator method.
-    """
+
+    Parameters
+    ----------
+    timeseries  : array
+        Either 1D or 2D array
+
+    kernel  : callable
+        Calls the desired kernel to calculate the Kramers--Moyal coefficients
+
+    bw: float
+        Desired bandwidth of the kernel
+
+	Returns
+	-------
+	kmc  : array
+		The calculated Kramers--Moyal coefficients
+
+    space  : array
+        The underlying space of the calculated Kramers--Moyal coefficients,
+        which can be directly inplemented for plotting
+	"""
+
     # Kramers-Moyal coefficients
     kmc = np.zeros((*bin_size, np.size(powers, 1)))
 
