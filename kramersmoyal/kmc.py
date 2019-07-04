@@ -53,9 +53,10 @@ def kmc_kernel_estimator(timeseries: np.ndarray, kernel: callable, bw: float,
     slices = gen_slices(timeseries, bin_size=bin_size, bw=bw)
     x = np.mgrid[slices].reshape(len(slices), -1).T
     kernel = kernel(x * bw)
+    kernel = kernel / np.sum(kernel)
 
     # Convolution
-    for p in range(len(powers)):
+    for p in range(np.size(powers, 1)):
         kmc[..., p] = convolve(kmc[..., p], kernel,
                                mode='same')
 
