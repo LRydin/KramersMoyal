@@ -8,7 +8,7 @@ from .binning import histogramdd
 def kmc_kernel_estimator(timeseries: np.ndarray, kernel: callable, bw: float,
                          bins: np.ndarray, powers: np.ndarray):
     """
-    Estimates Kramers-Moyal coefficients from a timeseries using an kernel
+    Estimates Kramers-Moyal coefficients from a timeseries using a kernel
     estimator method.
     """
     # Calculate derivatives and its powers
@@ -20,9 +20,8 @@ def kmc_kernel_estimator(timeseries: np.ndarray, kernel: callable, bw: float,
                              weights=weights, density=True)
 
     # Generate kernel
-    mesh = np.asarray(
-        list(product(*edges))).reshape((*(edge.size for edge in edges), -1))
-    kernel_ = kernel(mesh / bw)
+    mesh = np.asarray(list(product(*edges)))
+    kernel_ = kernel(mesh / bw).reshape(*(edge.size for edge in edges))
     kernel_ /= np.sum(kernel_)
 
     # Convolve with kernel for all powers
