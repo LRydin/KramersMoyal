@@ -1,20 +1,29 @@
 import numpy as np
-from scipy.sparse import csr_matrix
+
 
 _range = range
 
 
 def bincount(x, weights, minlength=0):
-    assert len(x.shape) == 1
+    return np.array(
+        [np.bincount(x, w, minlength=minlength) for w in weights.T]).T
 
-    ans_size = x.max() + 1
+# # Prefer for very big bins
+# from scipy.sparse import csr_matrix
 
-    if (ans_size < minlength):
-        ans_size = minlength
 
-    csr = csr_matrix((np.ones(x.shape[0]), (x, np.arange(x.shape[0]))), shape=[
-                     ans_size, x.shape[0]])
-    return csr * weights
+# def bincount(x, weights, minlength=0):
+
+#     assert len(x.shape) == 1
+
+#     ans_size = x.max() + 1
+
+#     if (ans_size < minlength):
+#         ans_size = minlength
+
+#     csr = csr_matrix((np.ones(x.shape[0]), (x, np.arange(x.shape[0]))), shape=[
+#                      ans_size, x.shape[0]])
+#     return csr * weights
 
 
 def _get_outer_edges(a, range):
