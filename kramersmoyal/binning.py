@@ -139,25 +139,32 @@ def histogramdd(sample, bins=10, range=None, normed=None, weights=None, density=
     hist = hist[core]
 
     # handle the aliasing normed argument
-    assert normed is None, "Normed not supported"
-    # if normed is None:
-    #     if density is None:
-    #         density = False
-    # elif density is None:
-    #     # an explicit normed argument was passed, alias it to the new name
-    #     density = normed
-    # else:
-    #     raise TypeError("Cannot specify both 'normed' and 'density'")
+    if normed is None:
+        if density is None:
+            density = False
+    elif density is None:
+        # an explicit normed argument was passed, alias it to the new name
+        density = normed
+    else:
+        raise TypeError("Cannot specify both 'normed' and 'density'")
 
-    assert not density, "Density not supported"
-    # if density:
-    #     # calculate the probability density function
-    #     s = hist.sum()
-    #     for i in _range(D):
-    #         shape = np.ones(D, int)
-    #         shape[i] = nbin[i] - 2
-    #         hist = hist / dedges[i].reshape(shape)
-    #     hist /= s
+    if density:
+        if weights.ndim == 1:
+            # calculate the probability density function
+            s = hist.sum()
+            for i in _range(D):
+                shape = np.ones(D, int)
+                shape[i] = nbin[i] - 2
+                hist = hist / dedges[i].reshape(shape)
+            hist /= s
+        else:
+            for d in _range(weights.shape[1]):
+                s = hist[..., d].sum()
+                for i in _range(D):
+                    shape = np.ones(D, int)
+                    shape[i] = nbin[i] - 2
+                    hist[..., d] = hist[..., d] / dedges[i].reshape(shape)
+                hist[..., d] /= s
 
     if weights.ndim == 1:
         if (hist.shape != nbin - 2).any():
