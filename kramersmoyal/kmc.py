@@ -27,10 +27,10 @@ def kmc_kernel_estimator(timeseries: np.ndarray, bins: np.ndarray,
     Returns
     -------
     kmc: np.ndarray
-      The calculated Kramers-Moyal coefficients
+        The calculated Kramers-Moyal coefficients
 
     edges: np.ndarray
-          The bin edges of the calculated Kramers-Moyal coefficients
+        The bin edges of the calculated Kramers-Moyal coefficients
     """
 
     def cartesian_product(arrays: np.ndarray):
@@ -46,7 +46,7 @@ def kmc_kernel_estimator(timeseries: np.ndarray, bins: np.ndarray,
     weights = np.prod(np.power(grads[..., None], powers), axis=1)
 
     # Get weighted histogram
-    hist, edges = histogramdd(timeseries[1:, ...], bins=bins,
+    hist, edges = histogramdd(timeseries[:-1, ...], bins=bins,
                               weights=weights, density=True)
 
     # Generate kernel
