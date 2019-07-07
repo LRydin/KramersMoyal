@@ -9,6 +9,28 @@ def kmc_kernel_estimator(timeseries: np.ndarray, bins: np.ndarray,
     """
     Estimates Kramers-Moyal coefficients from a timeseries using a kernel
     estimator method.
+
+    Parameters
+    ----------
+    timeseries: np.ndarray
+        The D-dimensional timeseries (N, D)
+
+    bins: np.ndarray
+        The number of bins for each dimension
+
+    kernel: callable
+        Kernel used to calculate the Kramers-Moyal coefficients
+
+    bw: float
+        Desired bandwidth of the kernel
+
+    Returns
+    -------
+    kmc: np.ndarray
+      The calculated Kramers-Moyal coefficients
+
+    edges: np.ndarray
+          The bin edges of the calculated Kramers-Moyal coefficients
     """
 
     def cartesian_product(arrays: np.ndarray):
