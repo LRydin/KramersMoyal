@@ -1,25 +1,19 @@
+import numpy as np
+from itertools import product
+
 import sys
 sys.path.append("..")
+from kramersmoyal.kernels import *
 
-from kramersmoyal import kernels
-import numpy as np
-
-N = 200
-grid = np.linspace(-1, 1, N, endpoint=True)
-dx = grid[1] - grid[0]
-
-epanechnikov_1d = kernels.epanechnikov_1d(N)
-epanechnikov_2d = kernels.epanechnikov_2d(N)
-
-integrate_e1d = np.sum(epanechnikov_1d) * dx
-integrate_e2d = np.sum(epanechnikov_2d) * (dx ** 2)
-
-print("Epanechnikov integral in 1D: {}".format(integrate_e1d))
-print("Epanechnikov integral in 2D: {}".format(integrate_e2d))
-
-assert np.allclose(integrate_e1d, 1) "Not enough close in 1D"
-assert np.allclose(integrate_e2d, 1) "Not enough close in 2D"
-
-# import matplotlib.pyplot as plt
-# plt.plot(range(N), epanechnikov_2d)
-# plt.show()
+for dim in [1, 2, 3]:
+    edges = [np.linspace(-10, 10, 100000 / 10**dim, endpoint=True)] * dim
+    mesh = np.asarray(list(product(*edges)))
+    dx = (edges[0][1] - edges[0][0]) ** dim
+    for kernel in [epanechnikov, gaussian, uniform]:
+        for bw in [0.1, 0.3, 0.5, 1.0, 1.5, 2.0]:
+            kernel_ = kernel(mesh, bw=bw).reshape(
+                *(edge.size for edge in edges))
+            passed = np.allclose(kernel_.sum() * dx, 1, atol=1e-3)
+            print("Kernel {0:10s}\t with {1:.2f} bandwidth at {2}D passed: {3}".format(
+                kernel.__name__, bw, dim, passed))
+        print()

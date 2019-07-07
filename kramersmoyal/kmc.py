@@ -1,87 +1,62 @@
 import numpy as np
 from scipy.signal import convolve
+from .binning import histogramdd
 
 
-def to_grid_index(timeseries: np.ndarray, bin_size: np.ndarray, bw: float):
-    assert len(bin_size) == timeseries.shape[
-        1], "Bins not matching timeseries dimension"
-
-    coords = np.zeros_like(timeseries, dtype=int)
-
-    mins, maxs = timeseries.min(axis=0), timeseries.max(axis=0)
-
-    for dim, (min, max, size) in enumerate(zip(mins, maxs, bin_size)):
-        coords[:, dim] = ((timeseries[:, dim] - min) *
-                          (size - 1 + 1e-8) / (max - min)).astype(int)
-
-    return coords
-
-
-def gen_slices(timeseries: np.ndarray, bin_size: np.ndarray, bw: float):
-    assert len(bin_size) == timeseries.shape[
-        1], "Bins not matching timeseries dimension"
-
-    mins, maxs = timeseries.min(axis=0), timeseries.max(axis=0)
-
-    slices = list()
-    for (min, max, size) in zip(mins, maxs, bin_size):
-        step = (max - min) / (size - 1 + 1e-8)
-        slices.append(slice(min, max, step))
-    return slices
-
-
-def kmc_kernel_estimator(timeseries: np.ndarray, kernel: callable, bw: float,
-                         bin_size: np.ndarray, powers: np.ndarray):
+def kmc_kernel_estimator(timeseries: np.ndarray, bins: np.ndarray,
+                         kernel: callable, bw: float,
+                         powers: np.ndarray):
     """
-    Estimates Kramers-Moyal coefficients from a timeseries using an kernel
+    Estimates Kramers-Moyal coefficients from a timeseries using a kernel
     estimator method.
 
     Parameters
     ----------
-    timeseries  : array
-        Either 1D or 2D array
+    timeseries: np.ndarray
+        The D-dimensional timeseries (N, D)
 
-    kernel  : callable
-        Calls the desired kernel to calculate the Kramers--Moyal coefficients
+    bins: np.ndarray
+        The number of bins for each dimension
+
+    kernel: callable
+        Kernel used to calculate the Kramers-Moyal coefficients
 
     bw: float
         Desired bandwidth of the kernel
 
-	Returns
-	-------
-	kmc  : array
-		The calculated Kramers--Moyal coefficients
+    Returns
+    -------
+    kmc: np.ndarray
+      The calculated Kramers-Moyal coefficients
 
-    space  : array
-        The underlying space of the calculated Kramers--Moyal coefficients,
-        which can be directly inplemented for plotting
-	"""
+    edges: np.ndarray
+          The bin edges of the calculated Kramers-Moyal coefficients
+    """
 
-    # Kramers-Moyal coefficients
-    kmc = np.zeros((*bin_size, np.size(powers, 1)))
+    def cartesian_product(arrays: np.ndarray):
+        # Taken from https://stackoverflow.com/questions/11144513
+        la = len(arrays)
+        arr = np.empty([len(a) for a in arrays] + [la], dtype=np.float64)
+        for i, a in enumerate(np.ix_(*arrays)):
+            arr[..., i] = a
+        return arr.reshape(-1, la)
 
-    # Calculate gradient
-    grads = np.gradient(timeseries, axis=0)
+    # Calculate derivatives and its powers
+    grads = np.diff(timeseries, axis=0)
+    weights = np.prod(np.power(grads[..., None], powers), axis=1)
 
-    # Timeseries to coordinates
-    coords = to_grid_index(timeseries, bin_size=bin_size, bw=bw)
-
-    # Binning NOTE: Hardcoded for 2D...
-    for (coord, grad) in zip(coords, grads):
-        kmc[coord] += np.multiply(*np.power(grad[:, None], powers))
+    # Get weighted histogram
+    hist, edges = histogramdd(timeseries[1:, ...], bins=bins,
+                              weights=weights, density=True)
 
     # Generate kernel
-    slices = gen_slices(timeseries, bin_size=bin_size, bw=bw)
-    x = np.mgrid[slices].reshape(len(slices), -1).T
-    kernel = kernel(x * bw)
+    mesh = cartesian_product(edges)
+    kernel_ = kernel(mesh, bw=bw).reshape(*(edge.size for edge in edges))
+    kernel_ /= np.sum(kernel_)
 
-    # Convolution
-    for p in range(len(powers)):
-        kmc[..., p] = convolve(kmc[..., p], kernel,
-                               mode='same')
+    kmc = list()
+    # Convolve with kernel for all powers
+    for p in range(powers.shape[1]):
+        kmc.append(convolve(kernel_, hist[..., p], mode='same'))
 
-    # Normalisation
-    kmc[:, :, 0][kmc[:, :, 0] == 0.] = 1.
-    kmc[:, :, 1:] = np.divide(kmc[:, :, 1:], (kmc[:, :, 0, np.newaxis]))
-
-    return kmc
+    return np.stack(kmc, axis=-1), edges
