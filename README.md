@@ -9,7 +9,7 @@ from kramersmoyal import kernels, km
 
 # A one-dimensional stochastic process
 ## The theory
-Take for example the well documented one-dimension Ornstein–Uhlenbeck process, also known as Va&#353;&#237;&#268;ek process, see [here](https://en.wikipedia.org/wiki/Ornstein%E2%80%93Uhlenbeck_process). This process is governed by two main parameters: the mean-reverting parameter &theta; and the diffusion parameter &sigma;
+Take for example the well documented one-dimension Ornstein–Uhlenbeck process, also known as Va&#353;&#237;&#269;ek process, see [here](https://en.wikipedia.org/wiki/Ornstein%E2%80%93Uhlenbeck_process). This process is governed by two main parameters: the mean-reverting parameter &theta; and the diffusion parameter &sigma;
 
 ![Ornstein–Uhlenbeck process](/other/OU_eq.png)
 
@@ -47,7 +47,7 @@ for i in range(1,time.size):
     y[i] = y[i-1] - theta*y[i-1]*delta_t + sigma*dw[i]
 ```
 
-From here we have a plain example of an Ornstein
+From here we have a plain example of an Ornstein–Uhlenbeck process, starting approximately at ```python y[0]=2.3``` and moving, because of the mean-reverting drift ```python theta*y[i-1]*delta_t```. The system moves down to zero. The noise effect can be seen across the whole trajectory.
 
 # Bivariate jump-diffusion process
 To illustrate now a more complicated process, we present here a bivariate jump-diffusion process, a two-dimensional process with higher-order statistical moments, that allows for interaction between both the noise terms from the Wiener process ![Wiener process](/other/W.png) and the Poissonian jumps terms ![Poissonian jump process](/other/J.png) across dimensions.
