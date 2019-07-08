@@ -102,3 +102,13 @@ venv.bak/
 
 # mypy
 .mypy_cache/
+
+*.gz
+
+*.bak
+
+paper/paperNotes\.bib
+
+*.out
+
+*.aux
