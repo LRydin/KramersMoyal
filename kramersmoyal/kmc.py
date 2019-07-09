@@ -1,6 +1,7 @@
 import numpy as np
 from scipy.signal import convolve
 from .binning import histogramdd
+# from scipy.special import factorial
 
 
 def kmc_kernel_estimator(timeseries: np.ndarray, bins: np.ndarray,
@@ -47,16 +48,21 @@ def kmc_kernel_estimator(timeseries: np.ndarray, bins: np.ndarray,
 
     # Get weighted histogram
     hist, edges = histogramdd(timeseries[:-1, ...], bins=bins,
-                              weights=weights, density=True)
+                              weights=weights, density=False)
 
     # Generate kernel
     mesh = cartesian_product(edges)
     kernel_ = kernel(mesh, bw=bw).reshape(*(edge.size for edge in edges))
     kernel_ /= np.sum(kernel_)
 
-    kmc = list()
     # Convolve with kernel for all powers
-    for p in range(powers.shape[1]):
-        kmc.append(convolve(kernel_, hist[..., p], mode='same'))
+    kmc = np.stack([convolve(kernel_, hist[..., p], mode='same')
+                    for p in range(powers.shape[1])], axis=-1)
 
-    return np.stack(kmc, axis=-1), edges
+    # normalization = np.prod(factorial(2 * powers) /
+    #                         (np.power(2, powers) * factorial(powers)), axis=0)
+
+    # Normalize
+    kmc[..., 1:] /= kmc[..., 0, None]  # * normalization[1:]
+
+    return kmc, edges

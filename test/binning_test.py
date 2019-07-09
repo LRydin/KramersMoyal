@@ -22,5 +22,5 @@ for dim in [1, 2, 3]:
                         weights=weights, density=True)[0]
 
     assert np.array(
-        list(map(lambda i: (hist1[i] == hist2[..., i]), range(Nw)))).any()
+        list(map(lambda i: (hist1[i] == hist2[..., i]), range(Nw)))).all()
     print("Binning in {0}D: passed".format(dim))
