@@ -33,7 +33,7 @@ def kmc_kernel_estimator(timeseries: np.ndarray, bins: np.ndarray,
     edges: np.ndarray
         The bin edges of the calculated Kramers-Moyal coefficients
     """
-    def add_boundary(edges: list, bw: float, eps=1e-12):
+    def add_bandwidth(edges: list, bw: float, eps=1e-12):
         new_edges = list()
         for edge in edges:
             dx = edge[1] - edge[0]
@@ -51,7 +51,7 @@ def kmc_kernel_estimator(timeseries: np.ndarray, bins: np.ndarray,
             arr[..., i] = a
         return arr.reshape(-1, la)
 
-    # Calculate derivatives and its powers
+    # Calculate derivative and the product of its powers
     grads = np.diff(timeseries, axis=0)
     weights = np.prod(np.power(grads[..., None], powers), axis=1)
 
@@ -60,21 +60,18 @@ def kmc_kernel_estimator(timeseries: np.ndarray, bins: np.ndarray,
                               weights=weights, density=False)
 
     # Generate kernel
-    edges = add_boundary(edges, bw=bw, eps=eps)
-    mesh = cartesian_product(edges)
-    kernel_ = kernel(mesh, bw=bw).reshape(*(edge.size for edge in edges))
+    edges_k = add_bandwidth(edges, bw, eps=eps)
+    mesh_k = cartesian_product(edges_k)
+    kernel_ = kernel(mesh_k, bw=bw).reshape(*(edge.size for edge in edges_k))
     kernel_ /= np.sum(kernel_)
 
-    # Convolve with kernel for all powers
-    kmc = np.stack([convolve(kernel_, hist[..., p], mode='same')
-                    for p in range(powers.shape[1])], axis=-1)
+    # Convolve weighted histogram with kernel
+    kmc = convolve(hist, kernel_[..., None], mode='same')
 
     # Normalize
     mask = np.abs(kmc[..., 0]) < eps
     kmc[mask, 0:] = 0.0
     kmc[~mask, 1:] /= kmc[~mask, 0, None]
-    # normalization = np.prod(factorial(2 * powers) /
-    #                         (np.power(2, powers) * factorial(powers)), axis=0)
-    # kmc[..., 1:] /= kmc[..., 0, None]  # * normalization[1:]
 
-    return kmc, edges
+    return kmc, [edge[:-1] for edge in edges]
+    # return kmc, [edge[:-1] + 0.5 * (edge[1] - edge[0]) for edge in edges]
