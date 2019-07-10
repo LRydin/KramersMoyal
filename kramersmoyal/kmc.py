@@ -3,11 +3,13 @@ from scipy.signal import convolve
 from scipy.special import factorial
 
 from .binning import histogramdd
+from .kernels import silvermans_rule, epanechnikov, _kernels
 
 
-def kmc_kernel_estimator(timeseries: np.ndarray, bins: np.ndarray,
-                         kernel: callable, bw: float,
-                         powers: np.ndarray, eps=1e-12):
+def kmc_kernel_estimator(timeseries: np.ndarray,
+                         bins: np.ndarray,
+                         powers: np.ndarray,
+                         kernel=None, bw=None, eps=1e-12):
     """
     Estimates Kramers-Moyal coefficients from a timeseries using a kernel
     estimator method.
@@ -34,6 +36,43 @@ def kmc_kernel_estimator(timeseries: np.ndarray, bins: np.ndarray,
     edges: np.ndarray
         The bin edges of the calculated Kramers-Moyal coefficients
     """
+    timeseries = np.asarray_chkfinite(timeseries, dtype=float)
+
+    if len(timeseries.shape) == 1:
+        timeseries = timeseries.reshape(-1, 1)
+    elif len(timeseries.shape) != 2:
+        assert False, "Timeseries must (n, dims) shape"
+    if timeseries.shape[0] < 1:
+        assert False, "No data in timeseries"
+
+    n, dims = timeseries.shape
+
+    powers = np.asarray_chkfinite(powers, dtype=float)
+    assert (powers[0] == [0] * dims).all(), "First power must be zero"
+
+    if len(powers.shape) == 1:
+        powers = powers.reshape(-1, 1)
+    assert timeseries.shape[1] == powers.shape[
+        1], "Powers don't match timeseries' dimension"
+    if powers.shape[0] < 1:
+        assert False, "No power in powers"
+
+    if bw is None:
+        bw = silvermans_rule(timeseries)
+    elif callable(bw):
+        bw = bw(timeseries)
+    assert bw > 0.0, "Bandwidth must be > 0"
+
+    if kernel is None:
+        kernel = epanechnikov
+    assert kernel in _kernels, "Kernel not found"
+
+    return kmc_kernel_estimator_(timeseries, bins, kernel, bw, powers, eps=eps)
+
+
+def kmc_kernel_estimator_(timeseries: np.ndarray, bins: np.ndarray,
+                          kernel: callable, bw: float,
+                          powers: np.ndarray, eps):
     def add_bandwidth(edges: list, bw: float, eps=1e-12):
         new_edges = list()
         for edge in edges:
@@ -54,7 +93,7 @@ def kmc_kernel_estimator(timeseries: np.ndarray, bins: np.ndarray,
 
     # Calculate derivative and the product of its powers
     grads = np.diff(timeseries, axis=0)
-    weights = np.prod(np.power(grads[..., None], powers), axis=1)
+    weights = np.prod(np.power(grads[..., None], powers.T), axis=1)
 
     # Get weighted histogram
     hist, edges = histogramdd(timeseries[:-1, ...], bins=bins,
