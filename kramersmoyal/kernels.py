@@ -57,6 +57,8 @@ def uniform(x, dims):
     normalization = volume_unit_ball(dims)
     return kernel / normalization
 
+_kernels = {epanechnikov, gaussian, uniform}
+
 
 def silvermans_rule(timeseries):
     n, dims = timeseries.shape
