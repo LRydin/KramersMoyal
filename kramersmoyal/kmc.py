@@ -37,25 +37,23 @@ def kmc_kernel_estimator(timeseries: np.ndarray,
         The bin edges of the calculated Kramers-Moyal coefficients
     """
     timeseries = np.asarray_chkfinite(timeseries, dtype=float)
-
     if len(timeseries.shape) == 1:
         timeseries = timeseries.reshape(-1, 1)
-    elif len(timeseries.shape) != 2:
-        assert False, "Timeseries must (n, dims) shape"
-    if timeseries.shape[0] < 1:
-        assert False, "No data in timeseries"
+
+    assert len(timeseries.shape) == 2, "Timeseries must (n, dims) shape"
+    assert timeseries.shape[0] > 0, "No data in timeseries"
 
     n, dims = timeseries.shape
 
     powers = np.asarray_chkfinite(powers, dtype=float)
-    assert (powers[0] == [0] * dims).all(), "First power must be zero"
-
     if len(powers.shape) == 1:
         powers = powers.reshape(-1, 1)
-    assert timeseries.shape[1] == powers.shape[
-        1], "Powers don't match timeseries' dimension"
-    if powers.shape[0] < 1:
-        assert False, "No power in powers"
+
+    assert (powers[0] == [0] * dims).all(), "First power must be zero"
+    assert dims == powers.shape[1], "Powers not matching timeseries' dimension"
+    assert powers.shape[0] > 0, "No power in powers"
+
+    assert dims == bins.shape[0], "Bins not matching timeseries' dimension"
 
     if bw is None:
         bw = silvermans_rule(timeseries)
