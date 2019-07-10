@@ -1,7 +1,8 @@
 import numpy as np
 from scipy.signal import convolve
+from scipy.special import factorial
+
 from .binning import histogramdd
-# from scipy.special import factorial
 
 
 def kmc_kernel_estimator(timeseries: np.ndarray, bins: np.ndarray,
@@ -39,7 +40,7 @@ def kmc_kernel_estimator(timeseries: np.ndarray, bins: np.ndarray,
             dx = edge[1] - edge[0]
             min = edge[0] - bw
             max = edge[-1] + bw
-            new_edge = np.arange(min, max, dx)
+            new_edge = np.arange(min, max + eps, dx)
             new_edges.append(new_edge)
         return new_edges
 
@@ -71,7 +72,7 @@ def kmc_kernel_estimator(timeseries: np.ndarray, bins: np.ndarray,
     # Normalize
     mask = np.abs(kmc[..., 0]) < eps
     kmc[mask, 0:] = 0.0
-    kmc[~mask, 1:] /= kmc[~mask, 0, None]
+    taylors = np.prod(factorial(powers[1:]), axis=1)
+    kmc[~mask, 1:] /= np.tensordot(kmc[~mask, 0], taylors, axes=0)
 
-    return kmc, [edge[:-1] for edge in edges]
-    # return kmc, [edge[:-1] + 0.5 * (edge[1] - edge[0]) for edge in edges]
+    return kmc, [edge[:-1] + 0.5 * (edge[1] - edge[0]) for edge in edges]
