@@ -71,7 +71,8 @@ powers = np.array([[1],[2]])
 bw = .15
 
 # The kmc hold the results, where edges holds the binning space
-kmc, edges = km(y, kernel=kernel.epanechnikov, bw=bw, bins=bins, powers=powers)```
+kmc, edges = km(y, kernel=kernel.epanechnikov, bw=bw, bins=bins, powers=powers)
+```
 
 This results in
 ![Jump-diffusion process](/other/O-U_drift_diffusion.png)
