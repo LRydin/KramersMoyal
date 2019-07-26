@@ -79,17 +79,27 @@ def _km(timeseries: np.ndarray, bins: np.ndarray, powers: np.ndarray,
             arr[..., i] = a
         return arr.reshape(-1, la)
 
+    def kernel_edges(edges: np.ndarray):
+        # Generates the kernel edges
+        edges_k = list()
+        for edge in edges:
+            dx = edge[1] - edge[0]
+            L = edge.size
+            edges_k.append(np.linspace(-dx * L, dx * L, int(2 * L + 1)))
+        return edges_k
+
     # Calculate derivative and the product of its powers
     grads = np.diff(timeseries, axis=0)
     weights = np.prod(np.power(grads[..., None], powers.T), axis=1)
 
     # Get weighted histogram
     hist, edges = histogramdd(timeseries[:-1, ...], bins=bins,
-                              weights=weights, bw=2*bw)
+                              weights=weights, bw=bw)
 
-    # Generate kernel
-    mesh = cartesian_product(edges)
-    kernel_ = kernel(mesh, bw=bw).reshape(*(edge.size for edge in edges))
+    # Generate centered kernel
+    edges_k = kernel_edges(edges)
+    mesh = cartesian_product(edges_k)
+    kernel_ = kernel(mesh, bw=bw).reshape(*(edge.size for edge in edges_k))
     kernel_ /= np.sum(kernel_)
 
     # Convolve weighted histogram with kernel and trim it
