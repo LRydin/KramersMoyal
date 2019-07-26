@@ -9,9 +9,9 @@ Python KM is a  python package designed to obtain the Kramers–Moyal coefficien
 
 
 # Installation
-A the current stage of the library there is no direct installation protocol. Please download the two `.py` files, `kernels.py` and `km.py` to your working python directory. If you are solely using this library for occasional calculations, you can simply add the files to the directory you are working on, and add them to your import preamble
+A the current stage of the library there is no direct installation protocol. Just get the `kramersmoyal` to  to your working python directory and add your import preamble
 ```python
-from kramersmoyal import kernels, km
+from kramersmoyal import km, kernels
 ```
 
 # A one-dimensional stochastic process
@@ -20,7 +20,7 @@ Take for example the well documented one-dimension Ornstein–Uhlenbeck process,
 
 ![Ornstein–Uhlenbeck process](/other/OU_eq.png)
 
-which can be solved in various ways. For our purposes, recall that the drift coefficients, i.e., the first-order Kramers–Moyal coefficient is given by ![first-order Kramers–Moyal coefficient of an Ornstein–Uhlenbeck process](/other/KM_1.png) and the second-order Kramers–Moyal coefficient is ![second-order Kramers–Moyal coefficient of an Ornstein–Uhlenbeck process](/other/KM_2.png).
+which can be solved in various ways. For our purposes, recall that the drift coefficient, i.e., the first-order Kramers–Moyal coefficient, is given by ![first-order Kramers–Moyal coefficient of an Ornstein–Uhlenbeck process](/other/KM_1.png) and the second-order Kramers–Moyal coefficient is ![second-order Kramers–Moyal coefficient of an Ornstein–Uhlenbeck process](/other/KM_2.png), i.e., the diffusion.
 
 Generate an exemplary Ornstein–Uhlenbeck process with your favorite integrator, e.g., the [Euler–Maruyama](https://en.wikipedia.org/wiki/Euler%E2%80%93Maruyama_method) or with a more powerful tool from [`JiTCSDE`](https://github.com/neurophysik/jitcsde) found on GitHub.
 For this example lets take &theta;=.3 and &sigma;=.1, over a total time of 50 units, with a sampling of 1000 Hertz, and from the generated data series retrieve the two parameters, the drift &theta; and diffusion &sigma;.
@@ -59,7 +59,7 @@ From here we have a plain example of an Ornstein–Uhlenbeck process, always dri
 ![Jump-diffusion process](/other/O-U_plot.png)
 
 ## Using Python KM
-Take the timeseries ```y``` and lets study the Kramers–Moyal coefficients. For this lets look at the drift and diffusion coefficients of the process, i.e., the first and second Kramers–Moyal coefficients, with an  ```epanechnikov``` kernel
+Take the timeseries `y` and lets study the Kramers–Moyal coefficients. For this lets look at the drift and diffusion coefficients of the process, i.e., the first and second Kramers–Moyal coefficients, with an  `epanechnikov` kernel
 ```python
 # Choose number of points of you target space
 bins = np.array([5000])
@@ -96,7 +96,7 @@ Next on the list is
 
 # Support
 ### History
-This project was started a few years ago at the [neurophysik](https://www.researchgate.net/lab/Klaus-Lehnertz-Lab-2) with Klaus Lehnertz, M. Reza Rahimi Tabar, and Jan Heyselself. Francisco Meirinhos devised later the hard coding to python. The project is now supported by Dirk Witthaut and the [Institute of Energy and Climate Research Systems Analysis and Technology Evaluation](https://www.fz-juelich.de/iek/iek-ste/EN/Home/home_node.html).
+This project was started a few years ago at the [neurophysik](https://www.researchgate.net/lab/Klaus-Lehnertz-Lab-2) with Klaus Lehnertz, M. Reza Rahimi Tabar, and Jan Heysel. Francisco Meirinhos devised later the hard coding to python. The project is now supported by Dirk Witthaut and the [Institute of Energy and Climate Research Systems Analysis and Technology Evaluation](https://www.fz-juelich.de/iek/iek-ste/EN/Home/home_node.html).
 
 ### Funding
 Helmholtz Association Initiative _Energy System 2050 - A Contribution of the Research Field Energy_ and the grant No. VH-NG-1025.
