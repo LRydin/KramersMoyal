@@ -24,7 +24,7 @@ def bincount(x, weights, minlength=0):
 #     return csr * weights
 
 
-def _get_outer_edges(a, range):
+def _get_outer_edges(a, range, bw):
     """
     Determine the outer bin edges to use, from either the data or the range
     argument
@@ -41,7 +41,7 @@ def _get_outer_edges(a, range):
         # handle empty arrays. Can't determine range, so use 0-1.
         first_edge, last_edge = 0, 1
     else:
-        first_edge, last_edge = a.min(), a.max()
+        first_edge, last_edge = a.min() - bw, a.max() + bw
         if not (np.isfinite(first_edge) and np.isfinite(last_edge)):
             raise ValueError(
                 "autodetected range of [{}, {}] is not finite".format(first_edge, last_edge))
@@ -55,7 +55,7 @@ def _get_outer_edges(a, range):
 
 
 # An alternative to Numpy's histogramdd, supporting a weights matrix
-def histogramdd(sample, bins=10, range=None, normed=None, weights=None, density=None):
+def histogramdd(sample, bins=10, range=None, normed=None, weights=None, density=None, bw=0.0):
 
     try:
         # Sample is an ND-array.
@@ -93,7 +93,7 @@ def histogramdd(sample, bins=10, range=None, normed=None, weights=None, density=
             if bins[i] < 1:
                 raise ValueError(
                     '`bins[{}]` must be positive, when an integer'.format(i))
-            smin, smax = _get_outer_edges(sample[:, i], range[i])
+            smin, smax = _get_outer_edges(sample[:, i], range[i], bw)
             edges[i] = np.linspace(smin, smax, bins[i] + 1)
         elif np.ndim(bins[i]) == 1:
             edges[i] = np.asarray(bins[i])
