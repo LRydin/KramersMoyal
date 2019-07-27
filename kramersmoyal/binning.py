@@ -6,7 +6,7 @@ _range = range
 
 def bincount(x, weights, minlength=0):
     return np.array(
-        [np.bincount(x, w, minlength=minlength) for w in weights.T]).T
+        [np.bincount(x, w, minlength=minlength) for w in weights])
 
 # # Prefer for very big bins
 # from scipy.sparse import csr_matrix
@@ -136,14 +136,14 @@ def histogramdd(sample, bins=10, range=None, normed=None, weights=None, density=
     if weights.ndim == 1:
         hist = hist.reshape(nbin)
     else:
-        hist = hist.reshape((*nbin, weights.shape[1]))
+        hist = hist.reshape((weights.shape[0], *nbin))
 
     # This preserves the (bad) behavior observed in gh-7845, for now.
     hist = hist.astype(float, casting='safe')
 
     # Remove outliers (indices 0 and -1 for each dimension).
     core = D * (slice(1, -1),)
-    hist = hist[core]
+    hist = hist[(...,) + core]
 
     # handle the aliasing normed argument
     if normed is None:
@@ -178,7 +178,7 @@ def histogramdd(sample, bins=10, range=None, normed=None, weights=None, density=
             raise RuntimeError(
                 "Internal Shape Error")
     else:
-        if (hist.shape != np.array([*(nbin - 2), weights.shape[1]])).any():
+        if (hist.shape != np.array([weights.shape[0], *(nbin - 2)])).any():
             raise RuntimeError(
                 "Internal Shape Error")
     return hist, edges
