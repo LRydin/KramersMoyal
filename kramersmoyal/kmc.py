@@ -71,16 +71,6 @@ def km(timeseries: np.ndarray, bins: np.ndarray, powers: np.ndarray,
 
 def _km(timeseries: np.ndarray, bins: np.ndarray, powers: np.ndarray,
         kernel: callable, bw: float, eps: float, conv_method: str):
-    def add_bandwidth(edges: list, bw: float, eps: float):
-        new_edges = list()
-        for edge in edges:
-            dx = edge[1] - edge[0]
-            min = edge[0] - bw
-            max = edge[-1] + bw
-            new_edge = np.arange(min, max + eps, dx)
-            new_edges.append(new_edge)
-        return new_edges
-
     def cartesian_product(arrays: np.ndarray):
         # Taken from https://stackoverflow.com/questions/11144513
         la = len(arrays)
@@ -89,15 +79,14 @@ def _km(timeseries: np.ndarray, bins: np.ndarray, powers: np.ndarray,
             arr[..., i] = a
         return arr.reshape(-1, la)
 
-    def _centered(arr, newshape, newshape2):
-        # Return the center newshape portion of the array.
-        newshape = np.asarray(newshape)
-        newshape2 = np.asarray(newshape2)
-        currshape = np.array(arr.shape)
-        startind = (currshape - newshape2) // 2
-        endind = startind + newshape
-        myslice = [slice(startind[k], endind[k]) for k in range(len(endind))]
-        return arr[tuple(myslice)]
+    def kernel_edges(edges: np.ndarray):
+        # Generates the kernel edges
+        edges_k = list()
+        for edge in edges:
+            dx = edge[1] - edge[0]
+            L = edge.size
+            edges_k.append(np.linspace(-dx * L, dx * L, int(2 * L + 1)))
+        return edges_k
 
     # Calculate derivative and the product of its powers
     grads = np.diff(timeseries, axis=0)
@@ -105,17 +94,16 @@ def _km(timeseries: np.ndarray, bins: np.ndarray, powers: np.ndarray,
 
     # Get weighted histogram
     hist, edges = histogramdd(timeseries[:-1, ...], bins=bins,
-                              weights=weights, density=False)
+                              weights=weights, bw=bw)
 
-    # Generate kernel
-    edges_k = add_bandwidth(edges, bw, eps=eps)
-    mesh_k = cartesian_product(edges_k)
-    kernel_ = kernel(mesh_k, bw=bw).reshape(*(edge.size for edge in edges_k))
+    # Generate centered kernel
+    edges_k = kernel_edges(edges)
+    mesh = cartesian_product(edges_k)
+    kernel_ = kernel(mesh, bw=bw).reshape(*(edge.size for edge in edges_k))
     kernel_ /= np.sum(kernel_)
 
     # Convolve weighted histogram with kernel and trim it
-    kmc = convolve(hist, kernel_[..., None], mode='full', method=conv_method)
-    kmc = _centered(kmc, hist.shape, kernel_.shape + (hist.shape[-1],))
+    kmc = convolve(hist, kernel_[..., None], mode='same', method=conv_method)
 
     # Normalize
     mask = np.abs(kmc[..., 0]) < eps
