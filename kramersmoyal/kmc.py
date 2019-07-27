@@ -90,7 +90,7 @@ def _km(timeseries: np.ndarray, bins: np.ndarray, powers: np.ndarray,
 
     # Calculate derivative and the product of its powers
     grads = np.diff(timeseries, axis=0)
-    weights = np.prod(np.power(grads[..., None], powers.T), axis=1)
+    weights = np.prod(np.power(grads.T, powers[..., None]), axis=1)
 
     # Get weighted histogram
     hist, edges = histogramdd(timeseries[:-1, ...], bins=bins,
@@ -103,12 +103,12 @@ def _km(timeseries: np.ndarray, bins: np.ndarray, powers: np.ndarray,
     kernel_ /= np.sum(kernel_)
 
     # Convolve weighted histogram with kernel and trim it
-    kmc = convolve(hist, kernel_[..., None], mode='same', method=conv_method)
+    kmc = convolve(hist, kernel_[None, ...], mode='same', method=conv_method)
 
     # Normalize
-    mask = np.abs(kmc[..., 0]) < eps
-    kmc[mask, 0:] = 0.0
+    mask = np.abs(kmc[0]) < 1e-10
+    kmc[0:, mask] = 0.0
     taylors = np.prod(factorial(powers[1:]), axis=1)
-    kmc[~mask, 1:] /= kmc[~mask, 0, None] * taylors
+    kmc[1:, ~mask] /= taylors[..., None] * kmc[0, ~mask]
 
     return kmc, [edge[:-1] + 0.5 * (edge[1] - edge[0]) for edge in edges]
