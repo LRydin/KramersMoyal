@@ -105,7 +105,7 @@ For this particular example set $\theta = 0.3$ and $\sigma=0.1$.
 
 To be able to test the library and the retrieval on the Kramers--Moyal coefficients, and subsequently recover the drift and diffusion term, one can numerically integrate the process.
 For the present case employ a Euler--Maruyama integrator, for simplicity.
-There are more reliable and faster integrators, as for example \texttt{JiTCSDE} [@Ansmann].
+There are more reliable and faster integrators, as for example `JiTCSDE` [@Ansmann].
 
 ![Fig. 1: The minimum dominating set of a graph*Trajectory of \eqref{eq:OU} for $\theta = 0.3$ and $\sigma=0.1$, for a total time of $500$ time units, with a time step of $0.001$, i.e., comprising $5\times10^5$ data points.](Fig_1.pdf)\label{fig:1}
 
@@ -116,8 +116,8 @@ An Epanechnikov kernel was chosen for both kernel-based estimations.
 ![Fig. 2: Comparison of exemplary results of obtaining the Kramers--Moyal coefficients with a histogram-based approach, a conventional kernel-based approach, and the KM library, sequentially left to right, from the numerical integration of \eqref{eq:OU}. The top row displays the \textit{drift} coefficient, i.e., the first Kramers--Moyal coefficients. The bottom row displays the \textit{diffusion} coefficient, i.e., the second Kramers--Moyal coefficients. For the histogram $40$ bins were used, for the conventional kernel and this library a space with $5500$ numerical points were used, with a bandwidth of $0.05$. The total number of points of the numerically integrated data is $5\times10^5$.](Fig_2.pdf)\label{fig:2}
 
 # Library
-The presented library is comprised of two separate blocks, \texttt{kernels} and \texttt{km}, and is a standalone package for a non-parametric retrieval of Kramers--Moyal coefficients, solely dependent on \texttt{numpy}, \texttt{scipy}, and \texttt{functools}.
-The sub-module \texttt{kernels} comprises the kernels for the kernel-based estimation, similarly available in \texttt{sklearn}, and \texttt{km} performs the desired Kramers--Moyal calculations to any desired power [@scikitlearn].
+The presented library is comprised of two separate blocks, `kernels` and `km`, and is a standalone package for a non-parametric retrieval of Kramers--Moyal coefficients, solely dependent on `numpy`, `scipy`, and `functools`.
+The sub-module `kernels` comprises the kernels for the kernel-based estimation, similarly available in `sklearn`, and `km` performs the desired Kramers--Moyal calculations to any desired power [@scikitlearn].
 
 In order compare the computational speed up of the library the aforementioned Ornstein-Uhlenbeck \eqref{eq:OU} was used (with $\theta = 0.3$ and $\sigma=0.1$), and the total time of integration of the process was increased iteratively.
 In Fig.~\ref{fig:3} the comparative results of employing a histogram estimation with $200$ bins, a conventional kernel-based regression in a space with $5500$ numerical points, and this library's kernel-convolution method, over similarly $5500$ numerical points.
