@@ -1,11 +1,12 @@
 ---
-title: 'Python KM: Kramers--Moyal coefficients at any order for one and two-dimensional stochastic processes'
+title: 'Python KM: Kramers--Moyal coefficients for stochastic processes'
 tags:
   - Kramers--Moyal coefficents
-  - master equation
-  - Stochastic processes
-  - Jump-diffusion processes
+  - N-dimensional stochastic processes
+  - Markovian processes
+  - Master equation
   - Fokker--Planck
+  - Ornstein--Uhlenbeck process
   - Python
 authors:
  - name: Leonardo Rydin Gorjão
@@ -13,78 +14,120 @@ authors:
    affiliation: "1, 2, 3, 4"
  - name: Francisco Meirinhos
    orcid: 0000-0000-0000-0000
-   affiliation: 4
+   affiliation: 5
 affiliations:
- - name: Institute for Theoretical Physics, University of Cologne, 50937~Köln, Germany
+ - name: Department of Epileptology, University of Bonn, Venusberg Campus 1, 53127 Bonn, Germany
    index: 1
- - name: Forschungszentrum Jülich, Institute for Energy and Climate Research - Systems Analysis and Technology Evaluation (IEK-STE), 52428~J\"ulich, Germany
+ - name: Helmholtz Institute for Radiation and Nuclear Physics, University of Bonn, Nußallee 14--16, 53115~Bonn, Germany
    index: 2
- - name: Department of Epileptology, University of Bonn, Sigmund-Freud-Straße 25, 53105 Bonn, Germany
+ - name: Institute for Theoretical Physics, University of Cologne, 50937~Köln, Germany
    index: 3
- - name: Helmholtz Institute for Radiation and Nuclear Physics, University of Bonn, Nußallee~14--16, 53115~Bonn, Germany
+ - name: Forschungszentrum Jülich, Institute for Energy and Climate Research - Systems Analysis and Technology Evaluation (IEK-STE), 52428~J\"ulich, Germany
    index: 4
-
-date: Leonardo Rydin Gorjão, Francisco Meirinhos
+ - name: Physikalisches Institut and Bethe Center for Theoretical Physics, Universit\"at Bonn, Nussallee 12, 53115 Bonn, Germany
+   index: 5
+date: 23rd of August, 2019
 bibliography: bib.bib
 ---
 
 # Summary
 
-A general problem for measuring and evaluating any stochastic process is the retrieval from data or time-series of the Kramers--Moyal coefficients $\mathcal{M}$, the coefficients of the Kramers--Moyal expansion of the master equation describing a particular stochastic process.
+A general problem for evaluating Markovian stochastic processes is the retrieval of the moments or the Kramers--Moyal coefficients $\mathcal{M}$ from data or time-series.
+The Kramers--Moyal coefficients are derived from an Taylor expansion of the master equation that describes the probability evolution of a Markovian stochastic process.
 
-Given a set of continuous and stationary data, i.e., ergodic or quasi-stationary stochastic data, the extensive literature of stochastic processes awards a set of measures, as the Kramers--Moyal coefficients [@Risken] or the conditional moments, that link stochastic processes to a probabilistic description of the process or of the family of processes, i.e., to a set of partial differential equations, e.g. the master equation or the Fokker--Planck equations.
-Of particular relevance is the growing evidence that lower-order stochastic processes do not seem to accurately described phenomena seen in data [@Tabar], thus a necessity to study higher-order processes, an therefore uncover the higher-order Kramers--Moyal coefficients efficiently.
+Given a set of stochastic data, ergodic or quasi-stationary, the extensive literature of stochastic processes awards a set of measures, such as the Kramers--Moyal coefficients or its moments, which link stochastic processes to a probabilistic description of the process or of the family of processes [@Risken].
+Most commonly known is the Fokker--Planck equation or truncated forward Kolmogorov equation, partial differential equations, obtained from the Taylor expansion of the master equation.
 
-To unravel the Kramers--Moyal coefficients the most straightforward approach is to perform a histogram-based regression to evaluate the conditional moments of the system at hand.
-Such approach is conventional and requires the most commonly used packages in Python (i.e., `numpy`,  `scipy`, or `pandas`), and is directly embodied in MATLAB, Julia or R, usually under the name of `hist` or `histogram`.
 
-The package presented here comprises a manifold of options: A general open-source toolbox for the calculation of Kramers--Moyal coefficients in one and two dimension, for any desired order, and with a variety of different kernels, with the added freedom to implement a specific kernel, if desired.
+
+Of particular relevance is the growing evidence that real-world data displays higher-order ($n>2$) Kramers--Moyal coefficients, which has a two-fold consequence: The common truncation at third order of the forward Kolmogorov equation, giving rise to the Fokker--Planck equation, is no longer valid.
+The evidence of higher-order ($n>2$) Kramers--Moyal coefficients in recorded data thus invalidates the aforementioned common argument for truncation, based on Pawula's theorem and thus rendering the Fokker--Planck description unjustified [@Tabar].
+A clear and common example is the presence of discontinuous jumps in data[@Anvari,Sahalia], which can give rise to higher-order Kramers--Moyal coefficients, and are evidenced in [@Rydin] and references within.
+
+
+Calculating the moments or Kramers--Moyal coefficients strickly from data can be computationally heavy for long data series and is prone to be innacurate especially where the density of data points is scarce, e.g. usually at the boundaries on the domain of the process.
+The most straightforward approach is to perform a histogram-based estimation to evaluate the moments of the system at hand.
+This has two main drawbacks: it requires a discrete space of examination of the process, and is shown to be less accurate than using kernel-based estimators [@Lamouroux].
+
+This library is based on a kernel-based estimation, which allows for more robust results given both a wider range of possible kernel shapes to perform the calculation, as well as retrieving the results in a non-binned coordinate space, unlike histogram regressions [@Silverman].
+It further employs a convolution of the series in studied with the selected kernel, circumventing the computational issue of sequential array summation, the most common bottleneck in integration time and computer memory.
+
+The package presented here comprises a manifold of options: A general open-source toolbox for the calculation of Kramers--Moyal coefficients for any given data series of any dimension and to any order, with a selection of commonly used kernel estimators.
 
 # Mathematics
 
-The probability that an $n$-dimensional state variable $\boldsymbol{x}'(t)\in\mathbb{R}^n$ is observed at position $\boldsymbol{x}$ is given by the conditional probability of the previous (or future) states of the system [@Risken].
-This probabilistic description takes the form
-\begin{equation}
-\mathcal{M}^{[\ell]}(\boldsymbol{x},t)=\int  dx'(\boldsymbol{x}(t)'-\boldsymbol{x}(t))^\ell W(\boldsymbol{x}'|\boldsymbol{x}),
-\end{equation}
-with $W(\boldsymbol{x}'|\boldsymbol{x})$ the transition probability rate.
+For a general $N$-dimensional Markovian process $\boldsymbol{x}'(t)\in\mathbb{R}^N$ tke Kramers--Moyal yields all orders of the cumulants of the conditional probability distribution $P(\boldsymbol{x}',t+\Delta T | \boldsymbol{x}, t)$ as [@Risken]
+$$
+\mathcal{M}^{\sigma}(\boldsymbol{x},t)=\lim_{\Delta t\to 0}\frac{1}{\Delta t}\int  dx'[\boldsymbol{x}(t)'-\boldsymbol{x}(t)]^\sigma P(\boldsymbol{x}',t+\Delta T | \boldsymbol{x}, t),
+$$
+with $[\dots]^\sigma$ a dyadic multiplication, and the power $\sigma$ allowing for a set of powers depending on the dimensionality of the process.
 
 The exact evaluation of the Kramers--Moyal coefficients for discrete or discretised datasets $\boldsymbol{y}(t)$---any human measure of a process is discrete, as well as any computer generated data---is bounded by the timewise limit imposed.
-Taking as an example a two-dimentional case, that one can obtained numerically with this library, with $\boldsymbol{x}(t)=(x_1(t),x_2(t))\in\mathbb{R}^{2}$, the Kramers--Moyal coefficients $\mathcal{M}^{[\ell, m]}\in\mathbb{R}^{2}$ take the form
-\begin{equation}
-\begin{aligned}
-&\mathcal{M}^{[\ell, m]}(x_1,x_2)=\lim_{\Delta t\to 0}\!\frac{1}{\Delta t}\int \mathrm{d} y_1 \mathrm{d} y_2 (y_1(t\!+\!\Delta t)\!-\!y_1(t))^\ell(y_2(t\!+\!\Delta t)\!-y_2(t))^m \cdot \\
-& \qquad \qquad \qquad \qquad \qquad \qquad \qquad P(y_1,y_2; t\!+\!\Delta t|y_1,y_2 ; t)|_{y_1(t)=x_1, y_2(t)=x_2},
-\end{aligned}
-\end{equation}
-at a certain reference measure point $(x_1,x_2)$. The Kramers--Moyal coefficents $\mathcal{M}^{[\ell, m]}(x_1,x_2)$ are obtained from a two-dimensional time-series $(y_1(t),y_2(t))$.
+Taking as an example a two-dimensional case with $\boldsymbol{y}(t)=(y_1(t),y_2(t))\in\mathbb{R}^{2}$, the Kramers--Moyal coefficients $\mathcal{M}^{[\ell, m]}\in\mathbb{R}^{2}$ take the form
 
-Theoretically $\Delta t$ should take the limiting case of $\Delta t \to 0$, but the restriction of any measuring or storing device---or the nature of the observables themselves---permits only time-sampled or discrete recordings.
+$$
+\mathcal{M}^{[\ell, m]}(x_1,x_2,t)=\lim_{\Delta t\to 0}\!\frac{1}{\Delta t}\int \mathrm{d} y_1 \mathrm{d} y_2 (y_1(t+\Delta t)-x_1(t))^\ell(y_2(t+\Delta t)-x_2(t))^m \cdot P(y_1,y_2; t+\Delta t|x_1,x_2 ; t),
+$$
+at a certain measure point $(x_1,x_2)$.
+The order of the Kramers--Moyal coefficients is given here by the superscripts $\ell$ and $m$.
+
+Theoretically, there are still two details to attend to: Firstly, for non-stationary data, there is and explicity dependence on $t$, but, as the case discussed here, for stationary (or quasi-stationary) data, $P(\boldsymbol{x}',t+\Delta T | \boldsymbol{x}, t) = P(\boldsymbol{x}',\Delta T | \boldsymbol{x})$.
+This entails time-independent Kramers--Moyal coefficients $\mathcal{M}^{\sigma}(\boldsymbol{x})$.
+Secondly, $\Delta t$ should take the limiting case of $\Delta t \to 0$, but the restriction of any measuring or storing device---or the nature of the observables themselves---permits only time-sampled or discrete recordings.
+In the limiting case where $\Delta t$ is equivalent to the minimal sampling rate of the data, the Kramers--Moyal coefficients take the form, in our two-dimensional example, as
+
+$$
+\mathcal{M}^{[\ell, m]}(x_1, x_2) = \frac{1}{\Delta t} \langle \Delta y_1^{\ell} \Delta y_2^{m} |_{y_1(t)=x_1, y_2(t)=x_2}\rangle,~\mathrm{with}~\Delta y_i =  y_i(t+ \Delta t) - y_i(t).\label{eq:3}
+$$
+
+It is straightforward to generalise this to any dimensions.
 The relevance and importance of adequate time-sampling was extensively studied and discussed in [@Lehnertz].
-In the limiting case where $\Delta t$ is equivalent to the sampling rate of the data, the Kramers--Moyal coefficients take the form
-\begin{equation}
-\begin{aligned}
-\mathcal{M}^{[\ell, m]}(x_1, x_2) = \frac{1}{\Delta t} \langle \Delta y_1^{\ell} \Delta y_2^{m} |_{y_1(t)=x_1, y_2(t)=x_2}\rangle,~\mathrm{with}~\Delta y_i =  y_i(t+ \Delta t) - y_i(t).\nonumber
-\end{aligned}
-\end{equation}
+Notice here that if the sampling resolution of the process is known, than that is $\Delta t$.
 
-Furthermore, the order of the Kramers--Moyal coefficients is given here by the superscript $\ell$ and $m$.
-For such measure of the Kramers--Moyal coefficients, i.e., a probabilistic measure, a probabilistic space exists, assigned to the process, stemming from the master equation describing the family of such processes.
-The conventional procedure is to utilise a histogram regression of the observed process and retrieve, via approximation or fitting, the Kramers--Moyal coefficient.
+The Kramers--Moyal coefficients exist on an underlying probabilistic space, i.e., there exists a probabilistic measure assigned to the process, stemming from the master equation describing the family of such processes.
+The conventional procedure, as mentioned previously, is to utilise a histogram regression of the observed process and retrieve, via approximation or fitting, the Kramers--Moyal coefficient.
 The choice of a histogram measure for the Kramers--Moyal coefficient results in an acceptable measure of the probability density functions of the process but requires a new mathematical space (a distribution space).
-The usage of a kernel approach, followed here, permits an identical overview without the necessity of a new (descritised) distribution space, given that the equivalent space of the observable can be taken.
+The employment of a kernel estimation approach, implemented in this library, permits an identical overview without the necessity of a new (discretised) distribution space, given that the equivalent space of the observable can be taken.
 
-Alike the histogram approach for the measure of the Kramers--Moyal coefficients, each single measure of the observable $\boldsymbol{y}(t)$ is averaged, with a designed weight, into the distribution space.
+Like the histogram approach for the measure of the Kramers--Moyal coefficients, each single measure of the observable $\boldsymbol{y}(t)$ is averaged, with a designed weight, into the distribution space.
 The standing difference, in comparison to the histogram approach, is the riddance of a (discrete) binning system.
-All points are averaged, in a weighted fashion, into the distribution space---aiding specially in cases where the data sets is scarce---and awarding a continuous measurable space (easier for fitting, for example).
+All points are averaged, in a weighted fashion, into the distribution space---aiding especially in cases where the number of point in a dataset is small---and awarding a continuous measurable space (easier for fitting, for example) [@Lamouroux].
 
-![Two exemplary two-dimensional Kramers--Moyal coefficients for a stochastic process were calculated with a package using a $n\times n = 440\times 440$ array. Plotted as well are the theoretical surfaces according to [@Anvari]. An asymmetric two-dimensional Epanechnikov kernel was employed [@Epanechnikov].](figure.png)
+
+# Exemplary one-dimensional Ornstein--Uhlenbeck process
+A one-dimensional Ornstein--Uhlenbeck process $y(t)$ takes the form
+
+$$
+    d y = - \theta y dt + \sigma d W(t),
+$$
+with $\theta$ denoted as the \textit{drift} or mean-reverting term, $\sigma$ the \textit{diffusion} term or stochastic amplitude, and $W(t)$ is a Brownian motion, i.e., a Wiener process.
+For this particular example set $\theta = 0.3$ and $\sigma=0.1$.
+
+To be able to test the library and the retrieval on the Kramers--Moyal coefficients, and subsequently recover the drift and diffusion term, one can numerically integrate the process.
+For the present case employ a Euler--Maruyama integrator, for simplicity.
+There are more reliable and faster integrators, as for example \texttt{JiTCSDE} [@Ansmann].
+
+![Fig. 1: The minimum dominating set of a graph*Trajectory of \eqref{eq:OU} for $\theta = 0.3$ and $\sigma=0.1$, for a total time of $500$ time units, with a time step of $0.001$, i.e., comprising $5\times10^5$ data points.](Fig_1.pdf)\label{fig:1}
+
+For the present case, with an integration over $500$ time units and with a timestep of $0.001$, which can be seen in Fig.~\ref{fig:1}.
+The first and second Kramers--Moyal coefficients are presented in Fig.~\ref{fig:2}, where as well the conventional histogram-based estimation, a non-convolution based kernel estimation, and this library implementing a convolution of the kernel with the terms the right-hand side in \eqref{eq:3}.
+An Epanechnikov kernel was chosen for both kernel-based estimations.
+
+![Fig. 2: Comparison of exemplary results of obtaining the Kramers--Moyal coefficients with a histogram-based approach, a conventional kernel-based approach, and the KM library, sequentially left to right, from the numerical integration of \eqref{eq:OU}. The top row displays the \textit{drift} coefficient, i.e., the first Kramers--Moyal coefficients. The bottom row displays the \textit{diffusion} coefficient, i.e., the second Kramers--Moyal coefficients. For the histogram $40$ bins were used, for the conventional kernel and this library a space with $5500$ numerical points were used, with a bandwidth of $0.05$. The total number of points of the numerically integrated data is $5\times10^5$.](Fig_2.pdf)\label{fig:2}
 
 # Library
-The presented library is comprised of two separate blocks, `kernels` and `km`, and is a standalone package for a non-parametric retrieval of Kramers--Moyal coefficients, solely dependent on `numpy`. The sub-module `kernels` comprises the kernels for the kernel-based estimation, similarly available in `sklearn`, and `km` performs the desired Kramers--Moyal calculations to any desired power. [@scikitlearn].
+The presented library is comprised of two separate blocks, \texttt{kernels} and \texttt{km}, and is a standalone package for a non-parametric retrieval of Kramers--Moyal coefficients, solely dependent on \texttt{numpy}, \texttt{scipy}, and \texttt{functools}.
+The sub-module \texttt{kernels} comprises the kernels for the kernel-based estimation, similarly available in \texttt{sklearn}, and \texttt{km} performs the desired Kramers--Moyal calculations to any desired power [@scikitlearn].
+
+In order compare the computational speed up of the library the aforementioned Ornstein-Uhlenbeck \eqref{eq:OU} was used (with $\theta = 0.3$ and $\sigma=0.1$), and the total time of integration of the process was increased iteratively.
+In Fig.~\ref{fig:3} the comparative results of employing a histogram estimation with $200$ bins, a conventional kernel-based regression in a space with $5500$ numerical points, and this library's kernel-convolution method, over similarly $5500$ numerical points.
+
+![Fig. 2:Comparison of speed performance of obtaining the Kramers--Moyal coefficients with a histogram-based approach, a conventional kernel-based approach, and the KM library, sequentially left to right, from the numerical integration of \eqref{eq:OU} over increasing number of data points. For the histogram $200$ bins were used, for the conventional kernel and this library a space with $5500$ numerical points was used. The total number of points of numerical integration was varied between $5\times10^3$ and $5\times10^6$. The horizontal line indicates a total of $1$ second.Integration performed on a laptop with an Intel Core i5 CPU @$2.20$~GHz (@$2.56$~GHz turbo).](Fig_3.pdf)\label{fig:3}
 
 # Acknowledgements
+L. R. G. and F. M. contributed equally to this project with their respective expertise.
 L. R. G. thanks Klaus Lehnertz and M. Reza Rahimi Tabar for all the help in understanding stochastic processes and developing this package, Dirk Witthaut for the support during the process of writing and reviewing, Gerrit Ansmann for the help in understanding python's intricacies, and Marieke Helmich for the text reviews.
-L. R. G. gratefully acknowledge support Helmholtz Association, via the joint initiative _Energy System 2050 - A Contribution of the Research Field Energy_, and the grant No. VH-NG-1025.
+L. R. G. gratefully acknowledges support by the Helmholtz Association, via the joint initiative \emph{Energy System 2050 - A Contribution of the Research Field Energy}, the grant No. VH-NG-1025, the scholarship funding from \textit{E.ON Stipendienfonds}, and the STORM project of the Department of Mathematics, University of Oslo, under the supervision of Giulia di Nunno.
+F. M. gratefully acknowledges the fund, in part, by the Deutsche Forschungsgemeinschaft (DFG, German Research Foundation), project number 277625399 - CRC 185.
 
 # References
