@@ -100,7 +100,7 @@ A one-dimensional Ornstein--Uhlenbeck process $y(t)$ takes the form
 $$
     d y = - \theta y dt + \sigma d W(t),
 $$
-with $\theta$ denoted as the \textit{drift} or mean-reverting term, $\sigma$ the \textit{diffusion} term or stochastic amplitude, and $W(t)$ is a Brownian motion, i.e., a Wiener process.
+with $\theta$ denoted as the *drift* or mean-reverting term, $\sigma$ the *diffusion* term or stochastic amplitude, and $W(t)$ is a Brownian motion, i.e., a Wiener process.
 For this particular example set $\theta = 0.3$ and $\sigma=0.1$.
 
 To be able to test the library and the retrieval on the Kramers--Moyal coefficients, and subsequently recover the drift and diffusion term, one can numerically integrate the process.
@@ -113,7 +113,7 @@ For the present case, with an integration over $500$ time units and with a times
 The first and second Kramers--Moyal coefficients are presented in Fig.~\ref{fig:2}, where as well the conventional histogram-based estimation, a non-convolution based kernel estimation, and this library implementing a convolution of the kernel with the terms the right-hand side in \eqref{eq:3}.
 An Epanechnikov kernel was chosen for both kernel-based estimations.
 
-![Fig. 2: Comparison of exemplary results of obtaining the Kramers--Moyal coefficients with a histogram-based approach, a conventional kernel-based approach, and the KM library, sequentially left to right, from the numerical integration of \eqref{eq:OU}. The top row displays the \textit{drift} coefficient, i.e., the first Kramers--Moyal coefficients. The bottom row displays the \textit{diffusion} coefficient, i.e., the second Kramers--Moyal coefficients. For the histogram $40$ bins were used, for the conventional kernel and this library a space with $5500$ numerical points were used, with a bandwidth of $0.05$. The total number of points of the numerically integrated data is $5\times10^5$.](Fig_2.pdf)\label{fig:2}
+![Fig. 2: Comparison of exemplary results of obtaining the Kramers--Moyal coefficients with a histogram-based approach, a conventional kernel-based approach, and the KM library, sequentially left to right, from the numerical integration of \eqref{eq:OU}. The top row displays the *drift* coefficient, i.e., the first Kramers--Moyal coefficients. The bottom row displays the *diffusion* coefficient, i.e., the second Kramers--Moyal coefficients. For the histogram $40$ bins were used, for the conventional kernel and this library a space with $5500$ numerical points were used, with a bandwidth of $0.05$. The total number of points of the numerically integrated data is $5\times10^5$.](Fig_2.pdf)\label{fig:2}
 
 # Library
 The presented library is comprised of two separate blocks, `kernels` and `km`, and is a standalone package for a non-parametric retrieval of Kramers--Moyal coefficients, solely dependent on `numpy`, `scipy`, and `functools`.
@@ -127,7 +127,7 @@ In Fig.~\ref{fig:3} the comparative results of employing a histogram estimation 
 # Acknowledgements
 L. R. G. and F. M. contributed equally to this project with their respective expertise.
 L. R. G. thanks Klaus Lehnertz and M. Reza Rahimi Tabar for all the help in understanding stochastic processes and developing this package, Dirk Witthaut for the support during the process of writing and reviewing, Gerrit Ansmann for the help in understanding python's intricacies, and Marieke Helmich for the text reviews.
-L. R. G. gratefully acknowledges support by the Helmholtz Association, via the joint initiative \emph{Energy System 2050 - A Contribution of the Research Field Energy}, the grant No. VH-NG-1025, the scholarship funding from \textit{E.ON Stipendienfonds}, and the STORM project of the Department of Mathematics, University of Oslo, under the supervision of Giulia di Nunno.
+L. R. G. gratefully acknowledges support by the Helmholtz Association, via the joint initiative *Energy System 2050 - A Contribution of the Research Field Energy*, the grant No. VH-NG-1025, the scholarship funding from *E.ON Stipendienfonds*, and the STORM project of the Department of Mathematics, University of Oslo, under the supervision of Giulia di Nunno.
 F. M. gratefully acknowledges the fund, in part, by the Deutsche Forschungsgemeinschaft (DFG, German Research Foundation), project number 277625399 - CRC 185.
 
 # References
