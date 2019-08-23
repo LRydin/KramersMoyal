@@ -9,7 +9,7 @@ Python KM is a  python package designed to obtain the Kramers–Moyal coefficien
 
 
 # Installation
-A the current stage of the library there is no direct installation protocol. Just get the `kramersmoyal` to  to your working python directory and add your import preamble
+A the current stage of the library there is no direct installation protocol. Just get the `kramersmoyal` into your working python directory and add your import preamble
 ```python
 from kramersmoyal import km, kernels
 ```
@@ -23,31 +23,28 @@ Take for example the well documented one-dimension Ornstein–Uhlenbeck process,
 which can be solved in various ways. For our purposes, recall that the drift coefficient, i.e., the first-order Kramers–Moyal coefficient, is given by ![first-order Kramers–Moyal coefficient of an Ornstein–Uhlenbeck process](/other/KM_1.png) and the second-order Kramers–Moyal coefficient is ![second-order Kramers–Moyal coefficient of an Ornstein–Uhlenbeck process](/other/KM_2.png), i.e., the diffusion.
 
 Generate an exemplary Ornstein–Uhlenbeck process with your favorite integrator, e.g., the [Euler–Maruyama](https://en.wikipedia.org/wiki/Euler%E2%80%93Maruyama_method) or with a more powerful tool from [`JiTCSDE`](https://github.com/neurophysik/jitcsde) found on GitHub.
-For this example lets take &theta;=.3 and &sigma;=.1, over a total time of 50 units, with a sampling of 1000 Hertz, and from the generated data series retrieve the two parameters, the drift &theta; and diffusion &sigma;.
+For this example lets take &theta;=.3 and &sigma;=.1, over a total time of 500 units, with a sampling of 1000 Hertz, and from the generated data series retrieve the two parameters, the drift &theta; and diffusion &sigma;.
 
 ## Integrating an Ornstein–Uhlenbeck process
 Here is a short code on generating a Ornstein–Uhlenbeck stochastic trajectory with a simple Euler–Maruyama integration method
 
 ```python
 # integration time and time sampling
-t_final=500
-delta_t=0.001
+t_final = 500
+delta_t = 0.001
 
 # The parameters theta and sigma
-theta=.3
-sigma=.1
+theta = .3
+sigma = .1
 
 # The time array of the trajectory
-time=np.linspace(0,t_final,t_final*int(1/delta_t))
+time = np.linspace(0,t_final,t_final*int(1/delta_t))
 
 # Initialise the array y
 y = np.zeros([time.size])
 
 #Generate a Wiener process
 dw = np.random.normal(loc=0, scale=np.sqrt(delta_t),size=[time.size,1])
-
-# Give some random initial conditions far from zero
-y[0]=np.random.normal(size=1)/10
 
 # Integrate the process
 for i in range(1,time.size):
@@ -59,7 +56,7 @@ From here we have a plain example of an Ornstein–Uhlenbeck process, always dri
 ![Jump-diffusion process](/other/O-U_plot.png)
 
 ## Using Python KM
-Take the timeseries `y` and lets study the Kramers–Moyal coefficients. For this lets look at the drift and diffusion coefficients of the process, i.e., the first and second Kramers–Moyal coefficients, with an  `epanechnikov` kernel
+Take the timeseries `y` and lets study the Kramers–Moyal coefficients. For this lets look at the drift and diffusion coefficients of the process, i.e., the first and second Kramers–Moyal coefficients, with an `epanechnikov` kernel
 ```python
 # Choose number of points of you target space
 bins = np.array([5000])
@@ -96,7 +93,7 @@ Next on the list is
 
 # Support
 ### History
-This project was started a few years ago at the [neurophysik](https://www.researchgate.net/lab/Klaus-Lehnertz-Lab-2) with Klaus Lehnertz, M. Reza Rahimi Tabar, and Jan Heysel. Francisco Meirinhos devised later the hard coding to python. The project is now supported by Dirk Witthaut and the [Institute of Energy and Climate Research Systems Analysis and Technology Evaluation](https://www.fz-juelich.de/iek/iek-ste/EN/Home/home_node.html).
+This project was started in 2017 at the [neurophysik](https://www.researchgate.net/lab/Klaus-Lehnertz-Lab-2) with Klaus Lehnertz, M. Reza Rahimi Tabar, and Jan Heysel. Francisco Meirinhos devised later the hard coding to python. The project is now supported by Dirk Witthaut and the [Institute of Energy and Climate Research Systems Analysis and Technology Evaluation](https://www.fz-juelich.de/iek/iek-ste/EN/Home/home_node.html).
 
 ### Funding
 Helmholtz Association Initiative _Energy System 2050 - A Contribution of the Research Field Energy_ and the grant No. VH-NG-1025.
