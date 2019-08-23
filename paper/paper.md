@@ -13,7 +13,6 @@ authors:
    orcid: 0000-0001-5513-0580
    affiliation: "1, 2, 3, 4"
  - name: Francisco Meirinhos
-   orcid: 0000-0000-0000-0000
    affiliation: 5
 affiliations:
  - name: Department of Epileptology, University of Bonn, Venusberg Campus 1, 53127 Bonn, Germany
@@ -22,9 +21,9 @@ affiliations:
    index: 2
  - name: Institute for Theoretical Physics, University of Cologne, 50937~Köln, Germany
    index: 3
- - name: Forschungszentrum Jülich, Institute for Energy and Climate Research - Systems Analysis and Technology Evaluation (IEK-STE), 52428~J\"ulich, Germany
+ - name: Forschungszentrum Jülich, Institute for Energy and Climate Research - Systems Analysis and Technology Evaluation (IEK-STE), 52428~Jülich, Germany
    index: 4
- - name: Physikalisches Institut and Bethe Center for Theoretical Physics, Universit\"at Bonn, Nussallee 12, 53115 Bonn, Germany
+ - name: Physikalisches Institut and Bethe Center for Theoretical Physics, Universität Bonn, Nussallee 12, 53115 Bonn, Germany
    index: 5
 date: 23rd of August, 2019
 bibliography: bib.bib
