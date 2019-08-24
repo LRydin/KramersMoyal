@@ -20,11 +20,17 @@ def km(timeseries: np.ndarray, bins: np.ndarray, powers: np.ndarray,
     bins: np.ndarray
         The number of bins for each dimension
 
+    powers: np.ndarray
+        Powers for the operation of calculating the Kramers--Moyal coefficients
+
     kernel: callable
-        Kernel used to calculate the Kramers-Moyal coefficients
+        Kernel used to convolute with the Kramers--Moyal coefficients
 
     bw: float
         Desired bandwidth of the kernel
+
+    eps: float
+        Truncation accuracy for the convolution process
 
     conv_method: str
         A string indicating which method to use to calculate the convolution.
@@ -106,9 +112,12 @@ def _km(timeseries: np.ndarray, bins: np.ndarray, powers: np.ndarray,
     kmc = convolve(hist, kernel_[None, ...], mode='same', method=conv_method)
 
     # Normalize
-    mask = np.abs(kmc[0]) < 1e-10
+    mask = np.abs(kmc[0]) < 1e-10   # @Francisco eps?
     kmc[0:, mask] = 0.0
     taylors = np.prod(factorial(powers[1:]), axis=1)
     kmc[1:, ~mask] /= taylors[..., None] * kmc[0, ~mask]
 
     return kmc, [edge[:-1] + 0.5 * (edge[1] - edge[0]) for edge in edges]
+
+# TODOS:
+# @Francisco have we removed the eps : float usage during testing?
