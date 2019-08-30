@@ -7,7 +7,7 @@ from .kernels import silvermans_rule, epanechnikov, _kernels
 
 
 def km(timeseries: np.ndarray, bins: np.ndarray, powers: np.ndarray,
-        kernel=None, bw=None, eps=1e-12, conv_method='auto'):
+        kernel=None, bw=None, tol=1e-10, conv_method='auto'):
     """
     Estimates Kramers-Moyal coefficients from a timeseries using a kernel
     estimator method.
@@ -29,8 +29,8 @@ def km(timeseries: np.ndarray, bins: np.ndarray, powers: np.ndarray,
     bw: float
         Desired bandwidth of the kernel
 
-    eps: float
-        Truncation accuracy for the convolution process
+    tol: float
+        Round to zero absolute values smaller than `tol`, after the convolutions
 
     conv_method: str
         A string indicating which method to use to calculate the convolution.
@@ -72,11 +72,11 @@ def km(timeseries: np.ndarray, bins: np.ndarray, powers: np.ndarray,
         kernel = epanechnikov
     assert kernel in _kernels, "Kernel not found"
 
-    return _km(timeseries, bins, powers, kernel, bw, eps, conv_method)
+    return _km(timeseries, bins, powers, kernel, bw, tol, conv_method)
 
 
 def _km(timeseries: np.ndarray, bins: np.ndarray, powers: np.ndarray,
-        kernel: callable, bw: float, eps: float, conv_method: str):
+        kernel: callable, bw: float, tol: float, conv_method: str):
     def cartesian_product(arrays: np.ndarray):
         # Taken from https://stackoverflow.com/questions/11144513
         la = len(arrays)
@@ -112,12 +112,9 @@ def _km(timeseries: np.ndarray, bins: np.ndarray, powers: np.ndarray,
     kmc = convolve(hist, kernel_[None, ...], mode='same', method=conv_method)
 
     # Normalize
-    mask = np.abs(kmc[0]) < 1e-10   # @Francisco eps?
+    mask = np.abs(kmc[0]) < tol
     kmc[0:, mask] = 0.0
     taylors = np.prod(factorial(powers[1:]), axis=1)
     kmc[1:, ~mask] /= taylors[..., None] * kmc[0, ~mask]
 
     return kmc, [edge[:-1] + 0.5 * (edge[1] - edge[0]) for edge in edges]
-
-# TODOS:
-# @Francisco have we removed the eps : float usage during testing?
