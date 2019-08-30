@@ -1,27 +1,24 @@
+from scipy.sparse import csr_matrix
 import numpy as np
 
 
-_range = range
-
-
-def bincount(x, weights, minlength=0):
+def bincount1(x, weights, minlength=0):
     return np.array(
         [np.bincount(x, w, minlength=minlength) for w in weights])
 
-# # Prefer for very big bins
-# from scipy.sparse import csr_matrix
-# def bincount(x, weights, minlength=0):
 
-#     assert len(x.shape) == 1
+def bincount2(x, weights, minlength=0):
+    # Small speedup if # of weights is large
+    assert len(x.shape) == 1
 
-#     ans_size = x.max() + 1
+    ans_size = x.max() + 1
 
-#     if (ans_size < minlength):
-#         ans_size = minlength
+    if (ans_size < minlength):
+        ans_size = minlength
 
-#     csr = csr_matrix((np.ones(x.shape[0]), (x, np.arange(x.shape[0]))), shape=[
-#                      ans_size, x.shape[0]])
-#     return csr * weights
+    csr = csr_matrix((np.ones(x.shape[0]), (np.arange(x.shape[0]), x)), shape=[
+                     x.shape[0], ans_size])
+    return weights * csr
 
 
 def _get_outer_edges(a, range, bw):
@@ -52,6 +49,9 @@ def _get_outer_edges(a, range, bw):
         last_edge = last_edge + 0.5
 
     return first_edge, last_edge
+
+
+_range = range
 
 
 # An alternative to Numpy's histogramdd, supporting a weights matrix
@@ -130,7 +130,7 @@ def histogramdd(sample, bins=10, range=None, normed=None, weights=None, density=
 
     # Compute the number of repetitions in xy and assign it to the
     # flattened histmat.
-    hist = bincount(xy, weights, minlength=nbin.prod())
+    hist = bincount1(xy, weights, minlength=nbin.prod())
 
     # Shape into a proper matrix
     if weights.ndim == 1:
@@ -165,13 +165,13 @@ def histogramdd(sample, bins=10, range=None, normed=None, weights=None, density=
                 hist = hist / dedges[i].reshape(shape)
             hist /= s
         else:
-            for d in _range(weights.shape[1]):
-                s = hist[..., d].sum()
+            for d in _range(weights.shape[0]):
+                s = hist[d, ...].sum()
                 for i in _range(D):
                     shape = np.ones(D, int)
                     shape[i] = nbin[i] - 2
-                    hist[..., d] = hist[..., d] / dedges[i].reshape(shape)
-                hist[..., d] /= s
+                    hist[d, ...] = hist[d, ...] / dedges[i].reshape(shape)
+                hist[d, ...] /= s
 
     if weights.ndim == 1:
         if (hist.shape != nbin - 2).any():

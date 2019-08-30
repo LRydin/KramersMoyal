@@ -13,14 +13,12 @@ for dim in [1, 2, 3]:
     Nw = 10
     weights = np.random.rand(N, Nw)
 
-    hist1 = list()
-    for w in weights.T:
-        hist1.append(np.histogramdd(
-            timeseries, bins=bins, weights=w, density=True)[0])
+    hist1 = [np.histogramdd(timeseries, bins=bins,
+                            weights=w, density=True)[0] for w in weights.T]
 
     hist2 = histogramdd(timeseries, bins=bins,
-                        weights=weights, density=True)[0]
+                        weights=weights.T, density=True)[0]
 
     assert np.array(
-        list(map(lambda i: (hist1[i] == hist2[..., i]), range(Nw)))).all()
+        list(map(lambda i: (hist1[i] == hist2[i, ...]), range(Nw)))).all()
     print("Binning in {0}D: passed".format(dim))
