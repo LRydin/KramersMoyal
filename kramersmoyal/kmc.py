@@ -57,9 +57,13 @@ def km(timeseries: np.ndarray, bins: np.ndarray, powers: np.ndarray,
     if len(powers.shape) == 1:
         powers = powers.reshape(-1, 1)
 
+    trim_output = False
+    if not (powers[0] == [0] * dims).all():
+        powers = np.array([[0] * dims, *powers])
+        trim_output = True
+
     assert (powers[0] == [0] * dims).all(), "First power must be zero"
     assert dims == powers.shape[1], "Powers not matching timeseries' dimension"
-
     assert dims == bins.shape[0], "Bins not matching timeseries' dimension"
 
     if bw is None:
@@ -72,7 +76,8 @@ def km(timeseries: np.ndarray, bins: np.ndarray, powers: np.ndarray,
         kernel = epanechnikov
     assert kernel in _kernels, "Kernel not found"
 
-    return _km(timeseries, bins, powers, kernel, bw, tol, conv_method)
+    kmc, edges =  _km(timeseries, bins, powers, kernel, bw, tol, conv_method)
+    return (kmc, edges) if not trim_output else (kmc[1:], edges)
 
 
 def _km(timeseries: np.ndarray, bins: np.ndarray, powers: np.ndarray,
