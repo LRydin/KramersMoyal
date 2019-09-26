@@ -38,13 +38,13 @@ theta = .3
 sigma = .1
 
 # The time array of the trajectory
-time = np.linspace(0,t_final,t_final*int(1/delta_t))
+time = np.arange(0,t_final,delta_t)
 
 # Initialise the array y
-y = np.zeros([time.size])
+y = np.zeros(time.size)
 
 #Generate a Wiener process
-dw = np.random.normal(loc=0, scale=np.sqrt(delta_t),size=[time.size,1])
+dw = np.random.normal(loc=0, scale=np.sqrt(delta_t),size=time.size)
 
 # Integrate the process
 for i in range(1,time.size):
@@ -68,7 +68,7 @@ powers = np.array([[1],[2]])
 bw = .15
 
 # The kmc hold the results, where edges holds the binning space
-kmc, edges = km(y, kernel=kernel.epanechnikov, bw=bw, bins=bins, powers=powers)
+kmc, edges = km(y, kernel=kernels.epanechnikov, bw=bw, bins=bins, powers=powers)
 ```
 
 This results in
