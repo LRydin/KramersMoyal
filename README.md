@@ -19,7 +19,7 @@ from kramersmoyal import km, kernels
 
 A Jupyter notebook with this example can be found [here](/examples/kmc.ipynb)
 
- ## The theory
+## The theory
 Take for example the well documented one-dimension Ornstein–Uhlenbeck process, also known as Va&#353;&#237;&#269;ek process, see [here](https://en.wikipedia.org/wiki/Ornstein%E2%80%93Uhlenbeck_process). This process is governed by two main parameters: the mean-reverting parameter &theta; and the diffusion parameter &sigma;
 
 <img src="/other/OU_eq.png" title="Ornstein–Uhlenbeck process" height="25"/>
@@ -87,12 +87,7 @@ A Jupyter notebook with this example can be found [here](/examples/kmc.ipynb)
 
 ## Theory
 
-<<<<<<< HEAD
 A two-dimensional diffusion process is a stochastic process that comprises two ![](/other/inline_W.png) and allows for a mixing of these noise terms across its two dimensions.
-=======
-A two-dimensional diffusion process is a stochastic process that comprises two ![Wiener process](/other/inline_W.png) and allows for a mixing of these noise terms across its two dimensions.
->>>>>>> 60ac18b... Added a relevant remark on normalisation and another reference
-It takes the form
 
 <img src="/other/2D-diffusion.png" alt="2D-diffusion" title="A 2-dimensional diffusion process" height="60" />
 
@@ -193,7 +188,7 @@ The study of stochastic processes from a data-driven approach is grounded in ext
 You can find and extensive review on the subject [here](http://sharif.edu/~rahimitabar/pdfs/80.pdf)<sup>1</sup>
 
 ### History
-This project was started in 2017 at the [neurophysik](https://www.researchgate.net/lab/Klaus-Lehnertz-Lab-2) with Leonardo Rydin Gorjão, Jan Heysel, Klaus Lehnertz, and M. Reza Rahimi Tabar. Francisco Meirinhos later devised the hard coding to python. The project is now supported by Dirk Witthaut and the [Institute of Energy and Climate Research Systems Analysis and Technology Evaluation](https://www.fz-juelich.de/iek/iek-ste/EN/Home/home_node.html).
+This project was started in 2017 at the [neurophysik](https://www.researchgate.net/lab/Klaus-Lehnertz-Lab-2) by Leonardo Rydin Gorjão, Jan Heysel, Klaus Lehnertz, and M. Reza Rahimi Tabar. Francisco Meirinhos later devised the hard coding to python. The project is now supported by Dirk Witthaut and the [Institute of Energy and Climate Research Systems Analysis and Technology Evaluation](https://www.fz-juelich.de/iek/iek-ste/EN/Home/home_node.html).
 
 ### Funding
 Helmholtz Association Initiative _Energy System 2050 - A Contribution of the Research Field Energy_ and the grant No. VH-NG-1025.
