@@ -82,6 +82,9 @@ A bivariate jump-diffusion process, a two-dimensional process with higher-order 
 
 An integration scheme as mentioned above allows one to numerically simulate the process.
 
+# Contributions
+We welcome reviews and ideas for everyone. If you want to share your ideas or report a bug, open a [issue](https://github.com/LRydin/KramersMoyal/issues) here on GitHub, or contact us directly.
+
 # TODOs
 Next on the list is
 - Include an optimal bandwith calculator, based on [Silverman's](https://en.wikipedia.org/wiki/Kernel_density_estimation#A_rule-of-thumb_bandwidth_estimator)
