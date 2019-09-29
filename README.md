@@ -79,6 +79,7 @@ This results in
 
 <img src="/other/fig2.png" title="Drift and diffusion terms" height="200"/>
 
+Notice here that to obtain the Kramers–Moyal coefficients you need to multiply by the timestep `delta_t`.
 
 # A 2-dimensional diffusion process
 
