@@ -2,7 +2,7 @@
 Python KM is a  python package designed to obtain the Kramers–Moyal coefficients, or conditional moments, from stochastic data of any dimension. It employs kernel density estimations, instead of a histogram approach, to ensure better results for low number of points as well as allowing better fitting of the results
 
 # Changelog
-- Version 0.32 - Adding 2 kernels: Triagular and Quartic and extentind the documentation and examples.
+- Version 0.32 - Adding 2 kernels: `triagular` and `quartic` and extenting the documentation and examples.
 - Version 0.31 - Corrections to the fft triming after convolution
 - Version 0.3 - The major breakthrough: Calculates the Kramers–Moyal coefficients for data of any dimension
 - Version 0.2 - Introducing convolutions and `gaussian` and `uniform` kernels. Major speed up in the calculations.
@@ -24,7 +24,7 @@ Take for example the well documented one-dimension Ornstein–Uhlenbeck process,
 
 <img src="/other/OU_eq.png" title="Ornstein–Uhlenbeck process" height="25"/>
 
-which can be solved in various ways. For our purposes, recall that the drift coefficient, i.e., the first-order Kramers–Moyal coefficient, is given by ![first-order Kramers–Moyal coefficient of an Ornstein–Uhlenbeck process](/other/inline_KM_1.png) and the second-order Kramers–Moyal coefficient is ![second-order Kramers–Moyal coefficient of an Ornstein–Uhlenbeck process](/other/inline_KM_2.png), i.e., the diffusion.
+which can be solved in various ways. For our purposes, recall that the drift coefficient, i.e., the first-order Kramers–Moyal coefficient, is given by ![](/other/inline_KM_1.png) and the second-order Kramers–Moyal coefficient is ![](/other/inline_KM_2.png), i.e., the diffusion.
 
 Generate an exemplary Ornstein–Uhlenbeck process with your favourite integrator, e.g., the [Euler–Maruyama](https://en.wikipedia.org/wiki/Euler%E2%80%93Maruyama_method) or with a more powerful tool from [`JiTCSDE`](https://github.com/neurophysik/jitcsde) found on GitHub.
 For this example let's take &theta;=.3 and &sigma;=.1, over a total time of 500 units, with a sampling of 1000 Hertz, and from the generated data series retrieve the two parameters, the drift &theta; and diffusion &sigma;.
@@ -48,7 +48,7 @@ time = np.arange(0, t_final, delta_t)
 y = np.zeros(time.size)
 
 # Generate a Wiener process
-dw = np.random.normal(loc=0, scale=np.sqrt(delta_t), size=time.size)
+dw = np.random.normal(loc = 0, scale = np.sqrt(delta_t), size = time.size)
 
 # Integrate the process
 for i in range(1,time.size):
@@ -66,28 +66,32 @@ Take the timeseries `y` and let's study the Kramers–Moyal coefficients. For th
 bins = np.array([5000])
 
 # Choose powers to calculate
-powers = np.array([[1],[2]])
+powers = np.array([[1], [2]])
 
 # Choose your desired bandwith
-bw = .15
+bw = 0.15
 
 # The kmc holds the results, where edges holds the binning space
-kmc, edges = km(y, kernel=kernels.epanechnikov, bw=bw, bins=bins, powers=powers)
+kmc, edges = km(y, kernel = kernels.epanechnikov, bw = bw, bins = bins, powers = powers)
 ```
 
 This results in
 
-<img src="/other/fig2.png" title="Drift and diffusion terms" height="200"/>
+<img src="/other/fig2.png" title="Drift and diffusion terms of an Ornstein–Uhlenbeck process" height="200"/>
 
-Notice here that to obtain the Kramers–Moyal coefficients you need to multiply by the timestep `delta_t`.
+Notice here that to obtain the Kramers–Moyal coefficients you need to multiply `kmc` by the timestep `delta_t`. This normalisation stems from the Taylor-like approximation, i.e., the  Kramers–Moyal expansion (`delta t` &rarr; 0).
 
-# A 2-dimensional diffusion process
+# A two-dimensional diffusion process
 
 A Jupyter notebook with this example can be found [here](/examples/kmc.ipynb)
 
 ## Theory
 
-A 2-dimensional diffusion process is a stochastic process that comprises two ![Wiener process](/other/inline_W.png) and allows for a mixing of these noise terms across its two dimensions.
+<<<<<<< HEAD
+A two-dimensional diffusion process is a stochastic process that comprises two ![](/other/inline_W.png) and allows for a mixing of these noise terms across its two dimensions.
+=======
+A two-dimensional diffusion process is a stochastic process that comprises two ![Wiener process](/other/inline_W.png) and allows for a mixing of these noise terms across its two dimensions.
+>>>>>>> 60ac18b... Added a relevant remark on normalisation and another reference
 It takes the form
 
 <img src="/other/2D-diffusion.png" alt="2D-diffusion" title="A 2-dimensional diffusion process" height="60" />
@@ -161,9 +165,9 @@ kmc, edges = km(y, bw = bw, bins = bins, powers = powers)
 # is the second. These will be 2-dimensional matrices
 ```
 
-Now one can visualise the Kramers–Moyal coefficients (surfaces) and the respective theoretical surfaces.
+Now one can visualise the Kramers–Moyal coefficients (surfaces) in green and the respective theoretical surfaces in black. (Don't forget to normalise: `kmc * delta_t`).
 
-<img src="/other/fig4.png" alt="2D-diffusion" title="2-dimensional trajectory" height="480" />
+<img src="/other/fig4.png" alt="2D-diffusion" title="2-dimensional Kramers–Moyal surfaces (green) and the theoretical surfaces (black)" height="480" />
 
 # Contributions
 We welcome reviews and ideas from everyone. If you want to share your ideas or report a bug, open a [issue](https://github.com/LRydin/KramersMoyal/issues) here on GitHub, or contact us directly.
@@ -186,8 +190,14 @@ The study of stochastic processes from a data-driven approach is grounded in ext
 - Risken, H. (1989). *The Fokker–Planck equation.* Springer, Berlin, Heidelberg.
 - Gardiner, C.W. (1985). *Handbook of Stochastic Methods.* Springer, Berlin.
 
+You can find and extensive review on the subject [here](http://sharif.edu/~rahimitabar/pdfs/80.pdf)<sup>1</sup>
+
 ### History
 This project was started in 2017 at the [neurophysik](https://www.researchgate.net/lab/Klaus-Lehnertz-Lab-2) with Leonardo Rydin Gorjão, Jan Heysel, Klaus Lehnertz, and M. Reza Rahimi Tabar. Francisco Meirinhos later devised the hard coding to python. The project is now supported by Dirk Witthaut and the [Institute of Energy and Climate Research Systems Analysis and Technology Evaluation](https://www.fz-juelich.de/iek/iek-ste/EN/Home/home_node.html).
 
 ### Funding
 Helmholtz Association Initiative _Energy System 2050 - A Contribution of the Research Field Energy_ and the grant No. VH-NG-1025.
+
+---
+
+<sup>1</sup> Friedrich, R., Peinke, J., Sahimi, M., Tabar, M. R. R. *Approaching complexity by stochastic methods: From biological systems to turbulence,* [Phys. Rep. 506, 87–162 (2011)](https://doi.org/10.1016/j.physrep.2011.05.003).
