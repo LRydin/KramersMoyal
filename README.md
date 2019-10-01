@@ -8,12 +8,19 @@ Python KM is a  python package designed to obtain the Kramers–Moyal coefficien
 - Version 0.2 - Introducing convolutions and `gaussian` and `uniform` kernels. Major speed up in the calculations.
 - Version 0.1 - One and two dimensional Kramers–Moyal coefficients with an `epanechnikov` kernel
 
-
 # Installation
-A the current stage of the library there is no direct installation protocol. Just get the `kramersmoyal` into your working python directory and add your import preamble
+For the moment the library is available from TestPyPI, so you can use
+
+```
+pip install -i https://test.pypi.org/simple/ kramersmoyal
+```
+Then on your favourite editor just use
 ```python
 from kramersmoyal import km, kernels
 ```
+
+## Dependencies
+The library depends on `numpy` and `scipy`.
 
 # A one-dimensional stochastic process
 
