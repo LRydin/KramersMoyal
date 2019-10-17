@@ -39,7 +39,7 @@ Most commonly known is the Fokker--Planck equation or truncated forward Kolmogor
 
 Of particular relevance is the growing evidence that real-world data displays higher-order ($n>2$) Kramers--Moyal coefficients, which has a two-fold consequence: The common truncation at third order of the forward Kolmogorov equation, giving rise to the Fokker--Planck equation, is no longer valid.
 The evidence of higher-order ($n>2$) Kramers--Moyal coefficients in recorded data thus invalidates the aforementioned common argument for truncation, based on Pawula's theorem and thus rendering the Fokker--Planck description unjustified [@Tabar].
-A clear and common example is the presence of discontinuous jumps in data[@Anvari; @Sahalia], which can give rise to higher-order Kramers--Moyal coefficients, and are evidenced in @Rydin and references within.
+A clear and common example is the presence of discontinuous jumps in data [@Anvari; @Sahalia], which can give rise to higher-order Kramers--Moyal coefficients, and are evidenced in @Rydin and references within.
 
 
 Calculating the moments or Kramers--Moyal coefficients stricly from data can be computationally heavy for long data series and is prone to be innacurate especially where the density of data points is scarce, e.g. usually at the boundaries on the domain of the process.
