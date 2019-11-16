@@ -5,7 +5,6 @@ from scipy.special import factorial
 from .binning import histogramdd
 from .kernels import silvermans_rule, epanechnikov, _kernels
 
-
 def km(timeseries: np.ndarray, bins: np.ndarray, powers: np.ndarray,
         kernel: callable=None, bw: float=None, tol: float=1e-10,
         conv_method: str='auto'):
