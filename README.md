@@ -1,4 +1,4 @@
-[![Build Status](https://travis-ci.org/LRydin/KramersMoyal.svg?branch=master)](https://travis-ci.org/LRydin/KramersMoyal)
+[![Build Status](https://travis-ci.org/LRydin/KramersMoyal.svg?branch=master)](https://travis-ci.org/LRydin/KramersMoyal) [![Documentation Status](https://readthedocs.org/projects/kramersmoyal/badge/?version=latest)](https://kramersmoyal.readthedocs.io/en/latest/?badge=latest)
 
 # KramersMoyal
 Python KM is a python package designed to obtain the Kramers–Moyal coefficients, or conditional moments, from stochastic data of any dimension. It employs kernel density estimations, instead of a histogram approach, to ensure better results for low number of points as well as allowing better fitting of the results
