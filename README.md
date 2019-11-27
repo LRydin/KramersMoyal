@@ -4,11 +4,12 @@
 Python KM is a python package designed to obtain the Kramers–Moyal coefficients, or conditional moments, from stochastic data of any dimension. It employs kernel density estimations, instead of a histogram approach, to ensure better results for low number of points as well as allowing better fitting of the results
 
 # Changelog
+- Version 0.4 - Added the documentation, first testers, and the Conduct of Fairness
 - Version 0.32 - Adding 2 kernels: `triagular` and `quartic` and extenting the documentation and examples.
-- Version 0.31 - Corrections to the fft triming after convolution
-- Version 0.3 - The major breakthrough: Calculates the Kramers–Moyal coefficients for data of any dimension
+- Version 0.31 - Corrections to the fft triming after convolution.
+- Version 0.3 - The major breakthrough: Calculates the Kramers–Moyal coefficients for data of any dimension.
 - Version 0.2 - Introducing convolutions and `gaussian` and `uniform` kernels. Major speed up in the calculations.
-- Version 0.1 - One and two dimensional Kramers–Moyal coefficients with an `epanechnikov` kernel
+- Version 0.1 - One and two dimensional Kramers–Moyal coefficients with an `epanechnikov` kernel.
 
 # Installation
 For the moment the library is available from TestPyPI, so you can use
@@ -174,15 +175,14 @@ Now one can visualise the Kramers–Moyal coefficients (surfaces) in green and t
 <img src="/other/fig4.png" alt="2D-diffusion" title="2-dimensional Kramers–Moyal surfaces (green) and the theoretical surfaces (black)" height="480" />
 
 # Contributions
-We welcome reviews and ideas from everyone. If you want to share your ideas or report a bug, open a [issue](https://github.com/LRydin/KramersMoyal/issues) here on GitHub, or contact us directly.
+We welcome reviews and ideas from everyone. If you want to share your ideas or report a bug, open an [issue](https://github.com/LRydin/KramersMoyal/issues) here on GitHub, or contact us directly.
+If need help with the code, the theory, or the implementation, do not hesitate to contact us, we are here to help.
+We abide to a [Conduct of Fairness](contributions.md).
 
 # TODOs
 Next on the list is
-- Include an optimal bandwith calculator, based on [Silverman's](https://en.wikipedia.org/wiki/Kernel_density_estimation#A_rule-of-thumb_bandwidth_estimator)
 - Include more kernels
-- Add install script
 - Work through the documentation carefully
-- Extend examples here and in the documentation
 - Create a sub-routine to calculate the Kramers–Moyal coefficients without a convolution
 
 # Literature and Support

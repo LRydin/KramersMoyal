@@ -24,7 +24,7 @@ copyright = '2019, Leonardo Rydin and Francisco Meirinhos'
 author = 'Leonardo Rydin and Francisco Meirinhos'
 
 # The full version, including alpha/beta/rc tags
-release = '0.32'
+release = '0.4'
 
 
 # -- General configuration ---------------------------------------------------

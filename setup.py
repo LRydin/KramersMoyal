@@ -5,7 +5,7 @@ with open("README.md", "r") as fh:
 
 setuptools.setup(
     name="kramersmoyal",
-    version="0.3.2",
+    version="0.4",
     author="Leonardo Rydin Gorjao and Francisco Meirinhos",
     author_email="leonardo.rydin@gmail.com",
     description="Calculate Kramers-Moyal coefficients for stochastic process of any dimension, up to any order.",
