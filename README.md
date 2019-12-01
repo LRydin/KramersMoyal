@@ -30,14 +30,14 @@ The library depends on `numpy` and `scipy`.
 A Jupyter notebook with this example can be found [here](/examples/kmc.ipynb)
 
 ## The theory
-Take for example the well documented one-dimension Ornstein–Uhlenbeck process, also known as Va&#353;&#237;&#269;ek process, see [here](https://en.wikipedia.org/wiki/Ornstein%E2%80%93Uhlenbeck_process). This process is governed by two main parameters: the mean-reverting parameter &theta; and the diffusion parameter &sigma;
+Take, for example, the well-documented one-dimension Ornstein–Uhlenbeck process, also known as Va&#353;&#237;&#269;ek process, see [here](https://en.wikipedia.org/wiki/Ornstein%E2%80%93Uhlenbeck_process). This process is governed by two main parameters: the mean-reverting parameter &theta; and the diffusion parameter &sigma;
 
 <img src="/other/OU_eq.png" title="Ornstein–Uhlenbeck process" height="25"/>
 
 which can be solved in various ways. For our purposes, recall that the drift coefficient, i.e., the first-order Kramers–Moyal coefficient, is given by ![](/other/inline_KM_1.png) and the second-order Kramers–Moyal coefficient is ![](/other/inline_KM_2.png), i.e., the diffusion.
 
 Generate an exemplary Ornstein–Uhlenbeck process with your favourite integrator, e.g., the [Euler–Maruyama](https://en.wikipedia.org/wiki/Euler%E2%80%93Maruyama_method) or with a more powerful tool from [`JiTCSDE`](https://github.com/neurophysik/jitcsde) found on GitHub.
-For this example let's take &theta;=.3 and &sigma;=.1, over a total time of 500 units, with a sampling of 1000 Hertz, and from the generated data series retrieve the two parameters, the drift &theta; and diffusion &sigma;.
+For this example let's take &theta;=.3 and &sigma;=.1, over a total time of 500 units, with a sampling of 1000 Hertz, and from the generated data series retrieve the two parameters, the drift -&theta;y(t) and diffusion &sigma;.
 
 ## Integrating an Ornstein–Uhlenbeck process
 Here is a short code on generating a Ornstein–Uhlenbeck stochastic trajectory with a simple Euler–Maruyama integration method
@@ -65,7 +65,7 @@ for i in range(1,time.size):
     y[i] = y[i-1] - theta*y[i-1]*delta_t + sigma*dw[i]
 ```
 
-From here we have a plain example of an Ornstein–Uhlenbeck process, always drifting back to zero, due to the mean-reverting drift &theta;. The effect of the noise effect can be seen across the whole trajectory.
+From here we have a plain example of an Ornstein–Uhlenbeck process, always drifting back to zero, due to the mean-reverting drift &theta;. The effect of the noise can be seen across the whole trajectory.
 
 <img src="/other/fig1.png" title="Ornstein–Uhlenbeck process" height="200"/>
 
@@ -89,7 +89,7 @@ This results in
 
 <img src="/other/fig2.png" title="Drift and diffusion terms of an Ornstein–Uhlenbeck process" height="200"/>
 
-Notice here that to obtain the Kramers–Moyal coefficients you need to multiply `kmc` by the timestep `delta_t`. This normalisation stems from the Taylor-like approximation, i.e., the  Kramers–Moyal expansion (`delta t` &rarr; 0).
+Notice here that to obtain the Kramers–Moyal coefficients you need to multiply `kmc` by the timestep `delta_t`. This normalisation stems from the Taylor-like approximation, i.e., the Kramers–Moyal expansion (`delta t` &rarr; 0).
 
 # A two-dimensional diffusion process
 
