@@ -46,10 +46,8 @@ The library depends on ``numpy`` and ``scipy``.
 
 A one-dimensional stochastic process
 ====================================
-
 The theory
 ----------
-
 Take, for example, the well-documented one-dimension `Ornstein---Uhlenbeck <https://en.wikipedia.org/wiki/Ornstein%E2%80%93Uhlenbeck_process>`_
 process, also known as Vašíček process.
 This process is governed by two main parameters: the mean-reverting
@@ -66,7 +64,6 @@ coefficient is :math:`\mathcal{M}^{[2]}(y) = \sigma^2 / 2`, i.e., the diffusion.
 For this example let's take :math:`\theta=0.3` and :math:`\sigma=0.1`, over a total time of 500
 units, with a sampling of 1000 Hertz, and from the generated data series
 retrieve the two parameters, the drift :math:`-\theta y(t)` and diffusion :math:`\sigma`.
-
 
 Integrating an Ornstein---Uhlenbeck process
 -------------------------------------------
@@ -145,7 +142,6 @@ A two-dimensional diffusion process
 ===================================
 Theory
 ------
-
 A two-dimensional diffusion process is a stochastic process that comprises two
 :math:`W(t)` and allows for a mixing of these noise terms across its two
 dimensions.
@@ -233,12 +229,10 @@ The stochastic trajectory in 2 dimensions for 10 time units (10000 data points)
   :align: center
   :alt: 2-dimensional trajectory
 
-
 Back to Python KM and the Kramers---Moyal coefficients
 ------------------------------------------------------
 First notice that all the results now will be two-dimensional surfaces, so we
 will need to plot them as such
-
 
 .. code:: python
 
@@ -266,11 +260,10 @@ Now one can visualise the Kramers–Moyal coefficients (surfaces) in green and t
 respective theoretical surfaces in black. (Don't forget to normalise:
 :code:`kmc * delta_t`).
 
-.. image:: fig4.png
+.. image:: /_static/fig4.png
   :height: 480
   :align: center
   :alt: 2-dimensional Kramers–Moyal surfaces (green) and the theoretical surfaces (black)
-
 
 License
 =======

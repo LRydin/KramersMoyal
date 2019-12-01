@@ -3,14 +3,6 @@
 # KramersMoyal
 Python KM is a python package designed to obtain the Kramers–Moyal coefficients, or conditional moments, from stochastic data of any dimension. It employs kernel density estimations, instead of a histogram approach, to ensure better results for low number of points as well as allowing better fitting of the results
 
-# Changelog
-- Version 0.4 - Added the documentation, first testers, and the Conduct of Fairness
-- Version 0.32 - Adding 2 kernels: `triagular` and `quartic` and extenting the documentation and examples.
-- Version 0.31 - Corrections to the fft triming after convolution.
-- Version 0.3 - The major breakthrough: Calculates the Kramers–Moyal coefficients for data of any dimension.
-- Version 0.2 - Introducing convolutions and `gaussian` and `uniform` kernels. Major speed up in the calculations.
-- Version 0.1 - One and two dimensional Kramers–Moyal coefficients with an `epanechnikov` kernel.
-
 # Installation
 For the moment the library is available from TestPyPI, so you can use
 
@@ -184,6 +176,14 @@ Next on the list is
 - Include more kernels
 - Work through the documentation carefully
 - Create a sub-routine to calculate the Kramers–Moyal coefficients without a convolution
+
+# Changelog
+- Version 0.4 - Added the documentation, first testers, and the Conduct of Fairness
+- Version 0.32 - Adding 2 kernels: `triagular` and `quartic` and extenting the documentation and examples.
+- Version 0.31 - Corrections to the fft triming after convolution.
+- Version 0.3 - The major breakthrough: Calculates the Kramers–Moyal coefficients for data of any dimension.
+- Version 0.2 - Introducing convolutions and `gaussian` and `uniform` kernels. Major speed up in the calculations.
+- Version 0.1 - One and two dimensional Kramers–Moyal coefficients with an `epanechnikov` kernel.
 
 # Literature and Support
 
