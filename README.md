@@ -1,7 +1,7 @@
 [![Build Status](https://travis-ci.org/LRydin/KramersMoyal.svg?branch=master)](https://travis-ci.org/LRydin/KramersMoyal) [![Documentation Status](https://readthedocs.org/projects/kramersmoyal/badge/?version=latest)](https://kramersmoyal.readthedocs.io/en/latest/?badge=latest)
 
 # KramersMoyal
-Python KM is a python package designed to obtain the Kramers–Moyal coefficients, or conditional moments, from stochastic data of any dimension. It employs kernel density estimations, instead of a histogram approach, to ensure better results for low number of points as well as allowing better fitting of the results
+`kramersmoyal` is a python package designed to obtain the Kramers–Moyal coefficients, or conditional moments, from stochastic data of any dimension. It employs kernel density estimations, instead of a histogram approach, to ensure better results for low number of points as well as allowing better fitting of the results
 
 # Installation
 For the moment the library is available from TestPyPI, so you can use
@@ -61,7 +61,7 @@ From here we have a plain example of an Ornstein–Uhlenbeck process, always dri
 
 <img src="/other/fig1.png" title="Ornstein–Uhlenbeck process" height="200"/>
 
-## Using Python KM
+## Using `kramersmoyal`
 Take the timeseries `y` and let's study the Kramers–Moyal coefficients. For this let's look at the drift and diffusion coefficients of the process, i.e., the first and second Kramers–Moyal coefficients, with an `epanechnikov` kernel
 ```python
 # Choose number of points of you target space
@@ -137,7 +137,7 @@ The stochastic trajectory in 2 dimensions for 10 time units (10000 data points)
 
 <img src="/other/fig3.png" alt="2D-diffusion" title="2-dimensional trajectory" height="280" />
 
-## Back to Python KM and the Kramers–Moyal coefficients
+## Back to `kramersmoyal` and the Kramers–Moyal coefficients
 First notice that all the results now will be two-dimensional surfaces, so we will need to plot them as such
 
 ```python
@@ -200,7 +200,7 @@ You can find and extensive review on the subject [here](http://sharif.edu/~rahim
 This project was started in 2017 at the [neurophysik](https://www.researchgate.net/lab/Klaus-Lehnertz-Lab-2) by Leonardo Rydin Gorjão, Jan Heysel, Klaus Lehnertz, and M. Reza Rahimi Tabar. Francisco Meirinhos later devised the hard coding to python. The project is now supported by Dirk Witthaut and the [Institute of Energy and Climate Research Systems Analysis and Technology Evaluation](https://www.fz-juelich.de/iek/iek-ste/EN/Home/home_node.html).
 
 ### Funding
-Helmholtz Association Initiative _Energy System 2050 - A Contribution of the Research Field Energy_ and the grant No. VH-NG-1025.
+Helmholtz Association Initiative _Energy System 2050 - A Contribution of the Research Field Energy_ and the grant No. VH-NG-1025 and *STORM - Stochastics for Time-Space Risk Models* project of the Research Council of Norway (RCN) No. 274410.
 
 ---
 

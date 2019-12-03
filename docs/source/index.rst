@@ -4,7 +4,7 @@ Kramers---Moyal
 .. toctree::
    :maxdepth: 2
 
-Python KM is a python package designed to obtain the Kramers---Moyal
+:code:`kramersmoyal` is a python package designed to obtain the Kramers---Moyal
 coefficients, or conditional moments, from stochastic data of any
 dimension. It employs kernel density estimations, instead of a histogram
 approach, to ensure better results for low number of points as well as
@@ -104,8 +104,8 @@ effect of the noise can be seen across the whole trajectory.
   :alt: Ornstein---Uhlenbeck process
 
 
-Using Python KM
----------------
+Using :code:`kramersmoyal`
+--------------------------
 Take the timeseries :math:`y(t)` and let's study the Kramers---Moyal coefficients.
 For this let's look at the drift and diffusion coefficients of the process,
 i.e., the first and second Kramers---Moyal coefficients, with an
@@ -177,7 +177,7 @@ Ornstein---Uhlenbeck process, with
 
 and we take :math:`N_1=2.0` and :math:`N_2=1.0`.
 For this particular case a more involved diffusion matrix :math:`g` will be
-used. Let the matrix $g$ be state-dependent, i.e., dependent of the actual
+used. Let the matrix :math:`g` be state-dependent, i.e., dependent of the actual
 values of :math:`y_1` and :math:`y_2` via
 
 .. math::
@@ -229,8 +229,8 @@ The stochastic trajectory in 2 dimensions for 10 time units (10000 data points)
   :align: center
   :alt: 2-dimensional trajectory
 
-Back to Python KM and the Kramers---Moyal coefficients
-------------------------------------------------------
+Back to :code:`kramersmoyal` and the Kramers---Moyal coefficients
+-----------------------------------------------------------------
 First notice that all the results now will be two-dimensional surfaces, so we
 will need to plot them as such
 
