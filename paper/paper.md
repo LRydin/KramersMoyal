@@ -82,7 +82,6 @@ $$
 
 It is straightforward to generalise this to any dimensions.
 The relevance and importance of adequate time-sampling was extensively studied and discussed in @Lehnertz.
-Notice here that if the sampling resolution of the process is known, then that is $\Delta t$.
 
 The Kramers--Moyal coefficients exist on an underlying probabilistic space, i.e., there exists a probabilistic measure assigned to the process, stemming from the master equation describing the family of such processes.
 The conventional procedure, as mentioned previously, is to utilise a histogram regression of the observed process and retrieve, via approximation or fitting, the Kramers--Moyal coefficient.
@@ -122,7 +121,7 @@ An Epanechnikov kernel was chosen for both kernel-based estimations.
 <!---
 <img src="Fig_2.pdf" alt="Fig. 2" width="600"/>
 -->
-|![Fig. 2](Fig_2.pdf){ width=450px }|
+|![Fig. 2](Fig_2.pdf){ width=500px }|
 | -- |
 |Fig. 2: Comparison of exemplary results of obtaining the Kramers--Moyal coefficients with a histogram-based approach, a conventional kernel-based approach, and the `kramersmoyal` library, sequentially left to right, from the numerical integration of Eq.(4). The top row displays the *drift* coefficient, i.e., the first Kramers--Moyal coefficients. The bottom row displays the *diffusion* coefficient, i.e., the second Kramers--Moyal coefficients. For the histogram $40$ bins were used, for the conventional kernel and this library a space with $5500$ numerical points were used, with a bandwidth of $0.05$. The total number of points of the numerically integrated data is $5\times10^5$.|
 
