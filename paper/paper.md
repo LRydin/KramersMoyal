@@ -14,6 +14,7 @@ authors:
    orcid: 0000-0001-5513-0580
    affiliation: "1, 2, 3, 4"
  - name: Francisco Meirinhos
+   orcid: 0000-0002-3864-7569
    affiliation: 5
 affiliations:
  - name: Department of Epileptology, University of Bonn, Venusberg Campus 1, 53127 Bonn, Germany
