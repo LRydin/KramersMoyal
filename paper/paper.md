@@ -58,11 +58,10 @@ For a general $N$-dimensional Markovian process $\boldsymbol{x}(t)\in\mathbb{R}^
 $$
 \mathcal{M}^{\sigma}(\boldsymbol{x},t)=\lim_{\Delta t\to 0}\frac{1}{\Delta t}\int  d\boldsymbol{x}'[\boldsymbol{x}(t)'-\boldsymbol{x}(t)]^\sigma P(\boldsymbol{x}',t+\Delta T | \boldsymbol{x}, t),\nonumber \tag*{(1)}
 $$
-with $[\dots]^\sigma$ a dyadic multiplication, and the power $\sigma$ allowing for a set of powers depending on the dimensionality of the process.
+with $[\dots]^\sigma$ a dyadic multiplication and the power $\sigma$ allowing for a set of powers depending on the dimensionality of the process.
 
 The exact evaluation of the Kramers--Moyal coefficients for discrete or discretised datasets $\boldsymbol{y}(t)$---any human measure of a process is discrete, as well as any computer generated data---is bounded by the timewise limit imposed.
 Taking as an example a two-dimensional case with $\boldsymbol{y}(t)=(y_1(t),y_2(t))\in\mathbb{R}^{2}$, the Kramers--Moyal coefficients $\mathcal{M}^{[\ell, m]}\in\mathbb{R}^{2}$ take the form
-
 
 \begin{align}
 &\mathcal{M}^{[\ell, m]}(x_1,x_2,t)=\nonumber\\&\lim_{\Delta t\to 0}\!\frac{1}{\Delta t}\!\int\!\! \mathrm{d} y_1 \mathrm{d} y_2 (y_1(t\!+\!\Delta t)\!-\!y_1(t))^\ell(y_2(t\!+\!\Delta t)\!-\!y_2(t))^m P(y_1,y_2, t\!+\!\Delta t|x_1,x_2,t), \nonumber \tag*{(2)}
@@ -86,16 +85,14 @@ The relevance and importance of adequate time-sampling was extensively studied a
 The Kramers--Moyal coefficients exist on an underlying probabilistic space, i.e., there exists a probabilistic measure assigned to the process, stemming from the master equation describing the family of such processes.
 The conventional procedure, as mentioned previously, is to utilise a histogram regression of the observed process and retrieve, via approximation or fitting, the Kramers--Moyal coefficient.
 The choice of a histogram measure for the Kramers--Moyal coefficient results in an acceptable measure of the probability density functions of the process but requires a new mathematical space (a distribution space).
-The employment of a kernel estimation approach, implemented in this library, permits an identical overview without the necessity of a new (discretised) distribution space, given that the equivalent space of the observable can be taken.
+The employment of a kernel-estimation approach, the Nadaraya--Watson estimator, implemented in this library, permits an identical overview without the necessity of a new (discretised) distribution space, given that the equivalent space of the observable can be taken.
 
 Like the histogram approach for the measure of the Kramers--Moyal coefficients, each single measure of the observable $\boldsymbol{y}(t)$ is averaged, with a designed weight, into the distribution space.
 The standing difference, in comparison to the histogram approach, is the riddance of a (discrete) binning system.
 All points are averaged, in a weighted fashion, into the distribution space---aiding especially in cases where the number of point in a dataset is small---and awarding a continuous measurable space (easier for fitting, for example) [@Lamouroux].
 
-
 # Exemplary one-dimensional Ornstein--Uhlenbeck process
 A one-dimensional Ornstein--Uhlenbeck process $y(t)$ takes the form
-
 $$
     d y(t) = - \theta y(t) dt + \sigma d W(t), \nonumber \tag*{(4)}
 $$
@@ -112,7 +109,6 @@ There are more reliable and faster integrators, for example `JiTCSDE` [@Ansmann]
 |![Fig. 1](Fig_1.pdf){ width=270px }|
 | -- |
 |Fig. 1: Trajectory of Eq.(4) for $\theta = 0.3$ and $\sigma=0.1$, for a total time of $500$ time units, with a time step of $0.001$, i.e., comprising $5\times10^5$ data points.|
-
 
 For the present case, with an integration over $500$ time units and with a timestep of $0.001$, which can be seen in Fig. 1.
 The first and second Kramers--Moyal coefficients are presented in Fig. 2, where as well the conventional histogram-based estimation, a non-convolution based kernel estimation, and this library implementing a convolution of the kernel with the terms the right-hand side in Eq.(3).
@@ -138,7 +134,7 @@ In Fig. 3 the comparative results of employing a histogram estimation with $200$
 -->
 |![Fig. 3](Fig_3.pdf){ width=270px }|
 | -- |
-|Fig. 3: Comparison of speed performance of obtaining the Kramers--Moyal coefficients with a histogram-based approach, a conventional kernel-based approach, and the `kramersmoyal` library, sequentially left to right, from the numerical integration of Eq.(4) over increasing number of data points. For the histogram $200$ bins were used, for the conventional kernel and this library a space with $5500$ numerical points was used. The total number of points of numerical integration was varied between $5\times10^3$ and $5\times10^6$. The horizontal line indicates a total of $1$ second. Integration performed on a laptop with an Intel Core i5 CPU @$2.20$~GHz (@$2.56$~GHz turbo).|
+|Fig. 3: Comparison of speed performance of obtaining the Kramers--Moyal coefficients with a histogram-based approach, a conventional kernel-based approach, and the `kramersmoyal` library, of a numerical integration of Eq.(4) over increasing number of data points. For the histogram $200$ bins were used, for the conventional kernel and this library a space with $5500$ numerical points was used. The total number of points of numerical integration was varied between $5\times10^3$ and $5\times10^6$. The horizontal line indicates a total of $1$ second. Integration performed on a laptop with an Intel Core i5 CPU @$2.20$~GHz (@$2.56$~GHz turbo).|
 
 # Acknowledgements
 L. R. G. and F. M. contributed equally to this project with their respective expertise.
