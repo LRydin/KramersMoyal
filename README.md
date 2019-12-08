@@ -168,7 +168,7 @@ Now one can visualise the Kramers–Moyal coefficients (surfaces) in green and t
 
 # Contributions
 We welcome reviews and ideas from everyone. If you want to share your ideas or report a bug, open an [issue](https://github.com/LRydin/KramersMoyal/issues) here on GitHub, or contact us directly.
-If need help with the code, the theory, or the implementation, do not hesitate to contact us, we are here to help.
+If you need help with the code, the theory, or the implementation, do not hesitate to contact us, we are here to help.
 We abide to a [Conduct of Fairness](contributions.md).
 
 # TODOs
