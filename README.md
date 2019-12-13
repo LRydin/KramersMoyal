@@ -4,10 +4,10 @@
 `kramersmoyal` is a python package designed to obtain the Kramers–Moyal coefficients, or conditional moments, from stochastic data of any dimension. It employs kernel density estimations, instead of a histogram approach, to ensure better results for low number of points as well as allowing better fitting of the results
 
 # Installation
-For the moment the library is available from TestPyPI, so you can use
+To install `kramersmoyal`, just use `pip`
 
 ```
-pip install -i https://test.pypi.org/simple/ kramersmoyal
+pip install kramersmoyal
 ```
 Then on your favourite editor just use
 ```python
