@@ -104,14 +104,7 @@ To be able to test the library and the retrieval on the Kramers--Moyal coefficie
 We employ a Euler--Maruyama integrator, for simplicity.
 There are more reliable and faster integrators, for example `JiTCSDE` [@Ansmann].
 
-<!---
-<img src="Fig_1.pdf" alt="Fig. 1" width="200"/>
--->
-<!--
-|![Fig. 1](Fig_1.pdf){ width=270px }|
-| -- |
-|Fig. 1: Trajectory of Eq.(4) for $\theta = 0.3$ and $\sigma=0.1$, for a total time of $500$ time units, with a time step of $0.001$, i.e., comprising $5\times10^5$ data points.|
--->
+&nbsp;
 
 ![Fig. 1](Fig_1.pdf)
 Fig. 1: Trajectory of Eq.(4) for $\theta = 0.3$ and $\sigma=0.1$, for a total time of $500$ time units, with a time step of $0.001$, i.e., comprising $5\times10^5$ data points.
@@ -120,14 +113,8 @@ For the present case, with an integration over $500$ time units and with a times
 The first and second Kramers--Moyal coefficients are presented in Fig. 2, where as well the conventional histogram-based estimation, a non-convolution based kernel estimation, and this library implementing a convolution of the kernel with the terms the right-hand side in Eq.(3).
 An Epanechnikov kernel was chosen for both kernel-based estimations.
 
-<!---
-<img src="Fig_2.pdf" alt="Fig. 2" width="600"/>
--->
-<!--
-|![Fig. 2](Fig_2.pdf){ width=500px }|
-| -- |
-|Fig. 2: Comparison of exemplary results of obtaining the Kramers--Moyal coefficients with a histogram-based approach, a conventional kernel-based approach, and the `kramersmoyal` library, sequentially left to right, from the numerical integration of Eq.(4). The top row displays the *drift* coefficient, i.e., the first Kramers--Moyal coefficients. The bottom row displays the *diffusion* coefficient, i.e., the second Kramers--Moyal coefficients. For the histogram $40$ bins were used, for the conventional kernel and this library a space with $5500$ numerical points were used, with a bandwidth of $0.05$. The total number of points of the numerically integrated data is $5\times10^5$.|
--->
+&nbsp;
+
 ![Fig. 2](Fig_2.pdf)
 Fig. 2: Comparison of exemplary results of obtaining the Kramers--Moyal coefficients with a histogram-based approach, a conventional kernel-based approach, and the `kramersmoyal` library, sequentially left to right, from the numerical integration of Eq.(4). The top row displays the *drift* coefficient, i.e., the first Kramers--Moyal coefficients. The bottom row displays the *diffusion* coefficient, i.e., the second Kramers--Moyal coefficients. For the histogram $40$ bins were used, for the conventional kernel and this library a space with $5500$ numerical points were used, with a bandwidth of $0.05$. The total number of points of the numerically integrated data is $5\times10^5$.
 
@@ -139,14 +126,8 @@ There exists a library to retrieve Kramers--Moyal coefficents in `R` [@rinn2016]
 In order compare the computational speed up of the library the aforementioned Ornstein--Uhlenbeck Eq.(4) was used (with $\theta = 0.3$ and $\sigma=0.1$), and the total time of integration of the process was increased iteratively.
 In Fig. 3 the comparative results of employing a histogram estimation with $200$ bins, a conventional kernel-based regression in a space with $5500$ numerical points, and this library's kernel-convolution method, over similarly $5500$ numerical points.
 
-<!---
-<img src="Fig_3.pdf" alt="Fig. 3" width="200"/>
--->
-<!--
-|![Fig. 3](Fig_3.pdf){ width=270px }|
-| -- |
-|Fig. 3: Comparison of speed performance of obtaining the Kramers--Moyal coefficients with a histogram-based approach, a conventional kernel-based approach, and the `kramersmoyal` library, of a numerical integration of Eq.(4) over increasing number of data points. For the histogram $200$ bins were used, for the conventional kernel and this library a space with $5500$ numerical points was used. The total number of points of numerical integration was varied between $5\times10^3$ and $5\times10^6$. The horizontal line indicates a total of $1$ second. Integration performed on a laptop with an Intel Core i5 CPU @$2.20$~GHz (@$2.56$~GHz turbo).|
--->
+&nbsp;
+
 ![Fig. 3](Fig_3.pdf)
 Fig. 3: Comparison of speed performance of obtaining the Kramers--Moyal coefficients with a histogram-based approach, a conventional kernel-based approach, and the `kramersmoyal` library, of a numerical integration of Eq.(4) over increasing number of data points. For the histogram $200$ bins were used, for the conventional kernel and this library a space with $5500$ numerical points was used. The total number of points of numerical integration was varied between $5\times10^3$ and $5\times10^6$. The horizontal line indicates a total of $1$ second. Integration performed on a laptop with an Intel Core i5 CPU @$2.20$~GHz (@$2.56$~GHz turbo).
 
