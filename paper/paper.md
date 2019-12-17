@@ -89,7 +89,7 @@ The choice of a histogram measure for the Kramers--Moyal coefficient results in 
 The employment of a kernel-estimation approach, the Nadaraya--Watson estimator, implemented in this library, permits an identical overview without the necessity of a new (discretised) distribution space, given that the equivalent space of the observable can be taken.
 
 Like the histogram approach for the measure of the Kramers--Moyal coefficients, each single measure of the observable $\boldsymbol{y}(t)$ is averaged, with a designated weight, into the distribution space.
-The standing difference, in comparison to the histogram approach, is the riddance of a (discrete) binning system.
+The standing difference, in comparison to the histogram approach, is the removal of a (discrete) binning system.
 All points are averaged, in a weighted fashion, into the distribution space---aiding especially in cases where the number of point in a dataset is small---and awarding a continuous measurable space (easier for fitting, for example) [@Lamouroux].
 
 # Exemplary one-dimensional Ornstein--Uhlenbeck process
