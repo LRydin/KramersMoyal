@@ -44,22 +44,22 @@ The existence of higher-order ($n>2$) Kramers--Moyal coefficients in recorded da
 A clear and common example is the presence of discontinuous jumps in data [@Anvari; @Sahalia], which can give rise to higher-order Kramers--Moyal coefficients, as are evidenced in @Rydin and references within.
 
 
-Calculating the moments or Kramers--Moyal coefficients stricly from data can be computationally heavy for long data series and is prone to be innacurate especially where the density of data points is scarce, e.g. usually at the boundaries on the domain of the process.
+Calculating the moments or Kramers--Moyal coefficients strictly from data can be computationally heavy for long data series and is prone to innaccuracy especially where the density of data points is scarce, for example, usually at the boundaries on the domain of the process.
 The most straightforward approach is to perform a histogram-based estimation to evaluate the moments of the system at hand.
 This has two main drawbacks: it requires a discrete space of examination of the process and is shown to be less accurate than using kernel-based estimators [@Lamouroux].
 
-This library is based on a kernel-based estimation, i.e., the Nadaraya--Watson kernel estimator [@Nadaraya; @Watson], which allows for more robust results given both a wider range of possible kernel shapes to perform the calculation, as well as retrieving the results in a non-binned coordinate space, unlike histogram regressions [@Silverman].
+This library is based on a kernel-based estimation, *i.e.*, the Nadaraya--Watson kernel estimator [@Nadaraya; @Watson], which allows for more robust results given both a wider range of possible kernel shapes to perform the calculation, as well as retrieving the results in a non-binned coordinate space, unlike histogram regressions [@Silverman].
 It further employs a convolution of the time series with the selected kernel, circumventing the computational issue of sequential array summation, the most common bottleneck in integration time and computer memory.
 
-The package presented here contains several options: A general open-source toolbox for the calculation of Kramers--Moyal coefficients for any given data series of any dimension and to any order, with a selection of commonly used kernel estimators.
+The package presented here contains several options: A general open-source toolbox for the calculation of Kramers--Moyal coefficients for any given data series of any dimension and to any order, with a selection of commonly-used kernel estimators.
 
 # Mathematics
 
-For a general $N$-dimensional Markovian process $\boldsymbol{x}(t)\in\mathbb{R}^N$ the Kramers--Moyal yields all orders of the cumulants of the conditional probability distribution $P(\boldsymbol{x}',t+\Delta T | \boldsymbol{x}, t)$ as [@Risken]
+For a general $N$-dimensional Markovian process $\boldsymbol{x}(t)\in\mathbb{R}^N$ the Kramers--Moyal yields all orders of the cumulants of the conditional probability distribution $P(\boldsymbol{x}',t+\Delta T | \boldsymbol{x}, t)$ as
 $$
 \mathcal{M}^{\sigma}(\boldsymbol{x},t)=\lim_{\Delta t\to 0}\frac{1}{\Delta t}\int  d\boldsymbol{x}'[\boldsymbol{x}(t)'-\boldsymbol{x}(t)]^\sigma P(\boldsymbol{x}',t+\Delta T | \boldsymbol{x}, t),\nonumber \tag*{(1)}
 $$
-with $[\dots]^\sigma$ a dyadic multiplication and the power $\sigma$ allowing for a set of powers depending on the dimensionality of the process.
+with $[\dots]^\sigma$ a dyadic multiplication and the power $\sigma$ allowing for a set of powers depending on the dimensionality of the process [@Risken].
 
 The exact evaluation of the Kramers--Moyal coefficients for discrete or discretised datasets $\boldsymbol{y}(t)$---any human measure of a process is discrete, as well as any computer generated data---is bounded by the timewise limit imposed.
 Taking as an example a two-dimensional case with $\boldsymbol{y}(t)=(y_1(t),y_2(t))\in\mathbb{R}^{2}$, the Kramers--Moyal coefficients $\mathcal{M}^{[\ell, m]}\in\mathbb{R}^{2}$ take the form
@@ -71,7 +71,7 @@ Taking as an example a two-dimensional case with $\boldsymbol{y}(t)=(y_1(t),y_2(
 at a certain measure point $(x_1,x_2)$.
 The order of the Kramers--Moyal coefficients is given here by the superscripts $\ell$ and $m$.
 
-Theoretically, there are still two details to attend to: Firstly, there is an explicity dependence on time $t$. For the case of stationary (or quasi-stationary) data discussed here $P(\boldsymbol{x}',t+\Delta T | \boldsymbol{x}, t) = P(\boldsymbol{x}',\Delta T | \boldsymbol{x})$.
+Theoretically, there are still two details to attend to: Firstly, there is an explicit dependence on time $t$. For the case of stationary (or quasi-stationary) data discussed here, $P(\boldsymbol{x}',t+\Delta T | \boldsymbol{x}, t) = P(\boldsymbol{x}',\Delta T | \boldsymbol{x})$.
 This entails time-independent Kramers--Moyal coefficients $\mathcal{M}^{\sigma}(\boldsymbol{x})$.
 Secondly, $\Delta t$ should take the limiting case of $\Delta t \to 0$ but the restriction of any measuring or storing device---or the nature of the observables themselves---permits only time-sampled or discrete recordings.
 In the limiting case where $\Delta t$ is equivalent to the minimal sampling rate of the data, the Kramers--Moyal coefficients take the form, in our two-dimensional example, as
@@ -80,15 +80,15 @@ $$
 \mathcal{M}^{[\ell, m]}(x_1, x_2) = \frac{1}{\Delta t} \langle \Delta y_1^{\ell} \Delta y_2^{m} |_{y_1(t)=x_1, y_2(t)=x_2}\rangle,~\mathrm{with}~\Delta y_i =  y_i(t+ \Delta t) - y_i(t).\nonumber \tag*{(3)}
 $$
 
-It is straightforward to generalise this to any dimensions.
+It is straightforward to generalise this to any number of dimensions.
 The relevance and importance of adequate time-sampling was extensively studied and discussed in @Lehnertz.
 
-The Kramers--Moyal coefficients exist on an underlying probabilistic space, i.e., there exists a probabilistic measure assigned to the process, stemming from the master equation describing the family of such processes.
+The Kramers--Moyal coefficients exist on an underlying probabilistic space, that is, there exists a probabilistic measure assigned to the process, stemming from the master equation describing the family of such processes.
 The conventional procedure, as mentioned previously, is to utilise a histogram regression of the observed process and retrieve, via approximation or fitting, the Kramers--Moyal coefficient.
 The choice of a histogram measure for the Kramers--Moyal coefficient results in an acceptable measure of the probability density functions of the process but requires a new mathematical space (a distribution space).
 The employment of a kernel-estimation approach, the Nadaraya--Watson estimator, implemented in this library, permits an identical overview without the necessity of a new (discretised) distribution space, given that the equivalent space of the observable can be taken.
 
-Like the histogram approach for the measure of the Kramers--Moyal coefficients, each single measure of the observable $\boldsymbol{y}(t)$ is averaged, with a designed weight, into the distribution space.
+Like the histogram approach for the measure of the Kramers--Moyal coefficients, each single measure of the observable $\boldsymbol{y}(t)$ is averaged, with a designated weight, into the distribution space.
 The standing difference, in comparison to the histogram approach, is the riddance of a (discrete) binning system.
 All points are averaged, in a weighted fashion, into the distribution space---aiding especially in cases where the number of point in a dataset is small---and awarding a continuous measurable space (easier for fitting, for example) [@Lamouroux].
 
@@ -97,7 +97,7 @@ A one-dimensional Ornstein--Uhlenbeck process $y(t)$ takes the form
 $$
     d y(t) = - \theta y(t) dt + \sigma d W(t), \nonumber \tag*{(4)}
 $$
-with $\theta$ denoted as the *drift* or mean-reverting term, $\sigma$ the *diffusion*, *volatility*, or stochastic amplitude, and $W(t)$ is a Brownian motion, i.e., a Wiener process.
+with $\theta$ denoted as the *drift* or mean-reverting term, $\sigma$ the *diffusion*, *volatility*, or stochastic amplitude, and $W(t)$ is a Brownian motion, *i.e.*, a Wiener process.
 For this particular example set $\theta = 0.3$ and $\sigma=0.1$.
 
 To be able to test the library and the retrieval on the Kramers--Moyal coefficients, and subsequently recover the drift and diffusion term, one can numerically integrate the process.
