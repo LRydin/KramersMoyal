@@ -1,8 +1,11 @@
-[![status](https://joss.theoj.org/papers/f8158e61d51e0a9822dcc69a4a3c1f4d/status.svg)](https://joss.theoj.org/papers/f8158e61d51e0a9822dcc69a4a3c1f4d) ![PyPI - License](https://img.shields.io/pypi/l/kramersmoyal) ![PyPI - Python Version](https://img.shields.io/pypi/pyversions/kramersmoyal)
+[![DOI](https://joss.theoj.org/papers/10.21105/joss.01693/status.svg)](https://doi.org/10.21105/joss.01693)
+![PyPI - License](https://img.shields.io/pypi/l/kramersmoyal) ![PyPI - Python Version](https://img.shields.io/pypi/pyversions/kramersmoyal)
 [![Build Status](https://travis-ci.org/LRydin/KramersMoyal.svg?branch=master)](https://travis-ci.org/LRydin/KramersMoyal) [![Documentation Status](https://readthedocs.org/projects/kramersmoyal/badge/?version=latest)](https://kramersmoyal.readthedocs.io/en/latest/?badge=latest)
 
 # KramersMoyal
-`kramersmoyal` is a python package designed to obtain the Kramers–Moyal coefficients, or conditional moments, from stochastic data of any dimension. It employs kernel density estimations, instead of a histogram approach, to ensure better results for low number of points as well as allowing better fitting of the results
+`kramersmoyal` is a python package designed to obtain the Kramers–Moyal coefficients, or conditional moments, from stochastic data of any dimension. It employs kernel density estimations, instead of a histogram approach, to ensure better results for low number of points as well as allowing better fitting of the results.
+
+The [paper](https://doi.org/10.21105/joss.01693) is now officially published on [JOSS](https://joss.theoj.org/). The paper is also available [here](/paper/paper.pdf).
 
 # Installation
 To install `kramersmoyal`, just use `pip`
