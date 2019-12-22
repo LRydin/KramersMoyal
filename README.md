@@ -1,5 +1,5 @@
 [![DOI](https://joss.theoj.org/papers/10.21105/joss.01693/status.svg)](https://doi.org/10.21105/joss.01693)
-![PyPI - License](https://img.shields.io/pypi/l/kramersmoyal) ![PyPI - Python Version](https://img.shields.io/pypi/pyversions/kramersmoyal)
+![PyPI - License](https://img.shields.io/pypi/l/kramersmoyal) ![PyPI](https://img.shields.io/pypi/v/kramersmoyal) ![PyPI - Python Version](https://img.shields.io/pypi/pyversions/kramersmoyal)
 [![Build Status](https://travis-ci.org/LRydin/KramersMoyal.svg?branch=master)](https://travis-ci.org/LRydin/KramersMoyal) [![Documentation Status](https://readthedocs.org/projects/kramersmoyal/badge/?version=latest)](https://kramersmoyal.readthedocs.io/en/latest/?badge=latest)
 
 # KramersMoyal
