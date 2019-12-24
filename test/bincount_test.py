@@ -1,5 +1,5 @@
 from timeit import timeit
-import matplotlib.pyplot as plot
+# import matplotlib.pyplot as plot
 import numpy as np
 
 import sys
