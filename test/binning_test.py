@@ -6,7 +6,7 @@ from kramersmoyal.binning import histogramdd
 
 N = 1_000_000
 
-for dim in [1, 2, 3]:
+for dim in [1, 2]:
     bins = np.array([30] * dim)
     timeseries = np.random.rand(N, dim)
 

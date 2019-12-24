@@ -9,9 +9,10 @@ install:
   - pip install -e .
 # command to run tests
 script:
+  pytest
   # - python kramersmoyal/__init__.py
-  - python kramersmoyal/binning.py
-  - python kramersmoyal/kernels.py
+  # - python kramersmoyal/binning.py
+  # - python kramersmoyal/ckernels.py
   # - python kramersmoyal/kmc.py
 
 # no emails, I can check it myself, thank you
