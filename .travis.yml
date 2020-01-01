@@ -3,11 +3,11 @@ python:
   - "3.6"
   - "3.7"
 # command to install dependencies
-before_install:
-  - python --version
-  - pip install -U pip
-  - pip install -U pytest
-  - pip install codecov
+# before_install:
+  # - python --version
+  # - pip install -U pip
+  # - pip install -U pytest
+  # - pip install codecov
 install:
   # - export PYTHONPATH=$PYTHONPATH:$(pwd)
   - pip install -r requirements.txt
