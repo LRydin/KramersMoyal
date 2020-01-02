@@ -1,10 +1,8 @@
 import numpy as np
 
-# import sys
-# sys.path.append("../")
 from kramersmoyal.binning import histogramdd
 
-N = 1_000_000
+N = 1000000
 
 def test_binning():
     for dim in [1, 2]:
@@ -22,4 +20,4 @@ def test_binning():
 
         assert np.array(
             list(map(lambda i: (hist1[i] == hist2[i, ...]), range(Nw)))).all()
-        print("Binning in {0}D: passed".format(dim))
+        # print("Binning in {0}D: passed".format(dim))
