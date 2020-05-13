@@ -9,7 +9,7 @@ def km(timeseries: np.ndarray, bins: np.ndarray, powers: np.ndarray,
         kernel: callable=None, bw: float=None, tol: float=1e-10,
         conv_method: str='auto'):
     """
-    Estimates Kramers-Moyal coefficients from a timeseries using a kernel
+    Estimates Kramers─Moyal coefficients from a timeseries using a kernel
     estimator method.
 
     Parameters
@@ -37,7 +37,7 @@ def km(timeseries: np.ndarray, bins: np.ndarray, powers: np.ndarray,
 
     kernel: callable
         Kernel used to convolute with the Kramers-Moyal coefficients. To select
-        for example a Gaussian kernel use
+        for example an Epanechnikov kernel use
             kernel = kernels.epanechnikov
         If None the Epanechnikov kernel will be used
 

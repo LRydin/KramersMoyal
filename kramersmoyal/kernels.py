@@ -3,7 +3,6 @@ from functools import wraps
 from scipy.special import gamma, factorial2
 from scipy.stats import norm
 
-
 def kernel(kernel_func):
     """
     Transforms a kernel function into a scaled kernel function
