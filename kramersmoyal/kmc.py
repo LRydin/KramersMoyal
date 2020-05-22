@@ -7,48 +7,55 @@ from .kernels import silvermans_rule, epanechnikov, _kernels
 
 def km(timeseries: np.ndarray, bins: np.ndarray, powers: np.ndarray,
         kernel: callable=None, bw: float=None, tol: float=1e-10,
-        conv_method: str='auto'):
+        conv_method: str='auto') -> np.ndarray:
     """
-    Estimates Kramers─Moyal coefficients from a timeseries using a kernel
-    estimator method.
+    Estimates the Kramers─Moyal coefficients from a timeseries using a kernel
+    estimator method. ``km`` can calculate the Kramers─Moyal coefficients for a
+    timeseries of any dimension, up to any desired power.
 
     Parameters
     ----------
     timeseries: np.ndarray
-        The D-dimensional timeseries (N, D). The timeseries of length N and
-        dimensions D.
+        The D-dimensional timeseries ``(N, D)``. The timeseries of length ``N``
+        and dimensions ``D``.
 
     bins: np.ndarray
         The number of bins for each dimension. This is the underlying space for
         the Kramers-Moyal coefficients. In 1-dimension a choice as
-            bins = np.array([6000])
+            ``bins = np.array([6000])``
         is recommended. In 2-dimensions
-            bins = np.array([300,300])
-        is recommended
+            ``bins = np.array([300,300])``
+        is recommended.
 
     powers: np.ndarray
-        Powers for the operation of calculating the Kramers-Moyal coefficients,
+        Powers for the operation of calculating the Kramers─Moyal coefficients,
         which need to match dimensions of the timeseries. In 1-dimension the
         first four Kramers-Moyal coefficients can be found via
-            powers = np.array([0],[1],[2],[3],[4])
+            ``powers = np.array([0],[1],[2],[3],[4])``.
         In 2 dimensions take into account each dimension, as
+        ::
+
             powers = np.array([0,0],[0,1],[1,0],[1,1],[0,2],[2,0],[2,2],
                               [0,3],[3,0],[3,3],[0,4],[4,0],[4,4])
 
-    kernel: callable
+
+    kernel: callable (default ``None``)
         Kernel used to convolute with the Kramers-Moyal coefficients. To select
         for example an Epanechnikov kernel use
-            kernel = kernels.epanechnikov
-        If None the Epanechnikov kernel will be used
 
-    bw: float
+            ``kernel = kernels.epanechnikov``
+
+        If ``None`` the Epanechnikov kernel will be used.
+
+    bw: float (default ``None``)
         Desired bandwidth of the kernel. A value of 1 occupies the full space of
-        the bin space. Recommended are values 0.005 < bw < 0.2
+        the bin space. Recommended are values ``0.005 < bw < 0.5``.
 
-    tol: float
-        Round to zero absolute values smaller than `tol`, after the convolutions
+    tol: float (default ``1e-10``)
+        Round to zero absolute values smaller than ``tol``, after the
+        convolutions.
 
-    conv_method: str
+    conv_method: str (default ``auto``)
         A string indicating which method to use to calculate the convolution.
         https://docs.scipy.org/doc/scipy/reference/generated/scipy.signal.convolve.html
 
@@ -100,10 +107,10 @@ def km(timeseries: np.ndarray, bins: np.ndarray, powers: np.ndarray,
 
 
 def _km(timeseries: np.ndarray, bins: np.ndarray, powers: np.ndarray,
-        kernel: callable, bw: float, tol: float, conv_method: str):
+        kernel: callable, bw: float, tol: float, conv_method: str) -> np.ndarray:
     """
     Helper function for km that does the heavy lifting and actually estimates
-    the Kramers-Moyal coefficients from the timeseries.
+    the Kramers─Moyal coefficients from the timeseries.
     """
     def cartesian_product(arrays: np.ndarray):
         # Taken from https://stackoverflow.com/questions/11144513

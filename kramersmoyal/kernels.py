@@ -6,7 +6,7 @@ from scipy.stats import norm
 def kernel(kernel_func):
     """
     Transforms a kernel function into a scaled kernel function
-    (for a certain bandwidth `bw`)
+    (for a certain bandwidth ``bw``)
 
     Currently implemented kernels are:
         Epanechnikov, Gaussian, Uniform, Triangular, Quartic
@@ -30,14 +30,14 @@ def kernel(kernel_func):
 
 def volume_unit_ball(dims: int) -> float:
     """
-    Returns the volume of a unit ball in dimensions dims
+    Returns the volume of a unit ball in dimensions dims.
     """
     return np.pi ** (dims / 2.0) / gamma(dims / 2.0 + 1.0)
 
 @kernel
 def epanechnikov(x: np.ndarray, dims: int) -> np.ndarray:
     """
-    The Epanechnikov kernel in dimensions dims
+    The Epanechnikov kernel in dimensions dims.
     """
     x2 = (x ** 2)
     mask = x2 < 1.0
@@ -49,7 +49,7 @@ def epanechnikov(x: np.ndarray, dims: int) -> np.ndarray:
 @kernel
 def gaussian(x: np.ndarray, dims: int) -> np.ndarray:
     """
-    Gaussian kernel in dimensions dims
+    Gaussian kernel in dimensions dims.
     """
     def gaussian_integral(n):
         if n % 2 == 0:
@@ -63,7 +63,7 @@ def gaussian(x: np.ndarray, dims: int) -> np.ndarray:
 @kernel
 def uniform(x: np.ndarray, dims: int) -> np.ndarray:
     """
-    Uniform, or rectangular kernel in dimensions dims
+    Uniform, or rectangular kernel in dimensions dims.
     """
     mask = x < 1.0
     kernel = np.zeros_like(x)
@@ -74,7 +74,7 @@ def uniform(x: np.ndarray, dims: int) -> np.ndarray:
 @kernel
 def triagular(x: np.ndarray, dims: int) -> np.ndarray:
     """
-    Triagular kernel in dimensions dims
+    Triagular kernel in dimensions dims.
     """
     mask = x < 1.0
     kernel = np.zeros_like(x)
@@ -86,7 +86,7 @@ def triagular(x: np.ndarray, dims: int) -> np.ndarray:
 @kernel
 def quartic(x: np.ndarray, dims: int) -> np.ndarray:
     """
-    Quartic, or biweight kernel in dimensions dims
+    Quartic, or biweight kernel in dimensions dims.
     """
     x2 = (x ** 2)
     mask = x2 < 1.0
@@ -105,6 +105,3 @@ def silvermans_rule(timeseries: np.ndarray) -> float:
     sigma = sigma.max()
 
     return  ( (4.0 * sigma**5) / (3 * n)) ** (1 / 5)
-
-#TODO do we need dims in the kernel functions? Can't se just read that off the
-#     the x (ndarray)?
