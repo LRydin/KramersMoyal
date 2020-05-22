@@ -1,8 +1,6 @@
 import numpy as np
 from itertools import product
 
-# import sys
-# sys.path.append("..")
 from kramersmoyal.kernels import *
 
 def test_kernels():
@@ -18,6 +16,3 @@ def test_kernels():
                 print("Kernel {0:10s}\t with {1:.2f} bandwidth at {2}D passed: {3}".format(
                     kernel.__name__, bw, dim, passed))
             print()
-
-
-test_kernels()

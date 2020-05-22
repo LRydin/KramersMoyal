@@ -27,6 +27,3 @@ def test_kmc():
 
             assert isinstance(kmc, np.ndarray)
             assert isinstance(edges[0], np.ndarray)
-
-
-test_kmc()
