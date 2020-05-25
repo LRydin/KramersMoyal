@@ -86,7 +86,7 @@ This results in
   :align: center
   :alt: Drift and diffusion terms of an Ornstein---Uhlenbeck process
 
-Notice here that to obtain the Kramers---Moyal coefficients you need to multiply
+Notice here that to obtain the Kramers---Moyal coefficients you need to divide
 :code:`kmc` by the timestep :code:`delta_t`. This normalisation stems from the
 Taylor-like approximation, i.e., the Kramers---Moyal expansion
 (:math:`\delta t \to 0`).

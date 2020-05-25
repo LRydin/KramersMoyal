@@ -85,7 +85,7 @@ This results in
 
 <img src="/other/fig2.png" title="Drift and diffusion terms of an Ornstein–Uhlenbeck process" height="200"/>
 
-Notice here that to obtain the Kramers–Moyal coefficients you need to multiply `kmc` by the timestep `delta_t`. This normalisation stems from the Taylor-like approximation, i.e., the Kramers–Moyal expansion (`delta t` &rarr; 0).
+Notice here that to obtain the Kramers–Moyal coefficients you need to divide `kmc` by the timestep `delta_t`. This normalisation stems from the Taylor-like approximation, i.e., the Kramers–Moyal expansion (`delta t` &rarr; 0).
 
 # A two-dimensional diffusion process
 
@@ -137,7 +137,7 @@ for i in range(1, time.size):
     y[i,1] = y[i-1,1]  -  N[1] * y[i-1,1] * delta_t + g[1,0] * dW[i,0]  +  g[1,1]/(1 + np.exp(y[i-1,1]**2)) * dW[i,1]
 ```
 
-The stochastic trajectory in 2 dimensions for 10 time units (10000 data points)
+The stochastic trajectory in 2 dimensions for `10` time units (`10000` data points)
 
 <img src="/other/fig3.png" alt="2D-diffusion" title="2-dimensional trajectory" height="280" />
 
@@ -166,7 +166,7 @@ kmc, edges = km(y, bw = bw, bins = bins, powers = powers)
 # is the second. These will be 2-dimensional matrices
 ```
 
-Now one can visualise the Kramers–Moyal coefficients (surfaces) in green and the respective theoretical surfaces in black. (Don't forget to normalise: `kmc * delta_t`).
+Now one can visualise the Kramers–Moyal coefficients (surfaces) in green and the respective theoretical surfaces in black. (Don't forget to normalise: `kmc / delta_t`).
 
 <img src="/other/fig4.png" alt="2D-diffusion" title="2-dimensional Kramers–Moyal surfaces (green) and the theoretical surfaces (black)" height="480" />
 

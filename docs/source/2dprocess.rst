@@ -118,7 +118,7 @@ will need to plot them as such
 
 Now one can visualise the Kramers–Moyal coefficients (surfaces) in green and the
 respective theoretical surfaces in black. (Don't forget to normalise:
-:code:`kmc * delta_t`).
+:code:`kmc / delta_t`).
 
 .. image:: /_static/fig4.png
   :height: 480
