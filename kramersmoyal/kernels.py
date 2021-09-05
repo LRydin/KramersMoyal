@@ -16,6 +16,10 @@ def kernel(kernel_func):
     """
     @wraps(kernel_func)  # just for naming
     def decorated(x, bw):
+        def volume_unit_ball(dims: int):
+            # volume of a unit ball in dimension dims
+            return np.pi ** (dims / 2.0) / gamma(dims / 2.0 + 1.0)
+
         if len(x.shape) == 1:
             x = x.reshape(-1, 1)
 
@@ -24,27 +28,21 @@ def kernel(kernel_func):
         # Euclidean norm
         dist = np.sqrt((x * x).sum(axis=-1))
 
-        return kernel_func(dist / bw, dims) / (bw ** dims)
+        return kernel_func(dist / bw, dims) / (bw ** dims) / volume_unit_ball(dims)
     return decorated
 
-
-def volume_unit_ball(dims: int) -> float:
-    """
-    Returns the volume of a unit ball in dimensions dims.
-    """
-    return np.pi ** (dims / 2.0) / gamma(dims / 2.0 + 1.0)
 
 @kernel
 def epanechnikov(x: np.ndarray, dims: int) -> np.ndarray:
     """
     The Epanechnikov kernel in dimensions dims.
     """
+    normalisation = 2.0 / (dims + 2.0)
     x2 = (x ** 2)
     mask = x2 < 1.0
     kernel = np.zeros_like(x)
-    kernel[mask] = (1.0 - x2[mask])
-    normalisation = 2.0 / (dims + 2.0) * volume_unit_ball(dims)
-    return kernel / normalisation
+    kernel[mask] = (1.0 - x2[mask]) / normalisation
+    return kernel
 
 @kernel
 def gaussian(x: np.ndarray, dims: int) -> np.ndarray:
@@ -56,9 +54,9 @@ def gaussian(x: np.ndarray, dims: int) -> np.ndarray:
             return np.sqrt(np.pi * 2) * factorial2(n - 1) / 2
         elif n % 2 == 1:
             return np.sqrt(np.pi * 2) * factorial2(n - 1) * norm.pdf(0)
-    kernel = np.exp(-x ** 2 / 2.0)
-    normalisation = dims * gaussian_integral(dims - 1) * volume_unit_ball(dims)
-    return kernel / normalisation
+    normalisation = dims * gaussian_integral(dims - 1)
+    kernel = np.exp(-x ** 2 / 2.0) / normalisation
+    return kernel
 
 @kernel
 def uniform(x: np.ndarray, dims: int) -> np.ndarray:
@@ -68,19 +66,18 @@ def uniform(x: np.ndarray, dims: int) -> np.ndarray:
     mask = x < 1.0
     kernel = np.zeros_like(x)
     kernel[mask] = 1.0
-    normalisation = volume_unit_ball(dims)
-    return kernel / normalisation
+    return kernel
 
 @kernel
 def triagular(x: np.ndarray, dims: int) -> np.ndarray:
     """
     Triagular kernel in dimensions dims.
     """
+    normalisation = 1.0 / 2.0
     mask = x < 1.0
     kernel = np.zeros_like(x)
-    kernel[mask] = 1.0 - np.abs(x[mask])
-    normalisation = volume_unit_ball(dims) / 2.0
-    return kernel / normalisation
+    kernel[mask] = (1.0 - np.abs(x[mask])) / normalisation
+    return kernel
 
 
 @kernel
@@ -88,20 +85,16 @@ def quartic(x: np.ndarray, dims: int) -> np.ndarray:
     """
     Quartic, or biweight kernel in dimensions dims.
     """
+    normalisation = 2.0 / (dims + 2.0)
     x2 = (x ** 2)
     mask = x2 < 1.0
     kernel = np.zeros_like(x)
-    kernel[mask] = ((1.0 - x2[mask]) ** 2)
-    normalisation = 2.0 / (dims + 2.0) * volume_unit_ball(dims)
-    return kernel / normalisation
-
-
-_kernels = {epanechnikov, gaussian, uniform, triagular, quartic}
+    kernel[mask] = ((1.0 - x2[mask]) ** 2) / normalisation
+    return kernel
 
 
 def silvermans_rule(timeseries: np.ndarray) -> float:
     n, dims = timeseries.shape
     sigma = np.std(timeseries, axis=0)
     sigma = sigma.max()
-
-    return  ( (4.0 * sigma**5) / (3 * n)) ** (1 / 5)
+    return  ((4.0 * sigma ** 5) / (3 * n)) ** (1 / 5)
