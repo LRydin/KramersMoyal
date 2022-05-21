@@ -58,8 +58,8 @@ def km(timeseries: np.ndarray, bins: np.ndarray, powers: np.ndarray,
         https://docs.scipy.org/doc/scipy/reference/generated/scipy.signal.convolve.html
 
     center_edges: bool (default ``True``)
-        Whether to center the bin edges, since for `n` bins, `n+1` edges must 
-        have been defined.
+        Whether to return the bin centers or the bin edges (since for `n` bins
+        there are `n+1` edges).
 
     Returns
     -------
