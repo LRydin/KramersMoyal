@@ -1,6 +1,7 @@
 [![DOI](https://joss.theoj.org/papers/10.21105/joss.01693/status.svg)](https://doi.org/10.21105/joss.01693)
 ![PyPI - License](https://img.shields.io/pypi/l/kramersmoyal) ![PyPI](https://img.shields.io/pypi/v/kramersmoyal) ![PyPI - Python Version](https://img.shields.io/pypi/pyversions/kramersmoyal)
-[![Build Status](https://travis-ci.org/LRydin/KramersMoyal.svg?branch=master)](https://travis-ci.org/LRydin/KramersMoyal) [![codecov](https://codecov.io/gh/LRydin/KramersMoyal/branch/master/graph/badge.svg)](https://codecov.io/gh/LRydin/KramersMoyal) [![Documentation Status](https://readthedocs.org/projects/kramersmoyal/badge/?version=latest)](https://kramersmoyal.readthedocs.io/en/latest/?badge=latest)
+[![Build Status](https://github.com/LRydin/KramersMoyal/actions/workflows/CI.yml/badge.svg)](https://github.com/LRydin/KramersMoyal/actions/workflows/CI.yml)
+[![codecov](https://codecov.io/gh/LRydin/KramersMoyal/branch/master/graph/badge.svg)](https://codecov.io/gh/LRydin/KramersMoyal) [![Documentation Status](https://readthedocs.org/projects/kramersmoyal/badge/?version=latest)](https://kramersmoyal.readthedocs.io/en/latest/?badge=latest)
 
 # KramersMoyal
 `kramersmoyal` is a python package designed to obtain the Kramers–Moyal coefficients, or conditional moments, from stochastic data of any dimension. It employs kernel density estimations, instead of a histogram approach, to ensure better results for low number of points as well as allowing better fitting of the results.
@@ -78,7 +79,7 @@ powers = np.array([[1], [2]])
 bw = 0.15
 
 # The kmc holds the results, where edges holds the binning space
-kmc, edges = km(y, kernel = kernels.epanechnikov, bw = bw, bins = bins, powers = powers)
+kmc, edges = km(y, bw=bw, bins=bins, powers=powers)
 ```
 
 This results in
@@ -179,15 +180,15 @@ We abide to a [Conduct of Fairness](contributions.md).
 Next on the list is
 - Include more kernels
 - Work through the documentation carefully
-- Create a sub-routine to calculate the Kramers–Moyal coefficients without a convolution
 
 # Changelog
-- Version 0.4 - Added the documentation, first testers, and the Conduct of Fairness
-- Version 0.32 - Adding 2 kernels: `triagular` and `quartic` and extenting the documentation and examples.
+- Version 0.4.1 - Changing CI. Correcting `kmc[0,:]` normalisation.
+- Version 0.4.0 - Added the documentation, first testers, and the Conduct of Fairness
+- Version 0.3.2 - Adding 2 kernels: `triagular` and `quartic` and extending the documentation and examples.
 - Version 0.31 - Corrections to the fft triming after convolution.
-- Version 0.3 - The major breakthrough: Calculates the Kramers–Moyal coefficients for data of any dimension.
-- Version 0.2 - Introducing convolutions and `gaussian` and `uniform` kernels. Major speed up in the calculations.
-- Version 0.1 - One and two dimensional Kramers–Moyal coefficients with an `epanechnikov` kernel.
+- Version 0.30 - The major breakthrough: Calculates the Kramers–Moyal coefficients for data of any dimension.
+- Version 0.2.0 - Introducing convolutions and `gaussian` and `uniform` kernels. Major speed up in the calculations.
+- Version 0.1.0 - One and two dimensional Kramers–Moyal coefficients with an `epanechnikov` kernel.
 
 # Literature and Support
 
