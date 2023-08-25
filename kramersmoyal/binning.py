@@ -1,32 +1,13 @@
 from scipy.sparse import csr_matrix
 import numpy as np
 
-
-def bincount1(x, weights, minlength=0):
-    return np.array(
-        [np.bincount(x, w, minlength=minlength) for w in weights])
-
-
-def bincount2(x, weights, minlength=0):
-    # Small speedup if # of weights is large
-    assert len(x.shape) == 1
-
-    ans_size = x.max() + 1
-
-    if (ans_size < minlength):
-        ans_size = minlength
-
-    csr = csr_matrix((np.ones(x.shape[0]), (np.arange(x.shape[0]), x)), shape=[
-                     x.shape[0], ans_size])
-    return weights * csr
-
-
 _range = range
 
-
-# An alternative to Numpy's histogramdd, supporting a weights matrix
-# Part of the following code is licensed under the BSD-3 License (from Numpy)
-def histogramdd(sample, bins=10, range=None, normed=None, weights=None, density=None, bw=0.0):
+# An alternative to Numpy's histogramdd, supporting a weights matrix.
+# Part of the following code is licensed under the BSD-3 License (from Numpy).
+def histogramdd(sample: np.ndarray, bins: int=10, range: str=None,
+    normed: str=None, weights: np.ndarray=None, density: np.ndarray=None,
+    bw: float=0.0) -> (np.ndarray, np.ndarray):
 
     def _get_outer_edges(a, range, bw):
         """
@@ -37,10 +18,11 @@ def histogramdd(sample, bins=10, range=None, normed=None, weights=None, density=
             first_edge, last_edge = range
             if first_edge > last_edge:
                 raise ValueError(
-                    'max must be larger than min in range parameter.')
+                    'Max must be larger than min in range parameter')
             if not (np.isfinite(first_edge) and np.isfinite(last_edge)):
                 raise ValueError(
-                    "supplied range of [{}, {}] is not finite".format(first_edge, last_edge))
+                    'Supplied range of [{}, {}] '
+                    ' is not finite'.format(first_edge, last_edge))
         elif a.size == 0:
             # handle empty arrays. Can't determine range, so use 0-1.
             first_edge, last_edge = 0, 1
@@ -48,7 +30,8 @@ def histogramdd(sample, bins=10, range=None, normed=None, weights=None, density=
             first_edge, last_edge = a.min() - bw, a.max() + bw
             if not (np.isfinite(first_edge) and np.isfinite(last_edge)):
                 raise ValueError(
-                    "autodetected range of [{}, {}] is not finite".format(first_edge, last_edge))
+                    'Autodetected range of [{}, {}] '
+                    ' is not finite'.format(first_edge, last_edge))
 
         # expand empty range to avoid divide by zero
         if first_edge == last_edge:
@@ -76,7 +59,7 @@ def histogramdd(sample, bins=10, range=None, normed=None, weights=None, density=
         if M != D:
             raise ValueError(
                 'The dimension of bins must be equal to the dimension of the '
-                ' sample x.')
+                ' sample x')
     except TypeError:
         # bins is an integer
         bins = D * [bins]
@@ -85,7 +68,7 @@ def histogramdd(sample, bins=10, range=None, normed=None, weights=None, density=
     if range is None:
         range = (None,) * D
     elif len(range) != D:
-        raise ValueError('range argument must have one entry per dimension')
+        raise ValueError('Range argument must have one entry per dimension')
 
     # Create edge arrays
     for i in _range(D):
@@ -182,3 +165,22 @@ def histogramdd(sample, bins=10, range=None, normed=None, weights=None, density=
             raise RuntimeError(
                 "Internal Shape Error")
     return hist, edges
+
+
+def bincount1(x, weights, minlength=0):
+    return np.array(
+        [np.bincount(x, w, minlength=minlength) for w in weights])
+
+
+def bincount2(x, weights, minlength=0):
+    # Small speedup if # of weights is large
+    assert len(x.shape) == 1
+
+    ans_size = x.max() + 1
+
+    if (ans_size < minlength):
+        ans_size = minlength
+
+    csr = csr_matrix((np.ones(x.shape[0]), (np.arange(x.shape[0]), x)), shape=[
+                     x.shape[0], ans_size])
+    return weights * csr

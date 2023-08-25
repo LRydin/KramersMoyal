@@ -13,6 +13,7 @@ def test_kernels():
                 kernel_ = kernel(mesh, bw=bw).reshape(
                     *(edge.size for edge in edges))
                 passed = np.allclose(kernel_.sum() * dx, 1, atol=1e-2)
-                print("Kernel {0:10s}\t with {1:.2f} bandwidth at {2}D passed: {3}".format(
+                print("Kernel {0:10s}\t with {1:.2f} bandwidth at "
+                      "{2}D passed: {3}".format(
                     kernel.__name__, bw, dim, passed))
             print()

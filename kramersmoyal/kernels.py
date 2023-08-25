@@ -15,7 +15,7 @@ def kernel(kernel_func):
     https://en.wikipedia.org/wiki/Kernel_(statistics)
     """
     @wraps(kernel_func)  # just for naming
-    def decorated(x, bw):
+    def decorated(x: np.ndarray, bw: float):
         def volume_unit_ball(dims: int):
             # volume of a unit ball in dimension dims
             return np.pi ** (dims / 2.0) / gamma(dims / 2.0 + 1.0)
@@ -28,9 +28,9 @@ def kernel(kernel_func):
         # Euclidean norm
         dist = np.sqrt((x * x).sum(axis=-1))
 
-        return kernel_func(dist / bw, dims) / (bw ** dims) / volume_unit_ball(dims)
+        return kernel_func(dist / bw, dims) \
+            / (bw ** dims) / volume_unit_ball(dims)
     return decorated
-
 
 @kernel
 def epanechnikov(x: np.ndarray, dims: int) -> np.ndarray:
@@ -79,7 +79,6 @@ def triagular(x: np.ndarray, dims: int) -> np.ndarray:
     kernel[mask] = (1.0 - np.abs(x[mask])) / normalisation
     return kernel
 
-
 @kernel
 def quartic(x: np.ndarray, dims: int) -> np.ndarray:
     """
@@ -91,7 +90,6 @@ def quartic(x: np.ndarray, dims: int) -> np.ndarray:
     kernel = np.zeros_like(x)
     kernel[mask] = ((1.0 - x2[mask]) ** 2) / normalisation
     return kernel
-
 
 def silvermans_rule(timeseries: np.ndarray) -> float:
     n, dims = timeseries.shape
