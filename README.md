@@ -16,7 +16,7 @@ pip install kramersmoyal
 ```
 Then on your favourite editor just use
 ```python
-from kramersmoyal import km, kernels
+from kramersmoyal import km
 ```
 
 ## Dependencies
@@ -55,7 +55,7 @@ time = np.arange(0, t_final, delta_t)
 y = np.zeros(time.size)
 
 # Generate a Wiener process
-dw = np.random.normal(loc = 0, scale = np.sqrt(delta_t), size = time.size)
+dw = np.random.normal(loc=0, scale=np.sqrt(delta_t), size=time.size)
 
 # Integrate the process
 for i in range(1,time.size):
@@ -69,17 +69,9 @@ From here we have a plain example of an Ornstein–Uhlenbeck process, always dri
 ## Using `kramersmoyal`
 Take the timeseries `y` and let's study the Kramers–Moyal coefficients. For this let's look at the drift and diffusion coefficients of the process, i.e., the first and second Kramers–Moyal coefficients, with an `epanechnikov` kernel
 ```python
-# Choose number of points of you target space
-bins = np.array([5000])
-
-# Choose powers to calculate
-powers = np.array([[1], [2]])
-
-# Choose your desired bandwith
-bw = 0.15
 
 # The kmc holds the results, where edges holds the binning space
-kmc, edges = km(y, bw=bw, bins=bins, powers=powers)
+kmc, edges = km(y, powers=2)
 ```
 
 This results in
@@ -130,7 +122,7 @@ Integrating the previous stochastic trajectory with a simple Euler–Maruyama in
 y = np.zeros([time.size, 2])
 
 # Generate two Wiener processes with a scale of np.sqrt(delta_t)
-dW = np.random.normal(loc = 0, scale = np.sqrt(delta_t), size = [time.size, 2])
+dW = np.random.normal(loc=0, scale=np.sqrt(delta_t), size=[time.size, 2])
 
 # Integrate the process (takes about 20 secs)
 for i in range(1, time.size):
@@ -147,7 +139,7 @@ First notice that all the results now will be two-dimensional surfaces, so we wi
 
 ```python
 # Choose the size of your target space in two dimensions
-bins = np.array([300, 300])
+bins = [100, 100]
 
 # Introduce the desired orders to calculate, but in 2 dimensions
 powers = np.array([[0,0], [1,0], [0,1], [1,1], [2,0], [0,2], [2,2]])
@@ -160,7 +152,7 @@ powers = np.array([[0,0], [1,0], [0,1], [1,1], [2,0], [0,2], [2,2]])
 bw = 0.1
 
 # Calculate the Kramers−Moyal coefficients
-kmc, edges = km(y, bw = bw, bins = bins, powers = powers)
+kmc, edges = km(y, bw=bw, bins=bins, powers=powers)
 
 # The K−M coefficients are stacked along the first dim of the
 # kmc array, so kmc[1,...] is the first K−M coefficient, kmc[2,...]
@@ -182,11 +174,11 @@ Next on the list is
 - Work through the documentation carefully
 
 # Changelog
-- Version 0.4.1 - Changing CI. Correcting `kmc[0,:]` normalisation.
+- Version 0.4.1 - Changing CI. Correcting `kmc[0,:]` normalisation. Various Simplifications. Bins as ints, powers as ints.
 - Version 0.4.0 - Added the documentation, first testers, and the Conduct of Fairness
 - Version 0.3.2 - Adding 2 kernels: `triagular` and `quartic` and extending the documentation and examples.
-- Version 0.31 - Corrections to the fft triming after convolution.
-- Version 0.30 - The major breakthrough: Calculates the Kramers–Moyal coefficients for data of any dimension.
+- Version 0.3.1 - Corrections to the fft triming after convolution.
+- Version 0.3.0 - The major breakthrough: Calculates the Kramers–Moyal coefficients for data of any dimension.
 - Version 0.2.0 - Introducing convolutions and `gaussian` and `uniform` kernels. Major speed up in the calculations.
 - Version 0.1.0 - One and two dimensional Kramers–Moyal coefficients with an `epanechnikov` kernel.
 

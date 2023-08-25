@@ -1,4 +1,7 @@
-from .kernels import epanechnikov, gaussian, uniform, silvermans_rule
+from .kernels import epanechnikov, silvermans_rule
 from .kmc import km
 
-name = "kramersmoyal"
+__name__ = 'kramersmoyal'
+__version__ = '0.4.1'
+__author__ = 'Leonardo Rydin Gorjão and Francisco Meirinhos'
+__copyright__ = 'Copyright 2019–2023 Leonardo Rydin Gorjão, MIT License'
