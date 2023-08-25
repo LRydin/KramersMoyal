@@ -94,3 +94,11 @@ def test_kmc():
     kmc, edges = km(timeseries, powers=4, bins=[25, 35])
     assert isinstance(kmc, np.ndarray)
     assert len(edges) == 2
+
+    # test output
+    timeseries = np.random.normal(loc=0, scale=1, size=(N, 1))
+    kmc, edges, bw, powers = km(timeseries, full=True)
+    assert isinstance(kmc, np.ndarray)
+    assert len(edges) == 1
+    assert isinstance(bw, float)
+    assert isinstance(powers, np.ndarray)

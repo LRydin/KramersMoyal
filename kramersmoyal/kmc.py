@@ -8,7 +8,8 @@ from .kernels import silvermans_rule, epanechnikov
 
 def km(timeseries: np.ndarray, bins: str='default', powers: int=4,
         kernel: callable=epanechnikov, bw: float=None, tol: float=1e-10,
-        conv_method: str='auto', center_edges: bool=True) -> np.ndarray:
+        conv_method: str='auto', center_edges: bool=True,
+        full: bool=False) -> (np.ndarray, np.ndarray):
     """
     Estimates the Kramers─Moyal coefficients from a timeseries using a kernel
     estimator method. `km` can calculate the Kramers─Moyal coefficients for a
@@ -57,8 +58,8 @@ def km(timeseries: np.ndarray, bins: str='default', powers: int=4,
             powers = np.array([[0, 0, 1, 1, 0, 1, 2, 2, 2],
                                [0, 1, 0, 1, 2, 2, 0, 1, 2]]).T
 
-        Set `verbose=True` to print out `powers`. The order that they appear
-        dictactes the order in the output `kmc`.
+        Set `full=True` to output `powers`. The order that they appear dictactes
+        the order in the output `kmc`.
 
     kernel: callable (default `epanechnikov`)
         Kernel used to convolute with the Kramers-Moyal coefficients. To select
@@ -68,7 +69,8 @@ def km(timeseries: np.ndarray, bins: str='default', powers: int=4,
 
     bw: float (default `None`)
         Desired bandwidth of the kernel. A value of 1 occupies the full space of
-        the bin space. Recommended are values `0.005 < bw < 0.5`.
+        the bin space. Recommended are values `0.005 < bw < 0.5`. Set
+        `full=True` to output `bw`.
 
     tol: float (default `1e-10`)
         Round to zero absolute values smaller than `tol`, after the
@@ -82,6 +84,9 @@ def km(timeseries: np.ndarray, bins: str='default', powers: int=4,
         Whether to return the bin centers or the bin edges (since for `n` bins
         there are `n + 1` edges).
 
+    full: bool (default `False`)
+        Outputs bandwidth `bw` and powers `powers`.
+
     Returns
     -------
     kmc: np.ndarray
@@ -93,6 +98,12 @@ def km(timeseries: np.ndarray, bins: str='default', powers: int=4,
     edges: np.ndarray
         The bin edges with shape `(D, bins.shape)` of the estimated
         Kramers─Moyal coefficients.
+
+    (..., bw, powers): tuple
+        This is only returned if `full=True`:
+
+        * The bandwidth `bw`,
+        * An array of the `powers`.
 
     References
     ----------
@@ -117,7 +128,7 @@ def km(timeseries: np.ndarray, bins: str='default', powers: int=4,
 
     # Tranforming powers into right shape
     if isinstance(powers, int):
-        # complicated way of obtaing power in all dimensions
+        # complicated way of obtaing powers in all dimensions
         powers = np.array(sorted(product(*(range(powers + 1),) * dims),
             key=lambda x: (max(x), x)))
 
@@ -127,9 +138,6 @@ def km(timeseries: np.ndarray, bins: str='default', powers: int=4,
 
     if not (powers[0] == [0] * dims).all():
         powers = np.array([[0] * dims, *powers])
-        trim_output = True
-    else:
-        trim_output = False
 
     assert (powers[0] == [0] * dims).all(), "First power must be zero"
     assert dims == powers.shape[1], "Powers not matching timeseries' dimension"
@@ -164,7 +172,10 @@ def km(timeseries: np.ndarray, bins: str='default', powers: int=4,
     if center_edges:
         edges = [edge[:-1] + 0.5 * (edge[1] - edge[0]) for edge in edges]
 
-    return (kmc, edges) if not trim_output else (kmc[1:], edges)
+    if not full:
+        return (kmc, edges)
+    else:
+        return (kmc, edges, bw, powers)
 
 
 def _km(timeseries: np.ndarray, bins: np.ndarray, powers: np.ndarray,
