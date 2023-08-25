@@ -5,7 +5,7 @@ from kramersmoyal.binning import histogramdd
 N = 1000000
 
 def test_binning():
-    for dim in [1, 2]:
+    for dim in [1, 2, 3]:
         bins = np.array([30] * dim)
         timeseries = np.random.rand(N, dim)
 
