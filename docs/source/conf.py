@@ -23,12 +23,12 @@ sys.path.insert(0, os.path.abspath('../..'))
 # -- Project information -----------------------------------------------------
 
 project = 'KramersMoyal'
-copyright = '2019-2020, Leonardo Rydin and Francisco Meirinhos'
-author = 'Leonardo Rydin and Francisco Meirinhos'
+copyright = '2019-2025, Leonardo Rydin Gorjão and Francisco Meirinhos'
+author = 'Leonardo Rydin Gorjão and Francisco Meirinhos'
 
 # The full version, including alpha/beta/rc tags
-release = '0.4'
-version = '0.4'
+release = '0.4.1'
+version = '0.4.1'
 
 
 # -- General configuration ---------------------------------------------------

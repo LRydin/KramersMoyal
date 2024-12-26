@@ -194,7 +194,7 @@ The study of stochastic processes from a data-driven approach is grounded in ext
 You can find and extensive review on the subject [here](http://sharif.edu/~rahimitabar/pdfs/80.pdf)<sup>1</sup>
 
 ### History
-This project was started in 2017 at the [neurophysik](https://www.researchgate.net/lab/Klaus-Lehnertz-Lab-2) by Leonardo Rydin Gorjão, Jan Heysel, Klaus Lehnertz, and M. Reza Rahimi Tabar. Francisco Meirinhos later devised the hard coding to python. The project is now supported by Dirk Witthaut and the [Institute of Energy and Climate Research Systems Analysis and Technology Evaluation](https://www.fz-juelich.de/iek/iek-ste/EN/Home/home_node.html).
+This project was started in 2017 at the [neurophysik](https://www.researchgate.net/lab/Klaus-Lehnertz-Lab-2) by Leonardo Rydin Gorjão, Jan Heysel, Klaus Lehnertz, and M. Reza Rahimi Tabar. Francisco Meirinhos later devised the hard coding to python. The project has had many supporters, such as Dirk Witthaut at the [Institute of Climate and Energy Systems (ICE)- Energiesystemtechnik (ICE-1), FZJ](https://www.fz-juelich.de/profile/witthaut_d), Benjamin Schäfer [Institute for Automation and Applied Informatics, KIT](https://www.iai.kit.edu/english/2154_4101.php), and Niklas Boers at [Technical University of Munich](https://www.professoren.tum.de/en/boers-niklas) & [Potsdam Institute for Climate Impact Research](https://www.pik-potsdam.de/members/boers), along with many others. 
 
 ### Funding
 Helmholtz Association Initiative _Energy System 2050 - A Contribution of the Research Field Energy_ and the grant No. VH-NG-1025 and *STORM - Stochastics for Time-Space Risk Models* project of the Research Council of Norway (RCN) No. 274410.

@@ -109,7 +109,7 @@ def km(timeseries: np.ndarray, bins: str='default', powers: int=4,
     ----------
     .. [Lamouroux2009] D. Lamouroux and K. Lehnertz, "Kernel-based regression of
     drift and diffusion coefficients of stochastic processes." Physics Letters A
-    373(39), 3507─3512, 2009.
+    373(39), 3507─3512, 2009. DOI: 10.1016/j.physleta.2009.07.073
     """
 
     # Check finiteness, dimensions, and existence of the time series
