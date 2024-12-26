@@ -117,25 +117,45 @@ def km(timeseries: np.ndarray, powers: np.ndarray, bins: np.ndarray=None,
     if dims >= n:
         raise ValueError("Timeseries should be transposed to (N, D) shape.")
     
-    powers = np.atleast_2d(np.asarray_chkfinite(powers, dtype=float))
+    # Tranforming powers into right shape
+    if isinstance(powers, int):
+        # complicated way of obtaing powers in all dimensions
+        powers = np.array(sorted(product(*(range(powers + 1),) * dims),
+            key=lambda x: (max(x), x)))
+
+    powers = np.asarray_chkfinite(powers, dtype=float)
+    if len(powers.shape) == 1:
+        powers = powers.reshape(-1, 1)
+
+    if not (powers[0] == [0] * dims).all():
+        powers = np.array([[0] * dims, *powers])
+
+    assert (powers[0] == [0] * dims).all(), "First power must be zero"
+    assert dims == powers.shape[1], "Powers not matching timeseries' dimension"
+
+    # Proposed explicit powers. Although explicit is generally better than 
+    # implicit, user friendliness is preferred. E.g., np.histogram also assumes 
+    # a number of bins=10 if none given.
+
+    # powers = np.atleast_2d(np.asarray_chkfinite(powers, dtype=float))
     
-    # NOTE: `_km` always requires the first element of `powers` to map to the pdf
-    if not np.array_equal(powers[0], [0] * dims):
-        powers = np.vstack((np.zeros((1, dims)), powers))
-        remove_pdf = True
-    else:
-        remove_pdf = False
+    # # NOTE: `_km` always requires the first element of `powers` to map to the 
+    # pdf
+    # if not np.array_equal(powers[0], [0] * dims):
+    #     powers = np.vstack((np.zeros((1, dims)), powers))
+    #     remove_pdf = True
+    # else:
+    #     remove_pdf = False
 
     if dims != powers.shape[1]:
         raise ValueError("Powers dimensions do not match timeseries dimensions.")
 
     # Check and adjust bins
     if isinstance(bins, None):
-        if bins == 'default':
-            bins = [5000] if dims == 1 else bins
-            bins = [100] * 2 if dims == 2 else bins
-            bins = [25] * 3 if dims == 3 else bins
-        assert dims < 4, "If dimension of timeseries > 3, set bins manually"
+        bins = [5000] if dims == 1 else bins
+        bins = [100] * 2 if dims == 2 else bins
+        bins = [25] * 3 if dims == 3 else bins
+        assert dims < 4, "If dimension of timeseries > 3, set bins manually."
 
     if isinstance(bins, int):
         bins = [int(bins**(1/dims))] * dims
@@ -159,8 +179,9 @@ def km(timeseries: np.ndarray, powers: np.ndarray, bins: np.ndarray=None,
     # This is where the calculations take place
     kmc, edges =  _km(timeseries, bins, powers, kernel, bw, tol, conv_method)
 
-    if remove_pdf:
-        kmc = kmc[1:, ...]
+    # it is prefered to have the pdf as the first element.
+    # if remove_pdf:
+    #     kmc = kmc[1:, ...]
     
     if center_edges:
         edges = [edge[:-1] + 0.5 * (edge[1] - edge[0]) for edge in edges]
