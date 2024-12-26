@@ -20,6 +20,22 @@ def km(timeseries: np.ndarray, powers: np.ndarray, bins: np.ndarray=None,
         The D-dimensional timeseries `(N, D)`. The timeseries of length `N`
         and dimensions `D`.
 
+    powers: int or list or tuple or np.ndarray (default `4`)
+        Powers for the operation of calculating the Kramers─Moyal coefficients.
+        Default is the largest power used, e.g., if `4`, then `(0, 1, 2, 3, 4)`.
+        They can be specified, matching the dimensions of the timeseries. E.g.,
+        in 1-dimension the first four Kramers─Moyal coefficients can be given as
+        `powers=(0, 1, 2, 3, 4)`, which is the same as `powers=4`. Setting
+        `powers=p` for higher dimensions will results in all possible
+        combinations up to the desired power 'p', e.g.
+
+        * 2-D, `powers=2` results in
+            powers = np.array([[0, 0, 1, 1, 0, 1, 2, 2, 2],
+                               [0, 1, 0, 1, 2, 2, 0, 1, 2]]).T
+
+        Set `full=True` to output `powers`. The order that they appear dictactes
+        the order in the output `kmc`.
+        
     bins: list or np.ndarray (default `None`)
         The number of bins. This is the underlying space for the Kramers─Moyal
         coefficients to be estimated. If desired, bins along each dimension can
@@ -43,22 +59,6 @@ def km(timeseries: np.ndarray, powers: np.ndarray, bins: np.ndarray=None,
 
         If `bins` is int, or a list or np.array of dimension 1, and the
         `timeseries` dimension is `D`, then `int(bins**(1/D))`.
-
-    powers: int or list or tuple or np.ndarray (default `4`)
-        Powers for the operation of calculating the Kramers─Moyal coefficients.
-        Default is the largest power used, e.g., if `4`, then `(0, 1, 2, 3, 4)`.
-        They can be specified, matching the dimensions of the timeseries. E.g.,
-        in 1-dimension the first four Kramers─Moyal coefficients can be given as
-        `powers=(0, 1, 2, 3, 4)`, which is the same as `powers=4`. Setting
-        `powers=p` for higher dimensions will results in all possible
-        combinations up to the desired power 'p', e.g.
-
-        * 2-D, `powers=2` results in
-            powers = np.array([[0, 0, 1, 1, 0, 1, 2, 2, 2],
-                               [0, 1, 0, 1, 2, 2, 0, 1, 2]]).T
-
-        Set `full=True` to output `powers`. The order that they appear dictactes
-        the order in the output `kmc`.
 
     kernel: callable (default `epanechnikov`)
         Kernel used to convolute with the Kramers-Moyal coefficients. To select
@@ -129,9 +129,23 @@ def km(timeseries: np.ndarray, powers: np.ndarray, bins: np.ndarray=None,
     if dims != powers.shape[1]:
         raise ValueError("Powers dimensions do not match timeseries dimensions.")
 
-    if bins is None:
-        # Sturges' formula
-        bins = np.full((dims,), np.ceil(np.log2(n) + 1), dtype=int)
+    # Check and adjust bins
+    if isinstance(bins, None):
+        if bins == 'default':
+            bins = [5000] if dims == 1 else bins
+            bins = [100] * 2 if dims == 2 else bins
+            bins = [25] * 3 if dims == 3 else bins
+        assert dims < 4, "If dimension of timeseries > 3, set bins manually"
+
+    if isinstance(bins, int):
+        bins = [int(bins**(1/dims))] * dims
+
+    # Suggested application of Sturges' formula, unfortunately for a 1-D 
+    # timeseries with 500000 datapoints, this results in 20 bins, which is
+    # simply too small.
+    # if bins is None:
+    #     # Sturges' formula
+    #     bins = np.full((dims,), np.ceil(np.log2(n) + 1), dtype=int)
 
     bins = np.asarray_chkfinite(bins, dtype=int)
 
