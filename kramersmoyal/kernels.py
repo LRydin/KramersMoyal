@@ -1,7 +1,14 @@
 import numpy as np
 from functools import wraps
-from scipy.special import gamma, factorial2
-from scipy.stats import norm
+from scipy.special import gamma
+
+
+def _volume_unit_ball(dims: int) -> float:
+    """
+    Volume of a unit ball in `dims` dimensions.
+    """
+    return np.pi ** (dims / 2.0) / gamma(dims / 2.0 + 1.0)
+
 
 def kernel(kernel_func):
     """
@@ -14,22 +21,18 @@ def kernel(kernel_func):
     For a good overview of various kernels see
     https://en.wikipedia.org/wiki/Kernel_(statistics)
     """
-    @wraps(kernel_func)  # just for naming
-    def decorated(x: np.ndarray, bw: float):
-        def volume_unit_ball(dims: int):
-            # volume of a unit ball in dimension dims
-            return np.pi ** (dims / 2.0) / gamma(dims / 2.0 + 1.0)
 
-        if len(x.shape) == 1:
+    @wraps(kernel_func)
+    def decorated(x: np.ndarray, bw: float) -> np.ndarray:
+        x = np.asarray(x, dtype=float)
+        if x.ndim == 1:
             x = x.reshape(-1, 1)
 
         dims = x.shape[-1]
+        dist = np.sqrt((x * x).sum(axis=-1))  # Euclidean norm
 
-        # Euclidean norm
-        dist = np.sqrt((x * x).sum(axis=-1))
+        return kernel_func(dist / bw, dims) / (bw**dims) / _volume_unit_ball(dims)
 
-        return kernel_func(dist / bw, dims) \
-            / (bw ** dims) / volume_unit_ball(dims)
     return decorated
 
 @kernel
@@ -45,18 +48,13 @@ def epanechnikov(x: np.ndarray, dims: int) -> np.ndarray:
     return kernel
 
 @kernel
-def gaussian(x: np.ndarray, dims: int) -> np.ndarray:
+def gaussian(r: np.ndarray, dims: int) -> np.ndarray:
     """
-    Gaussian kernel in dimensions dims.
+    Gaussian kernel in `dims` dimensions.
     """
-    def gaussian_integral(n):
-        if n % 2 == 0:
-            return np.sqrt(np.pi * 2) * factorial2(n - 1) / 2
-        elif n % 2 == 1:
-            return np.sqrt(np.pi * 2) * factorial2(n - 1) * norm.pdf(0)
-    normalisation = dims * gaussian_integral(dims - 1)
-    kernel = np.exp(-x ** 2 / 2.0) / normalisation
-    return kernel
+    normalisation = dims * (2 ** ((dims - 2) / 2.0)) * gamma(dims / 2.0)
+    return np.exp(-(r**2) / 2.0) / normalisation
+
 
 @kernel
 def uniform(x: np.ndarray, dims: int) -> np.ndarray:
